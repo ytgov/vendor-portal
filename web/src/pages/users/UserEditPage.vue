@@ -1,9 +1,9 @@
 <template>
-  <v-skeleton-loader v-if="isNil(currentUser)" />
+  <v-skeleton-loader v-if="isNil(user)" />
   <v-container v-else>
     <h2 class="d-flex flex-column flex-md-row justify-space-between mb-3">
       <span>
-        My Profile:
+        User Profile:
         <v-chip variant="outlined">
           {{ displayName }}
         </v-chip>
@@ -31,36 +31,54 @@
 
     <UserEditForm
       class="mt-10"
-      :user-id="currentUser.id"
+      :user-id="user.id"
       :cancel-button-options="{ to: { name: 'users/UsersPage' } }"
       @saved="refresh"
     />
   </v-container>
 </template>
 
-<script lang="ts" setup>
-import { computed, } from "vue"
+<script setup lang="ts">
+import { computed } from "vue"
 import { isNil } from "lodash"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
-import useCurrentUser from "@/use/use-current-user"
+import useUser from "@/use/use-user"
 
 import UserEditForm from "@/components/users/UserEditForm.vue"
 
-const { currentUser, refresh } = useCurrentUser<true>()
+const props = defineProps<{
+  userId: string
+}>()
+
+const userId = computed(() => parseInt(props.userId))
+const { user, refresh } = useUser(userId)
 
 const displayName = computed(() => {
-  if (currentUser.value === null) return "loading..."
+  if (user.value === null) return "loading..."
 
-  return currentUser.value.displayName
+  return user.value.displayName
 })
 
 useBreadcrumbs([
   {
-    title: "Profile",
-    to: { name: "ProfilePage" },
+    title: "All Users",
+    to: { name: "users/UsersPage" },
+  },
+  {
+    title: "User",
+    to: {
+      // TODO: set to non-edit user page, once it exists
+      name: "users/UserEditPage",
+      params: { userId: props.userId },
+    },
+  },
+  {
+    title: "Edit",
+    to: {
+      name: "users/UserEditPage",
+      params: { userId: props.userId },
+    },
   },
 ])
 </script>
-
-<style scoped></style>

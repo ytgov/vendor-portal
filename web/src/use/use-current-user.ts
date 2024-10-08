@@ -3,7 +3,9 @@ import { isNil } from "lodash"
 import { DateTime } from "luxon"
 
 import currentUserApi from "@/api/current-user-api"
-import usersApi, { User } from "@/api/users-api"
+import usersApi, { type User, UserRoles } from "@/api/users-api"
+
+export { type User, UserRoles }
 
 // TODO: consider sending this with every api request?
 export const CURRENT_USERS_TIMEZONE = DateTime.local().zoneName
@@ -30,6 +32,9 @@ export function useCurrentUser<IsLoaded extends boolean = false>() {
   type StateOrLoadedState = IsLoaded extends true ? LoadedState : State
 
   const isReady = computed(() => state.isCached && !state.isLoading && !state.isErrored)
+  const isSystemAdmin = computed(() => {
+    return state.currentUser?.roles.includes(UserRoles.SYSTEM_ADMIN)
+  })
 
   async function fetch(): Promise<User> {
     state.isLoading = true
@@ -85,8 +90,11 @@ export function useCurrentUser<IsLoaded extends boolean = false>() {
     ...toRefs(state as StateOrLoadedState),
     isReady,
     fetch,
+    refresh: fetch,
     reset,
     save,
+    // Computed properties
+    isSystemAdmin,
   }
 }
 

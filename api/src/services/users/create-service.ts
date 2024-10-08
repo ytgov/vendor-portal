@@ -18,9 +18,7 @@ export class CreateService extends BaseService {
       throw new Error("Email is required")
     }
 
-    if (isNil(auth0Subject)) {
-      throw new Error("Auth0 Subject is required")
-    }
+    const auth0SubjectOrFallback = auth0Subject || email
 
     const [emailLocalPart] = email.split("@")
     /**
@@ -39,7 +37,7 @@ export class CreateService extends BaseService {
     const workflowCategory = await User.create({
       ...optionalAttributes,
       email,
-      auth0Subject,
+      auth0Subject: auth0SubjectOrFallback,
       firstName: firstNameOrFallback,
       lastName: lastNameOrFallback,
       displayName: `${firstNameOrFallback} ${lastNameOrFallback}`,

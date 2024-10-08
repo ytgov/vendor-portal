@@ -15,6 +15,12 @@
         prepend-icon="mdi-account"
       />
       <v-list-item
+        v-if="isSystemAdmin"
+        title="Administration"
+        :to="{ name: 'administration/DashboardPage' }"
+        prepend-icon="mdi-cog-outline"
+      />
+      <v-list-item
         :title="releaseTag || 'loading...'"
         :to="{ name: 'StatusPage' }"
         prepend-icon="mdi-clock"
@@ -37,7 +43,7 @@ import useCurrentUser from "@/use/use-current-user"
 
 const { logout } = useAuth0()
 
-const { currentUser } = useCurrentUser()
+const { currentUser, isSystemAdmin } = useCurrentUser()
 
 const username = computed(() => {
   if (currentUser.value === null) return "loading..."
