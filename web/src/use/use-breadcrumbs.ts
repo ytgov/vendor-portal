@@ -2,9 +2,10 @@ import { isUndefined } from "lodash"
 import { reactive, toRefs } from "vue"
 import { RouteLocationRaw } from "vue-router"
 
-export interface Breadcrumb {
+export type Breadcrumb = {
   title: string
   disabled?: boolean
+  exact?: boolean
   to: RouteLocationRaw
 }
 

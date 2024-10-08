@@ -1,12 +1,47 @@
 <template>
-  <v-main>
-    <v-container
-      fluid
-      class="page-wrapper pb-sm-15 pb-10"
+  <v-navigation-drawer v-model="showDrawer">
+    <!--  -->
+  </v-navigation-drawer>
+
+  <v-app-bar>
+    <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
+
+    <v-app-bar-title
+      ><span
+        class="cursor-pointer"
+        @click="goToDashboard"
+        >Vendor Portal</span
+      ></v-app-bar-title
     >
+
+    <KebabMenu />
+  </v-app-bar>
+
+  <v-main>
+    <SimpleBreadcrumbs />
+
+    <v-container>
       <router-view />
     </v-container>
   </v-main>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue"
+import { useRouter } from "vue-router"
+
+import SimpleBreadcrumbs from "@/components/common/SimpleBreadcrumbs.vue"
+import KebabMenu from "@/components/default-layout/KebabMenu.vue"
+
+const showDrawer = ref(false)
+
+function toggleDrawer() {
+  showDrawer.value = !showDrawer.value
+}
+
+const router = useRouter()
+
+function goToDashboard() {
+  return router.push({ name: "DashboardPage" })
+}
+</script>

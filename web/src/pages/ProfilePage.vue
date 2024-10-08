@@ -63,6 +63,7 @@
 import { ref } from "vue"
 import { useRoute } from "vue-router"
 
+import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useCurrentUser from "@/use/use-current-user"
 
 const { currentUser, save } = useCurrentUser<true>()
@@ -73,10 +74,13 @@ const tab = ref("")
 if (route.hash) {
   tab.value = route.hash
 }
+
+useBreadcrumbs([
+  {
+    title: "Profile",
+    to: { name: "ProfilePage" },
+  },
+])
 </script>
 
-<style scoped>
-.tab-windows .v-window-item {
-  padding: 20px;
-}
-</style>
+<style scoped></style>

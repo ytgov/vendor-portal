@@ -9,11 +9,11 @@
   </v-breadcrumbs>
 </template>
 
-<script>
-export { Breadcrumb } from "@/use/use-breadcrumbs"
+<script lang="ts">
+export { type Breadcrumb } from "@/use/use-breadcrumbs"
 </script>
 
-<script setup>
+<script lang="ts" setup>
 import { computed } from "vue"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
