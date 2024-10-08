@@ -19,6 +19,7 @@ import { isNil } from "lodash"
 
 import BaseModel from "@/models/base-model"
 
+/** Keep in sync with web/src/api/users-api.ts */
 export enum UserRoles {
   SYSTEM_ADMIN = "system_admin",
   USER = "user",
