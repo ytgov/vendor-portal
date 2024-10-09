@@ -4,6 +4,15 @@
     @submit.prevent="saveWrapper"
   >
     <v-row>
+      <v-col cols="12">
+        <v-text-field
+          v-model="userAttributes.email"
+          label="Email *"
+          :rules="[required]"
+          variant="outlined"
+          required
+        />
+      </v-col>
       <v-col
         cols="12"
         md="6"
@@ -34,8 +43,7 @@
       >
         <v-text-field
           v-model="userAttributes.displayName"
-          label="Display Name *"
-          :rules="[required]"
+          label="Display Name"
           variant="outlined"
           required
         />
@@ -50,16 +58,49 @@
           variant="outlined"
         />
       </v-col>
+    </v-row>
+
+    <v-divider class="mb-6"></v-divider>
+
+    <v-row>
       <v-col
         cols="12"
         md="6"
       >
         <v-text-field
-          v-model="userAttributes.email"
-          label="Email *"
-          :rules="[required]"
+          v-model="userAttributes.department"
+          label="Department"
           variant="outlined"
-          required
+        />
+      </v-col>
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <v-text-field
+          v-model="userAttributes.division"
+          label="Division"
+          variant="outlined"
+        />
+      </v-col>
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <v-text-field
+          v-model="userAttributes.branch"
+          label="Branch"
+          variant="outlined"
+        />
+      </v-col>
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <v-text-field
+          v-model="userAttributes.unit"
+          label="Unit"
+          variant="outlined"
         />
       </v-col>
     </v-row>

@@ -5,9 +5,10 @@
 
       <div class="d-flex justify-space-between mt-4 mb-3 my-md-0">
         <v-btn
+          :to="{ name: 'users/UsersPage' }"
           color="primary"
           variant="outlined"
-          :to="{ name: 'users/UsersPage' }"
+          :block="smAndDown"
         >
           Back
         </v-btn>
@@ -19,9 +20,13 @@
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from "vuetify"
+
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 
 import UserCreateForm from "@/components/users/UserCreateForm.vue"
+
+const { smAndDown } = useDisplay()
 
 useBreadcrumbs([
   {

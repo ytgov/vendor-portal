@@ -69,6 +69,51 @@
       </v-col>
     </v-row>
 
+    <v-divider class="mb-6"></v-divider>
+
+    <v-row>
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <v-text-field
+          v-model="user.department"
+          label="Department"
+          variant="outlined"
+        />
+      </v-col>
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <v-text-field
+          v-model="user.division"
+          label="Division"
+          variant="outlined"
+        />
+      </v-col>
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <v-text-field
+          v-model="user.branch"
+          label="Branch"
+          variant="outlined"
+        />
+      </v-col>
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <v-text-field
+          v-model="user.unit"
+          label="Unit"
+          variant="outlined"
+        />
+      </v-col>
+    </v-row>
+
     <v-divider class="my-6"></v-divider>
 
     <v-row>
