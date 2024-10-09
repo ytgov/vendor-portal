@@ -48,8 +48,8 @@ const { currentUser, isSystemAdmin } = useCurrentUser()
 const username = computed(() => {
   if (currentUser.value === null) return "loading..."
 
-  const { email } = currentUser.value
-  return email.substring(0, email.indexOf("@"))
+  const { displayName } = currentUser.value
+  return displayName
 })
 
 const { releaseTag } = useStatus()

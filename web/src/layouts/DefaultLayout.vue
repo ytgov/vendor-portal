@@ -1,7 +1,5 @@
 <template>
-  <v-navigation-drawer v-model="showDrawer">
-    <!--  -->
-  </v-navigation-drawer>
+  <LeftSidebarNavigationDrawer v-model="showDrawer" />
 
   <v-app-bar>
     <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
@@ -29,11 +27,15 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useRouter } from "vue-router"
+import { useDisplay } from "vuetify"
 
 import SimpleBreadcrumbs from "@/components/common/SimpleBreadcrumbs.vue"
 import KebabMenu from "@/components/default-layout/KebabMenu.vue"
+import LeftSidebarNavigationDrawer from "@/components/default-layout/LeftSidebarNavigationDrawer.vue"
 
-const showDrawer = ref(false)
+const { lgAndUp } = useDisplay()
+
+const showDrawer = ref(lgAndUp.value)
 
 function toggleDrawer() {
   showDrawer.value = !showDrawer.value
