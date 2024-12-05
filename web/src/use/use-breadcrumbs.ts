@@ -13,7 +13,14 @@ const BASE_CRUMB = {
   title: "Vendor Portal",
   disabled: false,
   to: {
-    name: "DashboardPage",
+    name: "individual/HomePage",
+  },
+}
+const ADMIN_BASE_CRUMB = {
+  title: "Vendor Portal",
+  disabled: false,
+  to: {
+    name: "administration/DashboardPage",
   },
 }
 
@@ -24,9 +31,9 @@ const state = reactive<{
   breadcrumbs: [],
 })
 
-export function useBreadcrumbs(breadcrumbs?: Breadcrumb[]) {
+export function useBreadcrumbs(breadcrumbs?: Breadcrumb[], useAdmin = false) {
   if (!isUndefined(breadcrumbs)) {
-    state.breadcrumbs = [BASE_CRUMB, ...breadcrumbs]
+    state.breadcrumbs = [useAdmin ? ADMIN_BASE_CRUMB : BASE_CRUMB, ...breadcrumbs]
   }
 
   return {

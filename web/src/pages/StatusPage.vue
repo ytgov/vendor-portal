@@ -45,7 +45,7 @@ const { isAuthenticated } = useAuth0()
 const returnTo = computed<{ name: string; title: string }>(() => {
   if (isAuthenticated.value) {
     return {
-      name: "DashboardPage",
+      name: "administration/DashboardPage",
       title: "Dashboard",
     }
   }

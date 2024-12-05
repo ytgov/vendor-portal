@@ -4,6 +4,7 @@ import { type Policy } from "@/api/base-api"
 /** Keep in sync with api/src/models/user.ts */
 export enum UserRoles {
   SYSTEM_ADMIN = "system_admin",
+  PROGRAM_ADMIN = "program_admin",
   USER = "user",
 }
 

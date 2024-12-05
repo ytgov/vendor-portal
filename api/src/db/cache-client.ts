@@ -1,6 +1,7 @@
 import { REDIS_CONNECTION_URL } from "@/config"
 import { logger } from "@/utils/logger"
 import { RedisClientType, createClient } from "@redis/client"
+import { ScanCommandOptions } from "@redis/client/dist/lib/commands/SCAN"
 
 class CacheClient {
   protected client: RedisClientType
@@ -17,9 +18,12 @@ class CacheClient {
       this.failures = 0
       logger.info("Redis Client Connect")
     })
+
+    this.client.dump
   }
 
-  onError(err: unknown) {
+  // eslint-disable-next-line
+  onError(err: any) {
     if (this.failures < 5) {
       this.failures++
       logger.error(`Redis Connection Error ${this.failures}: ${err.message}`)
@@ -30,19 +34,34 @@ class CacheClient {
   }
 
   async getClient() {
-    await this.client.connect()
-
+    if (!this.client.isOpen) await this.client.connect()
     return this
   }
 
-  async setValue(key: string, value: any) {
-    this.client.set(key, value)
+  // eslint-disable-next-line
+  async setValue(key: string, value: any, expireSeconds = 0) {
+    this.client.set(key, value, { EX: expireSeconds })
   }
   async getValue(key: string) {
     return this.client.get(key)
   }
   async deleteValue(key: string) {
     return this.client.del(key)
+  }
+
+  async deleteValuesByPattern(pattern: string) {
+    const scanCommand = { MATCH: `${pattern}*` } as ScanCommandOptions
+    let cursor = 0
+
+    do {
+      const reply = await this.client.scan(cursor, scanCommand)
+      cursor = reply.cursor
+      const keys = reply.keys
+
+      if (keys.length > 0) {
+        await this.client.del(keys)
+      }
+    } while (cursor !== 0)
   }
 }
 

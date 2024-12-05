@@ -80,5 +80,6 @@ useBreadcrumbs([
       params: { userId: props.userId },
     },
   },
-])
+],
+true)
 </script>

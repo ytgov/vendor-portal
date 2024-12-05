@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, } from "vue"
+import { computed } from "vue"
 import { isNil } from "lodash"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
@@ -58,7 +58,7 @@ const displayName = computed(() => {
 useBreadcrumbs([
   {
     title: "Profile",
-    to: { name: "ProfilePage" },
+    to: { name: "individual/ProfilePage" },
   },
 ])
 </script>

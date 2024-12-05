@@ -22,6 +22,7 @@ import BaseModel from "@/models/base-model"
 /** Keep in sync with web/src/api/users-api.ts */
 export enum UserRoles {
   SYSTEM_ADMIN = "system_admin",
+  PROGRAM_ADMIN = "program_admin",
   USER = "user",
 }
 

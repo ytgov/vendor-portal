@@ -9,7 +9,7 @@
         class="cursor-pointer"
         @click="goToDashboard"
         >Vendor Portal</span
-      ></v-app-bar-title
+      > <strong>Administration</strong></v-app-bar-title
     >
 
     <KebabMenu />
@@ -30,8 +30,8 @@ import { useRouter } from "vue-router"
 import { useDisplay } from "vuetify"
 
 import SimpleBreadcrumbs from "@/components/common/SimpleBreadcrumbs.vue"
-import KebabMenu from "@/components/default-layout/KebabMenu.vue"
-import LeftSidebarNavigationDrawer from "@/components/default-layout/LeftSidebarNavigationDrawer.vue"
+import KebabMenu from "@/components/admin-layout/KebabMenu.vue"
+import LeftSidebarNavigationDrawer from "@/components/admin-layout/LeftSidebarNavigationDrawer.vue"
 
 const { lgAndUp } = useDisplay()
 
@@ -44,6 +44,6 @@ function toggleDrawer() {
 const router = useRouter()
 
 function goToDashboard() {
-  return router.push({ name: "individual/HomePage" })
+  return router.push({ name: "administration/DashboardPage" })
 }
 </script>

@@ -3,27 +3,25 @@ import { type RouteRecordRaw } from "vue-router"
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    component: () => import("@/layouts/DefaultLayout.vue"),
+    name: "SignInPage",
+    component: () => import("@/pages/SignInPage.vue"),
+    meta: { requiresAuth: false },
+  },
+  {
+    path: "/administration",
+    component: () => import("@/layouts/AdminLayout.vue"),
+    meta: { requiresAdmin: true },
     children: [
       {
         path: "",
-        redirect: "dashboard",
-      },
-      {
-        path: "dashboard",
-        name: "DashboardPage",
-        component: () => import("@/pages/DashboardPage.vue"),
-        meta: { title: "Dashboard" },
+        name: "administration/DashboardPage",
+        component: () => import("@/pages/administration/DashboardPage.vue"),
       },
       {
         path: "profile",
-        name: "ProfilePage",
+        name: "administration/ProfilePage",
         component: () => import("@/pages/ProfilePage.vue"),
-      },
-      {
-        path: "administration/dashboard",
-        name: "administration/DashboardPage",
-        component: () => import("@/pages/administration/DashboardPage.vue"),
+        meta: { title: "Profile" },
       },
       {
         path: "users",
@@ -44,10 +42,55 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
-    path: "/sign-in",
-    name: "SignInPage",
-    component: () => import("@/pages/SignInPage.vue"),
-    meta: { requiresAuth: false },
+    path: "/programs",
+    component: () => import("@/layouts/DefaultLayout.vue"),
+    meta: { requiresUser: true },
+    children: [
+      {
+        path: "",
+        name: "programs/HomePage",
+        component: () => import("@/pages/programs/ProgramListPage.vue"),
+      },
+    ],
+  },
+
+  {
+    path: "/individual",
+    component: () => import("@/layouts/DefaultLayout.vue"),
+    meta: { requiresUser: true },
+    children: [
+      {
+        path: "",
+        name: "individual/HomePage",
+        component: () => import("@/pages/individual/HomePage.vue"),
+      },
+      {
+        path: "profile",
+        name: "individual/ProfilePage",
+        component: () => import("@/pages/ProfilePage.vue"),
+      },
+    ],
+  },
+  {
+    path: "/vendor",
+    component: () => import("@/layouts/DefaultLayout.vue"),
+    children: [
+      {
+        path: "/vendor/:vendorId",
+        name: "vendor/HomePage",
+        component: () => import("@/pages/vendor/HomePage.vue"),
+      },
+      {
+        path: "/vendor/:vendorId/programs/EcDev-PSLR",
+        name: "vendor/PSLRVendorPage",
+        component: () => import("@/pages/programs/pslr/PSLRVendorPage.vue"),
+      },
+      {
+        path: "/vendor/:vendorId/programs/EcDev-PSLR/submissions/:submissionId",
+        name: "vendor/PSLRSubmissionViewPage",
+        component: () => import("@/pages/programs/pslr/PSLRSubmissionViewPage.vue"),
+      },
+    ],
   },
   {
     path: "/status",

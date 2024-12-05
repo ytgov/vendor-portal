@@ -39,5 +39,6 @@ useBreadcrumbs([
       name: "users/UserNewPage",
     },
   },
-])
+],
+true)
 </script>

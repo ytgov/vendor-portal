@@ -20,7 +20,7 @@ const uatConfig = {
 
 const devConfig = {
   domain: "https://dev-0tc6bn14.eu.auth0.com",
-  clientId: "mNqPwPZ5M1VXkEH6e8OgEaxmmWfxecwo",
+  clientId: "SaiIQgQuVedvs250Pyu9fhmS8IYfIDBT",
   audience: "testing",
   apiBaseUrl: "http://localhost:3000",
   applicationName: "Vendor Portal - DEV",
@@ -28,7 +28,7 @@ const devConfig = {
 
 const localProductionConfig = {
   domain: "https://dev-0tc6bn14.eu.auth0.com",
-  clientId: "mNqPwPZ5M1VXkEH6e8OgEaxmmWfxecwo",
+  clientId: "SaiIQgQuVedvs250Pyu9fhmS8IYfIDBT",
   audience: "testing",
   apiBaseUrl: "http://localhost:8080",
   applicationName: "Vendor Portal - DEV (production)",

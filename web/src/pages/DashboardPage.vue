@@ -14,7 +14,7 @@ import useBreadcrumbs from "@/use/use-breadcrumbs"
 useBreadcrumbs([
   {
     title: "Dashboard",
-    to: { name: "DashboardPage" },
+    to: { name: "administration/DashboardPage" },
   },
 ])
 </script>
