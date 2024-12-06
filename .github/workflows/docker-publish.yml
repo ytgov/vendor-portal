@@ -15,36 +15,29 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Log into registry ${{ env.REGISTRY }}
-        uses: docker/login-action@v3
+        uses: docker/login-action@v2
         with:
-          registry: ${{ secrets.AZURECR_URL }}
-          username: ${{ secrets.AZURECR_USERNAME }}
-          password: ${{ secrets.AZURECR_PASSWORD }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate release tag
         id: generate_release_tag
-        uses: amitsingh-007/next-release-tag@v5.1.0
+        uses: amitsingh-007/next-release-tag@v4.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_prefix: "v"
           tag_template: "yyyy.mm.dd.i"
 
-      - name: Extract Git Commit Hash
-        id: git_commit_hash
-        run: echo "commit_hash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
-
-      - name: Build and push web Docker image
-        uses: docker/build-push-action@v5.3.0
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
         with:
           context: .
           push: true
-          tags: ${{ secrets.AZURECR_URL }}/vendor-portal:${{ steps.generate_release_tag.outputs.next_release_tag }} , ${{ secrets.AZURECR_URL }}/vendor-portal:latest
-          build-args: |
-            RELEASE_TAG=${{ steps.generate_release_tag.outputs.next_release_tag }}
-            GIT_COMMIT_HASH=${{ steps.git_commit_hash.outputs.commit_hash }}
+          tags: ghcr.io/${{ github.repository }}:${{ steps.generate_release_tag.outputs.next_release_tag }}
 
       - name: Create release
         uses: ncipollo/release-action@v1
