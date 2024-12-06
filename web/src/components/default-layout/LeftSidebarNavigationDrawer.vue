@@ -1,56 +1,63 @@
 <template>
-  <v-navigation-drawer v-model="showDrawer">
-    <v-list v-model:opened="open">
-      <v-list-item title="Vendor Portal"></v-list-item>
-      <v-divider></v-divider>
-      <v-list-item
-        :to="{ name: 'individual/HomePage' }"
-        title="Home"
-        prepend-icon="mdi-home"
-      />
-      <v-list-item
-        :to="{ name: 'individual/ProfilePage' }"
-        :title="username"
-        prepend-icon="mdi-account"
-      />
+  <v-navigation-drawer
+    v-model="showDrawer"
+    :disable-resize-watcher="false"
+    :rail="showRail"
+    :permanent="mdAndUp"
+    :location="!mdAndUp ? 'bottom' : undefined"
+    color="#FEE6C2"
+  >
+    <v-list
+      v-model:opened="open"
+      class="pt-0"
+      color="black"
+    >
+      <v-list-item style="height: 64px; margin: 0; padding: 0">
+        <div
+          v-if="showRail"
+          class="d-flex"
+        >
+          <img
+            src="@/assets/logo-small.png"
+            style="margin-left: 0px; width: 53px"
+          />
+          <div
+            v-if="!mdAndUp"
+            style="margin-left: 20px; padding-top: 13px; font-weight: bold; font-size: 19px"
+          >
+            Vendor Portal
+          </div>
+        </div>
+        <img
+          v-else
+          src="@/assets/logo-wide.svg"
+          style="margin-left: 15px"
+        />
+      </v-list-item>
 
       <v-list-item
-        title="Sign out"
-        prepend-icon="mdi-exit-run"
-        @click="logoutWrapper"
+        title="Home"
+        prepend-icon="mdi-home"
+        :to="{ name: 'individual/HomePage' }"
+      />
+      <v-list-item
+        title="Available Programs"
+        prepend-icon="mdi-handshake"
+        :to="{ name: 'programs/HomePage' }"
       />
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue"
-import { useAuth0 } from "@auth0/auth0-vue"
+import { ref } from "vue"
+import { useDisplay } from "vuetify/lib/framework.mjs"
 
-import useCurrentUser from "@/use/use-current-user"
+const { mdAndUp } = useDisplay()
+defineProps<{ showRail: boolean }>()
 
 const showDrawer = defineModel<boolean>({
   default: false,
 })
 const open = ref([])
-
-const { logout } = useAuth0()
-
-const { currentUser } = useCurrentUser()
-
-const username = computed(() => {
-  if (currentUser.value === null) return "loading..."
-
-  const { displayName } = currentUser.value
-  return displayName
-})
-
-async function logoutWrapper() {
-  await logout({
-    logoutParams: {
-      // I would prefer to redirect to /sign-in here, but that doesn't seem to work?
-      returnTo: window.location.origin,
-    },
-  })
-}
 </script>

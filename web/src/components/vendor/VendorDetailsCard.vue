@@ -1,28 +1,34 @@
 <template>
-  <v-card variant="outlined">
+  <v-card>
     <v-card-title>Vendor Information</v-card-title>
     <v-card-text>
-      <v-form
-        horizontal
-        readonly
-      >
-        <v-label>Name</v-label>
-        <v-text-field
-          :model-value="vendor.name"
-          append-inner-icon="mdi-lock"
-        />
-        <v-label>Vendor ID</v-label>
-        <v-text-field
-          :model-value="vendor.vendorId"
-          append-inner-icon="mdi-lock"
-        />
-        <v-label>Address</v-label>
-        <v-textarea
-          :model-value="vendor.address"
-          append-inner-icon="mdi-lock"
-          rows="3"
-        />
-      </v-form>
+      <div class="d-flex mb-3">
+        <v-icon
+          class="mt-2"
+          size="40"
+          color="#7A9A01"
+          >mdi-store</v-icon
+        >
+        <div class="ml-2 text-subtitle-1">
+          <strong>Vendor ID: </strong><br />{{ vendor.vendorId }}
+        </div>
+      </div>
+
+      <div class="d-flex">
+        <v-icon
+          class="mt-2"
+          size="40"
+          color="#7A9A01"
+          >mdi-map</v-icon
+        >
+        <div class="ml-2 text-subtitle-1">
+          <strong>Address: </strong><br />2 Stope Way<br />Whitehorse YT, Y1A0B3
+        </div>
+      </div>
+    </v-card-text>
+
+    <v-card-text>
+      <v-btn block>Update this Information</v-btn>
     </v-card-text>
   </v-card>
 </template>

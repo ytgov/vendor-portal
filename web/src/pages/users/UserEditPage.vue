@@ -13,7 +13,7 @@
         <v-btn
           color="primary"
           variant="outlined"
-          :to="{ name: 'users/UsersPage' }"
+          :to="{ name: 'administration/UsersPage' }"
         >
           Back
         </v-btn>
@@ -32,7 +32,7 @@
     <UserEditForm
       class="mt-10"
       :user-id="user.id"
-      :cancel-button-options="{ to: { name: 'users/UsersPage' } }"
+      :cancel-button-options="{ to: { name: 'administration/UsersPage' } }"
       @saved="refresh"
     />
   </v-container>
@@ -63,20 +63,20 @@ const displayName = computed(() => {
 useBreadcrumbs([
   {
     title: "All Users",
-    to: { name: "users/UsersPage" },
+    to: { name: "administration/UsersPage" },
   },
   {
     title: "User",
     to: {
       // TODO: set to non-edit user page, once it exists
-      name: "users/UserEditPage",
+      name: "administration/UserEditPage",
       params: { userId: props.userId },
     },
   },
   {
     title: "Edit",
     to: {
-      name: "users/UserEditPage",
+      name: "administration/UserEditPage",
       params: { userId: props.userId },
     },
   },

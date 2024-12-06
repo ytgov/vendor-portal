@@ -32,12 +32,12 @@
           prepend-icon="mdi-home"
         />
         <v-list-item
-          :to="{ name: 'users/UsersPage' }"
+          :to="{ name: 'administration/UsersPage' }"
           title="All Users"
           prepend-icon="mdi-account-circle"
         />
         <v-list-item
-          :to="{ name: 'users/UserNewPage' }"
+          :to="{ name: 'administration/UserNewPage' }"
           title="Add User"
           prepend-icon="mdi-account-plus"
         />

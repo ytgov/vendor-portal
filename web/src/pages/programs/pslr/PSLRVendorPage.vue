@@ -4,13 +4,12 @@
     type="card"
   />
   <div v-if="vendor">
-    <h1>PSLR for {{ vendor.name }}</h1>
     <v-row>
       <v-col
         cols="12"
         md="5"
       >
-        <v-card variant="outlined">
+        <v-card>
           <v-card-title>Paid Sick Leave Rebate</v-card-title>
           <v-card-text>
             <p class="mb-3">
@@ -33,34 +32,48 @@
         </v-card>
       </v-col>
       <v-col>
-        <v-card
-          variant="outlined"
-          class="mb-5"
-        >
-          <v-card-title>Previous Submissions</v-card-title>
+        <h3 class="mb-3">Previous Submissions</h3>
+        <v-select
+          v-model="viewBy"
+          label="View by"
+          density="compact"
+          bg-color="white"
+          :items="['Date', 'Employee']"
+        />
+        <div v-if="viewBy == 'Date'">
+          <v-card
+            v-for="program of submissions"
+            :key="program.id"
+            class="mb-5"
+            @click="openSubmission(program.id)"
+          >
+            <v-card-title>{{ program.name }}</v-card-title>
 
-          <v-list>
-            <div>
-              <v-list-item
-                v-for="(program, idx) of submissions"
-                :key="program.id"
-                class="mx-2"
-                variant="outlined"
-                :style="{ 'border-top': idx === 0 ? '1px black solid' : 'none' }"
-                @click="openSubmission(program.id)"
-              >
-                <div class="py-2">
-                  <v-list-item-title class="text-subtitle-1 font-weight-bold mb-2">
-                    {{ program.name }} ({{ program.status }})
-                  </v-list-item-title>
-                  <v-list-item-subtitle>{{ program.employeeCount }} Employees</v-list-item-subtitle>
-                  <p class="text-subtitle-2"></p>
-                </div>
-              </v-list-item>
-            </div>
-          </v-list>
-        </v-card>
-        <v-card variant="outlined">
+            <v-card-text>
+              <v-list-item-title class="text-subtitle-1 font-weight-bold mb-2"> </v-list-item-title>
+              <v-list-item-subtitle>{{ program.employeeCount }} Employees</v-list-item-subtitle>
+              <p class="text-subtitle-2"></p>
+            </v-card-text>
+          </v-card>
+        </div>
+        <div v-else>
+          <v-card
+            v-for="program of employees"
+            :key="program.id"
+            class="mb-5"
+            @click="openSubmission(program.id)"
+          >
+            <v-card-title>{{ program.name }}</v-card-title>
+
+            <v-card-text>
+              <v-list-item-title class="text-subtitle-1 font-weight-bold mb-2"> </v-list-item-title>
+              <v-list-item-subtitle>{{ program.employeeCount }} Claims</v-list-item-subtitle>
+              <p class="text-subtitle-2"></p>
+            </v-card-text>
+          </v-card>
+        </div>
+
+        <v-card class="d-none">
           <v-card-title>Previous Payments</v-card-title>
           <v-card-text>List goes here</v-card-text>
         </v-card>
@@ -74,10 +87,12 @@ import useVendor from "@/use/use-vendor"
 import { isArray } from "lodash"
 import { computed, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import useBreadcrumbs from "@/use/use-breadcrumbs"
+import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
 
 const route = useRoute()
 const router = useRouter()
+
+const viewBy = ref("Date")
 
 const vendorId = computed(() =>
   isArray(route.params.vendorId) ? route.params.vendorId[0] : route.params.vendorId
@@ -116,6 +131,30 @@ const submissions = ref([
   },
 ])
 
+const employees = ref([
+  {
+    id: 1,
+    date: "2023-11-02",
+    name: "Bart Simpson",
+    status: "In Process",
+    employeeCount: 1,
+  },
+  {
+    id: 2,
+    date: "2023-10-02",
+    name: "Lisa Simpson",
+    status: "Rejected",
+    employeeCount: 2,
+  },
+  {
+    id: 3,
+    date: "2023-09-02",
+    name: "Homer Simpson",
+    status: "Paid",
+    employeeCount: 3,
+  },
+])
+
 watch(
   () => vendor.value,
   (newVal) => {
@@ -126,18 +165,15 @@ setBreadcrumbs()
 
 function setBreadcrumbs() {
   if (vendor.value) {
-    useBreadcrumbs([
+    useBreadcrumbs(`${vendor.value.name}: PSLR`, [
+      BASE_CRUMB,
       {
-        title: `${vendor.value?.name}`,
-        to: `/vendor/${vendor.value?.vendorId}`,
-      },
-      {
-        title: `Paid Sick Leave Rebate`,
-        to: `/vendor/${vendor.value?.vendorId}/programs/pslr`,
+        title: `${vendor.value.name}`,
+        to: `/vendor/${vendor.value.vendorId}`,
       },
     ])
   } else {
-    useBreadcrumbs([{ title: "Loading...", to: "" }])
+    useBreadcrumbs("", [{ title: "Loading...", to: "" }])
   }
 }
 function openSubmission(submissionId: number) {

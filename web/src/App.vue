@@ -6,11 +6,11 @@
     -->
     <router-view v-else-if="isReady || isErrored" />
     <PageLoader
-      v-else-if="isLoadingAuth0 || isLoadingCurrentUser"
+      v-else-if="isReadyAuth0 && isLoadingCurrentUser"
       message="Fetching and syncing user"
     />
     <PageLoader
-      v-else-if="!isReady"
+      v-else-if="isLoadingAuth0"
       message="Checking authentication status ..."
     />
     <PageLoader
@@ -35,38 +35,30 @@ const route = useRoute()
 const isUnauthenticatedRoute = computed(() => route.meta.requiresAuth === false)
 
 const { isLoading: isLoadingAuth0, isAuthenticated } = useAuth0()
-const { isLoading: isLoadingCurrentUser, isSystemAdmin, fetch } = useCurrentUser()
+const isReadyAuth0 = computed(() => !isLoadingAuth0.value && isAuthenticated.value)
 
-const isReady = ref(false)
+const { isReady: isReadyCurrentUser, isLoading: isLoadingCurrentUser, fetch } = useCurrentUser()
+
+const isReady = computed(() => isReadyAuth0.value && isReadyCurrentUser.value)
+
 const isErrored = ref(false)
-
 const router = useRouter()
 
 watch(
-  () => [isLoadingAuth0.value, isAuthenticated.value],
-  async ([isLoad, isAuth]) => {
-    if (isLoad === true) return
+  () => isReadyAuth0.value,
+  async (newIsReadyAuth0) => {
+    // Don't bother attempting to load current user for unathenticated routes
+    if (isUnauthenticatedRoute.value) return
 
-    if (isAuth === true) {
+    if (newIsReadyAuth0 === true) {
       try {
-        console.log("Loading current user")
         await fetch()
-        isReady.value = true
-
-        if (route.name == "SignInPage") {
-          if (isSystemAdmin.value == true) router.push({ name: "administration/DashboardPage" })
-          else router.push({ name: "individual/HomePage" })
-        }
       } catch (error) {
         console.log("Failed to load current user:", error)
         isErrored.value = true
         await router.isReady()
         await router.push({ name: "UnauthorizedPage" })
       }
-    } else if (!isUnauthenticatedRoute.value === false) {
-      isReady.value = true
-    } else {
-      isReady.value = true
     }
   },
   { immediate: true }

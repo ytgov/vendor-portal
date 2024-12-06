@@ -12,17 +12,16 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   document.title = `${APPLICATION_NAME} ${to.meta.title ? " - " + to.meta.title : ""}`
-
+  
   if (to.meta.requiresAuth === false) return true
 
   const { checkSession, isAuthenticated } = useAuth0()
   await checkSession()
 
   if (to.meta.requiresAdmin === true || to.meta.requiresUser === true) {
-    const { isSystemAdmin, isSystemUser, fetch } = useCurrentUser()
+    const { currentUser, isSystemAdmin, isSystemUser, fetch } = useCurrentUser()
 
-    await fetch()
-
+    if (!currentUser.value) await fetch()
     if (isSystemAdmin.value === true && to.meta.requiresAdmin === true) return true
     if (isSystemUser.value === true && to.meta.requiresUser === true) return true
 

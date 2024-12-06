@@ -24,7 +24,7 @@ useBreadcrumbs(
   [
     {
       title: "All Users",
-      to: { name: "users/UsersPage" },
+      to: { name: "administration/UsersPage" },
     },
   ],
   true

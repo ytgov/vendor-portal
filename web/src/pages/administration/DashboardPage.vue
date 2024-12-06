@@ -8,7 +8,7 @@
       <v-list>
         <v-list-item
           title="All Users"
-          :to="{ name: 'users/UsersPage' }"
+          :to="{ name: 'administration/UsersPage' }"
           prepend-icon="mdi-account-group"
         />
       </v-list>

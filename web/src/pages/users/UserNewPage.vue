@@ -5,7 +5,7 @@
 
       <div class="d-flex justify-space-between mt-4 mb-3 my-md-0">
         <v-btn
-          :to="{ name: 'users/UsersPage' }"
+          :to="{ name: 'administration/UsersPage' }"
           color="primary"
           variant="outlined"
           :block="smAndDown"
@@ -31,12 +31,12 @@ const { smAndDown } = useDisplay()
 useBreadcrumbs([
   {
     title: "All Users",
-    to: { name: "users/UsersPage" },
+    to: { name: "administration/UsersPage" },
   },
   {
     title: "New",
     to: {
-      name: "users/UserNewPage",
+      name: "administration/UserNewPage",
     },
   },
 ],

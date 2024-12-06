@@ -1,32 +1,41 @@
 <template>
-  <v-card variant="outlined">
-    <v-card-title>Enrolled Programs</v-card-title>
+  <h3 class="mb-3">Enrolled Programs</h3>
 
-    <v-list>
-      <div>
-        <v-list-item
-          v-for="program of vendor.programs"
-          :key="program.id"
-          class="mx-2"
-          variant="outlined"
-          @click="openVendorProgram(program)"
-        >
-          <div class="py-2">
-            <v-list-item-title class="text-subtitle-1 font-weight-bold mb-2">
-              {{ program.name }}
-            </v-list-item-title>
-            <v-list-item-subtitle>{{ program.department }}</v-list-item-subtitle>
-            <p class="text-subtitle-2">Enrolled since November 2, 2023</p>
-          </div>
-        </v-list-item>
-      </div>
-    </v-list>
+  <v-card
+    v-for="program of vendor.programs"
+    :key="program.id"
+    class="mb-5"
+    @click="openVendorProgram(program)"
+  >
+    <v-card-title>{{ program.name }}</v-card-title>
     <v-card-text>
-      <router-link :to="`/programs`">
-        Find additional programs
-      </router-link>
+      <div class="d-flex mb-3">
+        <v-icon
+          class="mt-2"
+          size="40"
+          color="#7A9A01"
+          >mdi-office-building</v-icon
+        >
+        <div class="ml-2 text-subtitle-1">
+          <strong>Department: </strong><br />{{ program.department }}
+        </div>
+      </div>
+      <div class="d-flex mb-3">
+        <v-icon
+          class="mt-2"
+          size="40"
+          color="#7A9A01"
+          >mdi-calendar</v-icon
+        >
+        <div class="ml-2 text-subtitle-1">
+          <strong>Enrolled Since: </strong><br />November 2, 2023
+        </div>
+      </div>
     </v-card-text>
   </v-card>
+  <router-link :to="`/programs`">
+    <v-icon>mdi-magnify</v-icon> Find additional programs
+  </router-link>
 </template>
 
 <script setup lang="ts">

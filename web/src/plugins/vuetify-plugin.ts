@@ -8,12 +8,15 @@
 import "@/assets/normalize.css"
 import "@mdi/font/css/materialdesignicons.css"
 import "vuetify/styles"
+import "@/assets/yk-style.css"
 
 // Composables
 import { createVuetify } from "vuetify"
 import * as components from "vuetify/components"
 import * as directives from "vuetify/directives"
 import * as labsComponents from "vuetify/labs/components"
+
+import lightTheme from "@/theme/LightTheme"
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
@@ -22,9 +25,15 @@ export default createVuetify({
     ...labsComponents,
   },
   directives,
+  theme: {
+    defaultTheme: "lightTheme",
+    themes: { lightTheme },
+  },
   defaults: {
     VCard: {
       rounded: "md",
+      color: "white",
+      elevation: "0",
     },
     VTextField: {
       variant: "outlined",
@@ -59,6 +68,6 @@ export default createVuetify({
       location: "top",
     },
     VSwitch: { color: "primary", density: "comfortable" },
-    VBtn: { color: "primary" },
+    VBtn: { color: "primary", elevation: "0" },
   },
 })

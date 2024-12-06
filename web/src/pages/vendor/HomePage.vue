@@ -5,7 +5,6 @@
   />
 
   <div v-if="vendor">
-    <h1>{{ vendor.name }}</h1>
     <v-row>
       <v-col
         cols="12"
@@ -23,7 +22,7 @@
 <script setup lang="ts">
 import VendorDetailsCard from "@/components/vendor/VendorDetailsCard.vue"
 import VendorProgramList from "@/components/vendor/VendorProgramList.vue"
-import useBreadcrumbs from "@/use/use-breadcrumbs"
+import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
 import useVendor from "@/use/use-vendor"
 import { isArray } from "lodash"
 import { computed, watch } from "vue"
@@ -48,14 +47,9 @@ setBreadcrumbs()
 
 function setBreadcrumbs() {
   if (vendor.value) {
-    useBreadcrumbs([
-      {
-        title: `${vendor.value?.name}`,
-        to: `/vendor/${vendor.value?.vendorId}`,
-      },
-    ])
+    useBreadcrumbs(vendor.value.name, [BASE_CRUMB])
   } else {
-    useBreadcrumbs([{ title: "Loading...", to: "" }])
+    useBreadcrumbs("", [{ title: "Loading...", to: "" }])
   }
 }
 </script>

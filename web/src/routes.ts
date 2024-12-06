@@ -25,17 +25,17 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: "users",
-        name: "users/UsersPage",
+        name: "administration/UsersPage",
         component: () => import("@/pages/users/UsersPage.vue"),
       },
       {
         path: "users/new",
-        name: "users/UserNewPage",
+        name: "administration/UserNewPage",
         component: () => import("@/pages/users/UserNewPage.vue"),
       },
       {
         path: "users/:userId/edit",
-        name: "users/UserEditPage",
+        name: "administration/UserEditPage",
         component: () => import("@/pages/users/UserEditPage.vue"),
         props: true,
       },
@@ -76,17 +76,17 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/layouts/DefaultLayout.vue"),
     children: [
       {
-        path: "/vendor/:vendorId",
+        path: ":vendorId",
         name: "vendor/HomePage",
         component: () => import("@/pages/vendor/HomePage.vue"),
       },
       {
-        path: "/vendor/:vendorId/programs/EcDev-PSLR",
+        path: ":vendorId/programs/EcDev-PSLR",
         name: "vendor/PSLRVendorPage",
         component: () => import("@/pages/programs/pslr/PSLRVendorPage.vue"),
       },
       {
-        path: "/vendor/:vendorId/programs/EcDev-PSLR/submissions/:submissionId",
+        path: ":vendorId/programs/EcDev-PSLR/submissions/:submissionId",
         name: "vendor/PSLRSubmissionViewPage",
         component: () => import("@/pages/programs/pslr/PSLRSubmissionViewPage.vue"),
       },

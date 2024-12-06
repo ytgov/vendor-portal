@@ -9,7 +9,6 @@
           v-model="userAttributes.email"
           label="Email *"
           :rules="[required]"
-          variant="outlined"
           required
         />
       </v-col>
@@ -21,7 +20,6 @@
           v-model="userAttributes.firstName"
           label="First name *"
           :rules="[required]"
-          variant="outlined"
           required
         />
       </v-col>
@@ -33,7 +31,6 @@
           v-model="userAttributes.lastName"
           label="Last name *"
           :rules="[required]"
-          variant="outlined"
           required
         />
       </v-col>
@@ -44,7 +41,6 @@
         <v-text-field
           v-model="userAttributes.displayName"
           label="Display Name"
-          variant="outlined"
           required
         />
       </v-col>
@@ -55,7 +51,6 @@
         <v-text-field
           v-model="userAttributes.title"
           label="Title"
-          variant="outlined"
         />
       </v-col>
     </v-row>
@@ -70,7 +65,6 @@
         <v-text-field
           v-model="userAttributes.department"
           label="Department"
-          variant="outlined"
         />
       </v-col>
       <v-col
@@ -80,7 +74,6 @@
         <v-text-field
           v-model="userAttributes.division"
           label="Division"
-          variant="outlined"
         />
       </v-col>
       <v-col
@@ -90,7 +83,6 @@
         <v-text-field
           v-model="userAttributes.branch"
           label="Branch"
-          variant="outlined"
         />
       </v-col>
       <v-col
@@ -100,7 +92,6 @@
         <v-text-field
           v-model="userAttributes.unit"
           label="Unit"
-          variant="outlined"
         />
       </v-col>
     </v-row>
@@ -119,7 +110,6 @@
           label="Roles *"
           :rules="[required]"
           class="mt-6"
-          variant="outlined"
           required
         />
       </v-col>
@@ -131,7 +121,7 @@
           :loading="isLoading"
           color="error"
           variant="outlined"
-          :to="{ name: 'users/UsersPage' }"
+          :to="{ name: 'administration/UsersPage' }"
         >
           Cancel
         </v-btn>
@@ -183,7 +173,7 @@ async function saveWrapper() {
   try {
     await usersApi.create(userAttributes.value)
     snack.success("User created.")
-    router.push({ name: "users/UsersPage" })
+    router.push({ name: "administration/UsersPage" })
   } catch (error) {
     snack.error("Failed to create user!")
     throw error

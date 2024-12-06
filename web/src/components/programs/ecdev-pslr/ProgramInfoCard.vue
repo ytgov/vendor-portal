@@ -1,5 +1,5 @@
 <template>
-  <v-card variant="outlined">
+  <v-card>
     <v-card-title>Paid Sick Leave Rebate</v-card-title>
     <v-card-subtitle>Economic Development</v-card-subtitle>
     <v-card-text>
@@ -19,10 +19,7 @@
           >Yukon.ca</a
         >.
       </p>
-      <v-btn
-        color="primary"
-        >Apply</v-btn
-      >
+      <v-btn color="primary">Apply</v-btn>
     </v-card-text>
   </v-card>
 </template>

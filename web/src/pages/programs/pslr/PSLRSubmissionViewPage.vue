@@ -4,13 +4,12 @@
     type="card"
   />
   <div v-if="vendor">
-    <h1>PSLR for {{ vendor.name }}</h1>
     <v-row>
       <v-col
         cols="12"
         md="7"
       >
-        <v-card variant="outlined" class="pb-2">
+        <v-card class="pb-2">
           <v-card-title>Employees</v-card-title>
           <v-list-item
             v-for="(program, idx) of employees"
@@ -31,17 +30,13 @@
         </v-card>
       </v-col>
       <v-col>
-        <v-card
-          variant="outlined"
-          class="mb-5"
-        >
+        <v-card class="mb-5">
           <v-card-title>Status</v-card-title>
 
           <v-list>
             <div></div>
           </v-list>
         </v-card>
-        
       </v-col>
     </v-row>
   </div>
@@ -52,7 +47,7 @@ import useVendor from "@/use/use-vendor"
 import { isArray } from "lodash"
 import { computed, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import useBreadcrumbs from "@/use/use-breadcrumbs"
+import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
 
 const route = useRoute()
 const router = useRouter()
@@ -97,18 +92,19 @@ setBreadcrumbs()
 
 function setBreadcrumbs() {
   if (vendor.value) {
-    useBreadcrumbs([
+    useBreadcrumbs("", [
+      BASE_CRUMB,
       {
         title: `${vendor.value?.name}`,
         to: `/vendor/${vendor.value?.vendorId}`,
       },
       {
         title: `Paid Sick Leave Rebate`,
-        to: `/vendor/${vendor.value?.vendorId}/programs/pslr`,
+        to: `/vendor/${vendor.value?.vendorId}/programs/EcDev-PSLR`,
       },
     ])
   } else {
-    useBreadcrumbs([{ title: "Loading...", to: "" }])
+    useBreadcrumbs("", [{ title: "Loading...", to: "" }])
   }
 }
 function openSubmission(submissionId: number) {

@@ -11,7 +11,7 @@
     <v-list>
       <v-list-item
         :title="username"
-        :to="{ name: 'ProfilePage' }"
+        :to="{ name: 'individual/ProfilePage' }"
         prepend-icon="mdi-account"
       />
       <v-list-item

@@ -2,29 +2,13 @@
   <v-skeleton-loader v-if="isNil(currentUser)" />
   <v-container v-else>
     <h2 class="d-flex flex-column flex-md-row justify-space-between mb-3">
-      <span>
-        My Profile:
-        <v-chip variant="outlined">
-          {{ displayName }}
-        </v-chip>
-      </span>
-
       <div class="d-flex justify-space-between mt-4 mb-3 my-md-0">
         <v-btn
           color="primary"
           variant="outlined"
-          :to="{ name: 'users/UsersPage' }"
+          :to="{ name: 'administration/UsersPage' }"
         >
           Back
-        </v-btn>
-        <v-btn
-          class="ml-md-3"
-          title="Refresh"
-          color="primary"
-          append-icon="mdi-sync"
-          @click="refresh"
-        >
-          Sync
         </v-btn>
       </div>
     </h2>
@@ -32,35 +16,23 @@
     <UserEditForm
       class="mt-10"
       :user-id="currentUser.id"
-      :cancel-button-options="{ to: { name: 'users/UsersPage' } }"
+      :cancel-button-options="{ to: { name: 'administration/UsersPage' } }"
       @saved="refresh"
     />
   </v-container>
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue"
 import { isNil } from "lodash"
 
-import useBreadcrumbs from "@/use/use-breadcrumbs"
+import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
 import useCurrentUser from "@/use/use-current-user"
 
 import UserEditForm from "@/components/users/UserEditForm.vue"
 
 const { currentUser, refresh } = useCurrentUser<true>()
 
-const displayName = computed(() => {
-  if (currentUser.value === null) return "loading..."
-
-  return currentUser.value.displayName
-})
-
-useBreadcrumbs([
-  {
-    title: "Profile",
-    to: { name: "individual/ProfilePage" },
-  },
-])
+useBreadcrumbs("My Profile", [BASE_CRUMB])
 </script>
 
 <style scoped></style>

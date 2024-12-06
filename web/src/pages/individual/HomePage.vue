@@ -1,12 +1,10 @@
 <template>
-  <h1>Home</h1>
-
   <v-row>
     <v-col
       cols="12"
       md="6"
     >
-      <h3 class="mb-3">Personal Details</h3>
+      <h3 class="mb-3 d-none">Personal Details</h3>
       <AccountDetailsCard />
     </v-col>
     <v-col
@@ -24,5 +22,5 @@ import AccountDetailsCard from "@/components/individual/AccountDetailsCard.vue"
 import VendorLinkCard from "@/components/vendor/VendorLinkCard.vue"
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 
-useBreadcrumbs([])
+useBreadcrumbs("Vendor Portal Home", [])
 </script>

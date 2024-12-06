@@ -17,7 +17,6 @@
           v-model="user.firstName"
           label="First name *"
           :rules="[required]"
-          variant="outlined"
           required
         />
       </v-col>
@@ -29,7 +28,6 @@
           v-model="user.lastName"
           label="Last name *"
           :rules="[required]"
-          variant="outlined"
           required
         />
       </v-col>
@@ -41,7 +39,6 @@
           v-model="user.displayName"
           label="Display Name *"
           :rules="[required]"
-          variant="outlined"
           required
         />
       </v-col>
@@ -52,7 +49,6 @@
         <v-text-field
           v-model="user.title"
           label="Title"
-          variant="outlined"
         />
       </v-col>
       <v-col
@@ -63,7 +59,6 @@
           v-model="user.email"
           label="Email *"
           :rules="[required]"
-          variant="outlined"
           required
         />
       </v-col>
@@ -79,7 +74,6 @@
         <v-text-field
           v-model="user.department"
           label="Department"
-          variant="outlined"
         />
       </v-col>
       <v-col
@@ -89,7 +83,6 @@
         <v-text-field
           v-model="user.division"
           label="Division"
-          variant="outlined"
         />
       </v-col>
       <v-col
@@ -99,7 +92,6 @@
         <v-text-field
           v-model="user.branch"
           label="Branch"
-          variant="outlined"
         />
       </v-col>
       <v-col
@@ -109,7 +101,6 @@
         <v-text-field
           v-model="user.unit"
           label="Unit"
-          variant="outlined"
         />
       </v-col>
     </v-row>
