@@ -35,7 +35,6 @@
                   >
                     {{ APPLICATION_NAME }}
                   </h2>
-                  <!-- <h6 class="text-subtitle-1 font-weight-light mt-0">{{ applicationSubtitle }}</h6> -->
                 </div>
               </div>
             </v-col>
@@ -56,14 +55,11 @@
                   >
                     {{ APPLICATION_NAME }}
                   </h2>
-                  <!-- <h6 class="text-subtitle-1 font-weight-light mt-4 op-5">
-                    {{ applicationSubtitle }}
-                  </h6> -->
                 </div>
 
                 <h2 class="text-h4 font-weight-bold mt-4">Welcome!</h2>
                 <h6 class="text-h6 font-weight-light mt-3 mb-5">
-                  Businesses can use this portal to apply for programs offered by the Yukon
+                  Organizations can use this portal to apply for programs offered by the Yukon
                   Government which currently include:
                 </h6>
 
@@ -126,7 +122,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue"
+import { onMounted } from "vue"
 import { useAuth0 } from "@auth0/auth0-vue"
 
 import { APPLICATION_NAME } from "@/config"
@@ -135,8 +131,6 @@ import useCurrentUser from "@/use/use-current-user"
 const { reset: resetCurrentUser } = useCurrentUser()
 
 const { loginWithRedirect } = useAuth0()
-
-const applicationSubtitle = ref("Testing")
 
 onMounted(() => {
   resetCurrentUser()
