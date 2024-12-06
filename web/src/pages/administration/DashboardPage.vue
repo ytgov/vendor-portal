@@ -19,13 +19,10 @@
 <script lang="ts" setup>
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 
-useBreadcrumbs(
-  [
-    {
-      title: "Administration Dashboard",
-      to: { name: "administration/DashboardPage" },
-    },
-  ],
-  true
-)
+useBreadcrumbs("Administration Dashboard", [
+  {
+    title: "Administration Dashboard",
+    to: { name: "administration/DashboardPage" },
+  },
+])
 </script>

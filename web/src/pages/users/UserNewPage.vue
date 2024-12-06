@@ -28,7 +28,7 @@ import UserCreateForm from "@/components/users/UserCreateForm.vue"
 
 const { smAndDown } = useDisplay()
 
-useBreadcrumbs([
+useBreadcrumbs("New User", [
   {
     title: "All Users",
     to: { name: "administration/UsersPage" },
@@ -39,6 +39,5 @@ useBreadcrumbs([
       name: "administration/UserNewPage",
     },
   },
-],
-true)
+])
 </script>

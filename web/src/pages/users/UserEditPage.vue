@@ -60,7 +60,7 @@ const displayName = computed(() => {
   return user.value.displayName
 })
 
-useBreadcrumbs([
+useBreadcrumbs("Edit User", [
   {
     title: "All Users",
     to: { name: "administration/UsersPage" },
@@ -80,6 +80,5 @@ useBreadcrumbs([
       params: { userId: props.userId },
     },
   },
-],
-true)
+])
 </script>

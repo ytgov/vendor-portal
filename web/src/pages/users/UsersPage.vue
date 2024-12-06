@@ -20,13 +20,10 @@ import UsersEditTable from "@/components/users/UsersEditTable.vue"
 
 import { useBreadcrumbs } from "@/use/use-breadcrumbs"
 
-useBreadcrumbs(
-  [
-    {
-      title: "All Users",
-      to: { name: "administration/UsersPage" },
-    },
-  ],
-  true
-)
+useBreadcrumbs("Users", [
+  {
+    title: "All Users",
+    to: { name: "administration/UsersPage" },
+  },
+])
 </script>
