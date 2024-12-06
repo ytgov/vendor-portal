@@ -24,7 +24,7 @@
             >
               <div class="d-none d-sm-block">
                 <img
-                  src="@/assets/logo.svg"
+                  src="@/assets/yukon-logo.svg"
                   alt="Logo"
                   class="d-md-block pl-6"
                 />
@@ -45,7 +45,7 @@
                   class="pa-5 d-md-none"
                 >
                   <img
-                    src="@/assets/logo.svg"
+                    src="@/assets/yukon-logo.svg"
                     alt="Logo"
                     class="d-md-inline"
                   />
