@@ -81,6 +81,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/layouts/DefaultLayout.vue"),
     children: [
       {
+        path: "link",
+        name: "vendor/LinkPage",
+        component: () => import("@/pages/vendor/LinkPage.vue"),
+      },
+      {
         path: ":vendorId",
         name: "vendor/HomePage",
         component: () => import("@/pages/vendor/HomePage.vue"),

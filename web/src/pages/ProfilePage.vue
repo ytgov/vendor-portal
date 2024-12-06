@@ -1,20 +1,8 @@
 <template>
   <v-skeleton-loader v-if="isNil(currentUser)" />
   <v-container v-else>
-    <h2 class="d-flex flex-column flex-md-row justify-space-between mb-3">
-      <div class="d-flex justify-space-between mt-4 mb-3 my-md-0">
-        <v-btn
-          color="primary"
-          variant="outlined"
-          :to="{ name: 'administration/UsersPage' }"
-        >
-          Back
-        </v-btn>
-      </div>
-    </h2>
-
     <UserEditForm
-      class="mt-10"
+      class="mt-2"
       :user-id="currentUser.id"
       :cancel-button-options="{ to: { name: 'administration/UsersPage' } }"
       @saved="refresh"

@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="mb-5">
     <v-card-title>My Account</v-card-title>
     <v-card-text>
       <div>
@@ -39,12 +39,24 @@
       </div>
     </v-card-text>
     <v-card-text>
-      <v-btn
-        :to="{ name: 'individual/ProfilePage' }"
-        block
-        color="secondary"
-        >View Profile
-      </v-btn>
+      <v-row>
+        <v-col cols="6">
+          <v-btn
+            :to="{ name: 'individual/ProfilePage' }"
+            block
+            color="secondary"
+            >Edit Profile
+          </v-btn>
+        </v-col>
+        <v-col cols="6">
+          <v-btn
+            block
+            color="warning"
+            :to="{ name: 'vendor/LinkPage' }"
+            >Link to Vendor</v-btn
+          >
+        </v-col>
+      </v-row>
     </v-card-text>
   </v-card>
 </template>

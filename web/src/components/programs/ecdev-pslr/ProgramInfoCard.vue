@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>Paid Sick Leave Rebate</v-card-title>
-    <v-card-subtitle>Economic Development</v-card-subtitle>
+    <v-card-subtitle>Administered by <strong>Economic Development</strong></v-card-subtitle>
     <v-card-text>
       <p class="mb-3">
         The Paid Sick Leave Rebate provides up to 40 hours of wages for eligible workers who are
