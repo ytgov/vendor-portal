@@ -39,6 +39,11 @@ const routes: RouteRecordRaw[] = [
         component: () => import("@/pages/users/UserEditPage.vue"),
         props: true,
       },
+      {
+        path: "programs",
+        name: "administration/ProgramsPage",
+        component: () => import("@/pages/programs/ProgramsManagePage.vue"),
+      },
     ],
   },
   {

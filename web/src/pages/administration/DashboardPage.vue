@@ -1,13 +1,10 @@
 <template>
-  <h2>Administration Dashboard</h2>
-
+  <h3 class="mb-3">Administration Home</h3>
   <v-card>
     <v-card-text>
-      <p>Welcome to the Administration Dashboard!</p>
-
       <v-list>
         <v-list-item
-          title="All Users"
+          title="Manage Users"
           :to="{ name: 'administration/UsersPage' }"
           prepend-icon="mdi-account-group"
         />
@@ -19,10 +16,5 @@
 <script lang="ts" setup>
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 
-useBreadcrumbs("Administration Dashboard", [
-  {
-    title: "Administration Dashboard",
-    to: { name: "administration/DashboardPage" },
-  },
-])
+useBreadcrumbs("Administration Home", [])
 </script>
