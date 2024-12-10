@@ -11,6 +11,7 @@
         md="6"
       >
         <VendorDetailsCard :vendor="vendor" />
+        <VendorPeopleCard :vendor="vendor" />
       </v-col>
       <v-col>
         <VendorProgramList :vendor="vendor" />
@@ -21,6 +22,7 @@
 
 <script setup lang="ts">
 import VendorDetailsCard from "@/components/vendor/VendorDetailsCard.vue"
+import VendorPeopleCard from "@/components/vendor/VendorPeopleCard.vue"
 import VendorProgramList from "@/components/vendor/VendorProgramList.vue"
 import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
 import useVendor from "@/use/use-vendor"

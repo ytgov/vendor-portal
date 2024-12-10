@@ -85,7 +85,7 @@
 <script setup lang="ts">
 import useVendor from "@/use/use-vendor"
 import { isArray } from "lodash"
-import { computed, ref, watch } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
 
@@ -93,6 +93,21 @@ const route = useRoute()
 const router = useRouter()
 
 const viewBy = ref("Date")
+
+onMounted(() => {
+  const sort = localStorage.getItem("pslrSort")
+
+  if (sort) {
+    viewBy.value = sort
+  }
+})
+
+watch(
+  () => viewBy.value,
+  (newVal) => {
+    localStorage.setItem("pslrSort", newVal)
+  }
+)
 
 const vendorId = computed(() =>
   isArray(route.params.vendorId) ? route.params.vendorId[0] : route.params.vendorId

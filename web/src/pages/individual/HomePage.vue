@@ -12,6 +12,16 @@
       md="6"
     >
       <h3 class="mb-3">Linked Vendor Accounts</h3>
+
+      <v-alert
+        type="info"
+        color="success"
+        class="mb-5 white-text"
+        title="Pending Link Request"
+        >We are still processing a request to link "AALKDJSF" to your account, submitted on Monday,
+        June 21, 2021.
+      </v-alert>
+
       <VendorLinkCard vendor-id="CDICEFOGANAL" />
     </v-col>
   </v-row>
@@ -24,3 +34,11 @@ import useBreadcrumbs from "@/use/use-breadcrumbs"
 
 useBreadcrumbs("Vendor Portal Home", [])
 </script>
+
+<style>
+.white-text .v-alert__content,
+.white-text .v-alert__prepend,
+.white-text .v-alert-title {
+  color: white !important;
+}
+</style>

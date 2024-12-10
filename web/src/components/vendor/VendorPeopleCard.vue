@@ -1,34 +1,38 @@
 <template>
+  <h3 class="mb-3">Linked Accounts</h3>
   <v-card class="mb-5">
-    <v-card-title>Vendor Information</v-card-title>
+    <v-card-title>Michael Johnson (Vendor Admin)</v-card-title>
     <v-card-text>
       <div class="d-flex mb-3">
         <v-icon
           class="mt-2"
           size="40"
           color="#7A9A01"
-          >mdi-store</v-icon
+          >mdi-calendar</v-icon
         >
         <div class="ml-2 text-subtitle-1">
-          <strong>Vendor ID: </strong><br />{{ vendor.vendorId }}
+          <strong>Linked to Vendor on: </strong><br />February 10, 2024<br />
+          <strong>Approved by: </strong><br />Department of Finance
         </div>
       </div>
-
-      <div class="d-flex">
+    </v-card-text>
+  </v-card>
+  <v-card>
+    <v-card-title>Jack London</v-card-title>
+    <v-card-text>
+      <div class="d-flex mb-3">
         <v-icon
           class="mt-2"
           size="40"
           color="#7A9A01"
-          >mdi-map</v-icon
+          >mdi-account</v-icon
         >
         <div class="ml-2 text-subtitle-1">
-          <strong>Address: </strong><br />2 Stope Way<br />Whitehorse YT, Y1A0B3
+          <strong>Linked to Vendor on: </strong><br />February 25, 2024<br />
+          <strong>Approved by: </strong><br />Michael Johnson
         </div>
       </div>
-    </v-card-text>
-
-    <v-card-text>
-      <v-btn block>Update this Information</v-btn>
+      <v-btn color="warning">Unlink</v-btn>
     </v-card-text>
   </v-card>
 </template>

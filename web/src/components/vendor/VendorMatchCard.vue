@@ -1,6 +1,6 @@
 <template>
-  <v-card>
-    <v-card-title>Vendor Information</v-card-title>
+  <v-card class="mb-5">
+    <v-card-title>Matched Vendor Information</v-card-title>
     <v-card-text>
       <div class="d-flex mb-3">
         <v-icon
@@ -10,7 +10,7 @@
           >mdi-store</v-icon
         >
         <div class="ml-2 text-subtitle-1">
-          <strong>Vendor ID: </strong><br />{{ vendor.vendorId }}
+          <strong>Vendor Name: </strong><br />{{ vendor.name }}
         </div>
       </div>
 
@@ -25,6 +25,7 @@
           <strong>Address: </strong><br />2 Stope Way<br />Whitehorse YT, Y1A0B3
         </div>
       </div>
+      <p class="mt-5">If this match is correct, please click the "Continue" button below.</p>
     </v-card-text>
   </v-card>
 </template>

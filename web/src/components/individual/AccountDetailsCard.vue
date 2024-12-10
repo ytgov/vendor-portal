@@ -25,7 +25,7 @@
           </div>
         </div>
 
-        <div class="d-flex">
+        <!-- <div class="d-flex">
           <v-icon
             class="mt-2"
             size="40"
@@ -35,7 +35,7 @@
           <div class="ml-2 text-subtitle-1">
             <strong>Address: </strong><br />2 Stope Way<br />Whitehorse YT, Y1A0B3
           </div>
-        </div>
+        </div> -->
       </div>
     </v-card-text>
     <v-card-text>
