@@ -44,6 +44,16 @@ const routes: RouteRecordRaw[] = [
         name: "administration/ProgramsPage",
         component: () => import("@/pages/programs/ProgramsManagePage.vue"),
       },
+      {
+        path: "programs/pslr",
+        name: "administration/PSLRRequestsPage",
+        component: () => import("@/pages/programs/pslr/ManageRequestPage.vue"),
+      },
+      {
+        path: "programs/pslr/:id",
+        name: "administration/PSLRManageRequestDetailPage",
+        component: () => import("@/pages/programs/pslr/ManageRequestDetailPage.vue"),
+      },
     ],
   },
   {
