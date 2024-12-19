@@ -19,7 +19,16 @@
           >Yukon.ca</a
         >.
       </p>
-      <v-btn color="primary">Apply</v-btn>
+      <v-btn
+        v-if="showApply"
+        color="primary"
+        :to="{ name: 'programs/PSLRApplyPage' }"
+        >Apply</v-btn
+      >
     </v-card-text>
   </v-card>
 </template>
+
+<script setup lang="ts">
+defineProps<{ showApply: boolean }>()
+</script>

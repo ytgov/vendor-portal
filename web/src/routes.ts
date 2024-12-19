@@ -56,6 +56,11 @@ const routes: RouteRecordRaw[] = [
         name: "programs/HomePage",
         component: () => import("@/pages/programs/ProgramListPage.vue"),
       },
+      {
+        path: "paid-sick-leave-rebate",
+        name: "programs/PSLRApplyPage",
+        component: () => import("@/pages/programs/pslr/PSLRApplyPage.vue"),
+      },
     ],
   },
 

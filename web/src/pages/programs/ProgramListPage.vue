@@ -4,7 +4,7 @@
       cols="12"
       md="6"
     >
-      <PSLRProgramInfoCard />
+      <PSLRProgramInfoCard :show-apply="true" />
     </v-col>
   </v-row>
 </template>

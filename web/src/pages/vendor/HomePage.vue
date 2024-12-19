@@ -14,6 +14,14 @@
         <VendorPeopleCard :vendor="vendor" />
       </v-col>
       <v-col>
+        <v-alert
+          type="info"
+          color="success"
+          class="mb-5 white-text"
+          title="Pending Program Application"
+          >We are still processing an application for the Paid Sick Leave Rebate program, submitted on
+          Monday, November 21, 2024.
+        </v-alert>
         <VendorProgramList :vendor="vendor" />
       </v-col>
     </v-row>

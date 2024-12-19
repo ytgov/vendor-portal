@@ -41,6 +41,14 @@ export default createVuetify({
       color: "primary",
       /* hideDetails: "auto" */
     },
+    VFileInput: {
+      variant: "outlined",
+      density: "comfortable",
+      color: "primary",
+      prependIcon: "",
+      prependInnerIcon: "mdi-paperclip"
+      /* hideDetails: "auto" */
+    },
     VTextarea: {
       variant: "outlined",
       density: "comfortable",
