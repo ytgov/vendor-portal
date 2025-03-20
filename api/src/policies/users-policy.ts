@@ -29,16 +29,7 @@ export class UsersPolicy extends PolicyFactory(User) {
   }
 
   permittedAttributes(): Path[] {
-    const attributes: (keyof Attributes<User>)[] = [
-      "firstName",
-      "lastName",
-      "displayName",
-      "title",
-      "department",
-      "division",
-      "branch",
-      "unit",
-    ]
+    const attributes: (keyof Attributes<User>)[] = ["firstName", "lastName", "displayName"]
 
     if (this.user.isSystemAdmin) {
       attributes.push("email", "roles", "deactivatedAt")

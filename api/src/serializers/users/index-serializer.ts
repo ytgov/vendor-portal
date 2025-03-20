@@ -5,18 +5,7 @@ import BaseSerializer from "@/serializers/base-serializer"
 
 export type UserIndexView = Pick<
   User,
-  | "id"
-  | "email"
-  | "firstName"
-  | "lastName"
-  | "displayName"
-  | "roles"
-  | "title"
-  | "department"
-  | "division"
-  | "branch"
-  | "unit"
-  | "deactivatedAt"
+  "id" | "email" | "firstName" | "lastName" | "displayName" | "roles" | "deactivatedAt"
 > & {
   isActive: boolean
 }
@@ -31,11 +20,6 @@ export class IndexSerializer extends BaseSerializer<User> {
         "lastName",
         "displayName",
         "roles",
-        "title",
-        "department",
-        "division",
-        "branch",
-        "unit",
         "deactivatedAt",
       ]),
       isActive: isNil(this.record.deactivatedAt),
