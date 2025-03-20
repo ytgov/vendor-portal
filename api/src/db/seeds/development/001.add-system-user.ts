@@ -8,7 +8,7 @@ export async function seed(_knex: Knex): Promise<void> {
   const usersAttributes = [
     {
       email: "system.user@vendor-portal.com",
-      auth0Subject: "system.user@vendor-portal.com",
+      auth0Subject: "NO_LOGIN_system.user@vendor-portal.com",
       firstName: "System",
       lastName: "User",
       displayName: "System User",

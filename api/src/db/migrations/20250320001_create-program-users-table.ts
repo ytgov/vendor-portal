@@ -1,11 +1,11 @@
 import type { Knex } from "knex"
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.createTable("vendor_links", function (table) {
+  await knex.schema.createTable("program_users", function (table) {
     table.increments("id").notNullable().primary()
-    table.integer("vendor_id").notNullable().index()
-    table.integer("user_id").notNullable().index()
-    table.boolean("is_primary").notNullable().defaultTo(false)  
+    table.integer("program_id").notNullable().references("id").inTable("programs")
+    table.integer("user_id").notNullable().references("id").inTable("users")
+    table.string("roles", 255)
 
     table
       .specificType("created_at", "DATETIME2(0)")
@@ -20,5 +20,5 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  await knex.schema.dropTable("vendor_links")
+  await knex.schema.dropTable("program_users")
 }
