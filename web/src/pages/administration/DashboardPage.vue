@@ -4,25 +4,25 @@
   <v-row>
     <v-col>
       <v-card>
-        <v-card-text>
-          <v-list>
+          <v-list class="py-0">
             <v-list-item
               title="Manage Users"
               :to="{ name: 'administration/UsersPage' }"
               prepend-icon="mdi-account-group"
             />
+            <v-divider />
             <v-list-item
               title="Manage Programs"
               :to="{ name: 'administration/ProgramsPage' }"
               prepend-icon="mdi-handshake"
             />
+            <v-divider />
             <v-list-item
               title="Manage Paid Sick Leave Rebate"
               :to="{ name: 'administration/PSLRRequestsPage' }"
               prepend-icon="mdi-emoticon-sick-outline"
             />
           </v-list>
-        </v-card-text>
       </v-card>
     </v-col>
     <v-col>
@@ -32,19 +32,29 @@
         <v-list class="pt-0">
           <v-list-item
             class="pt-0"
+            title="Homer Simpson : Springfield Nuclear Power Plant"
+            subtitle="Submitted December 16, 2024 (3 days ago)"
+          />
+          <v-list-item
+            class="pt-0"
             title="Michael Johnson : Ice Fog Analytics Inc."
-            subtitle="Applied December 17, 2024 (48 hours ago)"
+            subtitle="Submitted December 17, 2024 (2 days ago)"
+          />
+          <v-list-item
+            class="pt-0"
+            title="Brett Favre : Green Bay Packers"
+            subtitle="Submitted December 17, 2024 (8 hours ago)"
           />
         </v-list>
       </v-card>
 
       <v-card>
-        <v-card-title>Pending Paid Sick Leave Application Requests</v-card-title>
+        <v-card-title>Pending Paid Sick Leave Applications</v-card-title>
         <v-list class="pt-0">
           <v-list-item
             class="pt-0"
             title="Ice Fog Analytics Inc."
-            subtitle="Applied December 18, 2024 (18 hours ago)"
+            subtitle="Submitted December 18, 2024 (18 hours ago)"
             :to="{ name: 'administration/PSLRManageRequestDetailPage', params: { id: 12 } }"
           />
         </v-list>

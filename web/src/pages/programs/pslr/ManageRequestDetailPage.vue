@@ -20,7 +20,7 @@
             class="d-flex"
             style="width: 100%"
           >
-            <v-btn color="success">Approve</v-btn>
+            <v-btn color="success">Confirm</v-btn>
             <v-spacer />
 
             <v-btn color="warning">Reject</v-btn>
@@ -50,7 +50,8 @@
       <v-card class="mb-5">
         <v-card-title>YCOR Certificate</v-card-title>
         <v-card-text>
-          <p class="mb-5">File name: <strong>Downloaded Cert.pdf</strong></p>
+          <p class="mb-2">File name: <strong>Downloaded Cert.pdf</strong></p>
+          <p class="mb-5">Expires on: <strong>December 31, 2025</strong></p>
           <v-btn
             class="mr-5"
             size="small"
@@ -63,7 +64,8 @@
       <v-card class="mb-5">
         <v-card-title>Business license</v-card-title>
         <v-card-text>
-          <p class="mb-5">File name: <strong>Business_Lic.pdf</strong></p>
+          <p class="mb-2">File name: <strong>Business_Lic.pdf</strong></p>
+          <p class="mb-5">Expires on: <strong>December 31, 2025</strong></p>
           <v-btn
             class="mr-5"
             size="small"
@@ -76,7 +78,8 @@
       <v-card class="mb-5">
         <v-card-title>Paid sick leave policy</v-card-title>
         <v-card-text>
-          <p class="mb-5">File name: <strong>Policy.docx</strong></p>
+          <p class="mb-2">File name: <strong>Policy.docx</strong></p>
+          <p class="mb-5">Expires on: <strong>December 31, 2025</strong></p>
           <v-btn
             class="mr-5"
             size="small"

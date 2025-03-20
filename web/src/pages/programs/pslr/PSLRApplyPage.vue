@@ -11,15 +11,15 @@
   <v-row>
     <v-col>
       <v-card>
-        <v-card-title>Application Form</v-card-title>
+        <v-card-title>Vendor Information</v-card-title>
         <v-card-text>
           <p class="mb-3">
             To apply for this program, you must upload your current Yukon Corporate Online Registry
-            (YCOR) Certificate along with your Business License and a CRA Remittance. If your
+            (YCOR) Certificate along with your Business License or a CRA Remittance. If your
             business offers a paid sick leave program, please also include that policy in your
             submission.
           </p>
-          <p class="mb-3">
+          <p class="mb-5">
             Once you submit the required documents, we will review them and contact you with any
             questions we may have. When your application is approved, you will be notified via email
             and you will be able to submit claims through this portal at that point. This process
@@ -27,31 +27,122 @@
           </p>
 
           <v-form @submit.prevent="submitClick">
-            <VendorSelect v-model="vendorId" />
+            <v-row>
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <VendorSelect
+                  v-model="vendorId"
+                  hide-details
+                />
+              </v-col>
 
-            <v-file-input
-              v-model="ycorFile"
-              label="YCOR Certificate (required)"
-              required
-            />
+              <v-col
+                cols="12"
+                md="6"
+              >
+              Self employed ?
+              </v-col>
 
-            <v-file-input
-              v-model="businessLicenceFile"
-              label="Business license"
-            />
-            <v-file-input
-              v-model="craFile"
-              label="CRA remittance"
-            />
-            <v-file-input
-              v-model="policyFile"
-              label="Paid sick leave policy"
-            />
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <v-file-input
+                  v-model="ycorFile"
+                  label="YCOR Certificate (required)"
+                  required
+                  hide-details
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <DatePickerMenu
+                  :field-options="{ label: 'Document expiration', hideDetails: true }"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <v-file-input
+                  v-model="businessLicenceFile"
+                  label="Business license"
+                  hide-details
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <DatePickerMenu
+                  :field-options="{ label: 'Document expiration', hideDetails: true }"
+                />
+              </v-col>
+
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <v-file-input
+                  v-model="craFile"
+                  label="CRA remittance"
+                  hide-details
+              /></v-col>
+
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <DatePickerMenu
+                  :field-options="{ label: 'Document expiration', hideDetails: true }"
+              /></v-col>
+
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <v-file-input
+                  v-model="policyFile"
+                  label="Paid sick leave policy"
+                  hide-details
+              /></v-col>
+
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <DatePickerMenu
+                  :field-options="{ label: 'Document expiration', hideDetails: true }"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <v-textarea
+                  label="Mailing address"
+                  rows="3"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <v-textarea
+                  label="Physical address"
+                  rows="3"
+                />
+              </v-col>
+            </v-row>
 
             <v-btn
               :disabled="!isValid"
               type="submit"
-              >Apply</v-btn
+              >Save</v-btn
             >
           </v-form>
         </v-card-text>
@@ -68,6 +159,7 @@ import { useRouter } from "vue-router"
 import ProgramInfoCard from "@/components/programs/ecdev-pslr/ProgramInfoCard.vue"
 import useSnack from "@/use/use-snack"
 import VendorSelect from "@/components/vendor/VendorSelect.vue"
+import DatePickerMenu from "@/components/common/DatePickerMenu.vue"
 
 const snack = useSnack()
 const router = useRouter()

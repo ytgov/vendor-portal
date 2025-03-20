@@ -63,7 +63,7 @@
             class="mb-5"
             @click="openSubmission(program.id)"
           >
-            <v-card-title>{{ program.name }}</v-card-title>
+            <v-card-title>{{ program.name }} (Birth date)</v-card-title>
 
             <v-card-text>
               <v-list-item-title class="text-subtitle-1 font-weight-bold mb-2"> </v-list-item-title>
