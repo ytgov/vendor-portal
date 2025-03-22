@@ -9,7 +9,6 @@ This diagram should be verified against the current database schema for accuracy
 end note
 
 ' Entities (Tables)
-together {
 entity "users" {
   * id : integer <<PK>> <<increments>>
   --
@@ -33,7 +32,6 @@ entity "vendor_users" {
   --
   vendor_id : integer <<FK>> <<notNullable>>
   user_id : integer <<FK>> <<notNullable>>
-  program_id : integer <<FK>> <<nullable>>
   is_active : boolean <<notNullable>> <<default=false>>
   is_admin : boolean <<notNullable>> <<default=false>>
   decision_by_user_id : integer <<FK>> <<nullable>>
@@ -55,9 +53,7 @@ entity "program_users" {
   updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
   deleted_at : DATETIME2(0) <<nullable>>
 }
-}
 
-together {
 entity "vendors" {
   * id : integer <<PK>> <<increments>>
   --
@@ -101,25 +97,6 @@ entity "vendor_programs" {
   deleted_at : DATETIME2(0) <<nullable>>
 }
 
-entity "vendor_link_requests" {
-  * id : integer <<PK>> <<increments>>
-  --
-  user_id : integer <<FK>> <<notNullable>>
-  matched_vendor_id : string(50) <<nullable>>
-  business_name : string(150) <<nullable>>
-  operating_name : string(150) <<nullable>>
-  ycor_number : string(50) <<nullable>>
-  address : string(500) <<nullable>>
-  vendor_id : string(50) <<nullable>>
-  status : string(100) <<notNullable>>
-  decision_by_user_id : integer <<FK>> <<nullable>>
-  decision_at : DATETIME2(0) <<nullable>>
-  review_notes : string(2000) <<nullable>>
-  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
-  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
-  deleted_at : DATETIME2(0) <<nullable>>
-}
-
 entity "vendor_documentations" {
   * id : integer <<PK>> <<increments>>
   --
@@ -141,8 +118,26 @@ entity "vendor_documentations" {
   deleted_at : DATETIME2(0) <<nullable>>
 }
 
+entity "vendor_link_requests" {
+  * id : integer <<PK>> <<increments>>
+  --
+  user_id : integer <<FK>> <<notNullable>>
+  matched_vendor_id : string(50) <<nullable>>
+  business_name : string(150) <<nullable>>
+  operating_name : string(150) <<nullable>>
+  ycor_number : string(50) <<nullable>>
+  address : string(500) <<nullable>>
+  vendor_id : string(50) <<nullable>>
+  status : string(100) <<notNullable>>
+  decision_by_user_id : integer <<FK>> <<nullable>>
+  decision_at : DATETIME2(0) <<nullable>>
+  review_notes : string(2000) <<nullable>>
+  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  deleted_at : DATETIME2(0) <<nullable>>
 }
 
+together {
 entity "programs" {
   * id : integer <<PK>> <<increments>>
   --
@@ -161,6 +156,17 @@ entity "programs" {
   + unique(slug, indexName: "programs_slug_unique", where deleted_at IS NULL)
 }
 
+entity "program_documentations" {
+  * id : integer <<PK>> <<increments>>
+  --
+  program_id : integer <<FK>> <<notNullable>>
+  documentation_id : integer <<FK>> <<notNullable>>
+  purpose : string(500) <<nullable>>
+  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  deleted_at : DATETIME2(0) <<nullable>>
+}
+}
 entity "histories" {
   * id : integer <<PK>> <<increments>>
   --
@@ -185,39 +191,21 @@ entity "documentations" {
   deleted_at : DATETIME2(0) <<nullable>>
 }
 
-entity "program_documentations" {
-  * id : integer <<PK>> <<increments>>
-  --
-  program_id : integer <<FK>> <<notNullable>>
-  documentation_id : integer <<FK>> <<notNullable>>
-  purpose : string(500) <<nullable>>
-  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
-  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
-  deleted_at : DATETIME2(0) <<nullable>>
-}
-
 ' Relationships (Foreign Keys)
-vendors::id ||--o{ vendor_users::vendor_id
-users::id ||--o{ vendor_users::user_id
-programs::id ||--o{ vendor_users::program_id
-users::id ||--o{ vendor_users
+vendors::id ||-up-o{ vendor_users::vendor_id
+users::id ||-right-o{ vendor_users::user_id
 
 vendors::id ||--o{ vendor_programs::vendor_id
 programs::id ||--o{ vendor_programs::program_id
-users::id ||--o{ vendor_programs::requested_by_user_id
-users::id ||--o{ vendor_programs::review_by_user_id
 
 programs::id ||--o{ program_users::program_id
-users::id ||--o{ program_users::user_id
+users::id ||-left-o{ program_users::user_id
 
-programs::id ||--o{ program_documentations::program_id
+programs::id ||-right-o{ program_documentations::program_id
 documentations::id ||--o{ program_documentations::documentation_id
 
 vendors::id ||--o{ vendor_documentations::vendor_id
 documentations::id ||--o{ vendor_documentations::documentation_id
-users::id ||--o{ vendor_documentations::created_by_user_id
-users::id ||--o{ vendor_documentations::review_by_user_id
 
 users::id ||--o{ vendor_link_requests::user_id
-users::id ||--o{ vendor_link_requests::decision_by_user_id
 @enduml
