@@ -1,31 +1,223 @@
-@startuml Entity Relationship Diagram
+@startuml
 top to bottom direction
 
+note as Disclaimer
+Diagram generated with the assistance of grok.com - may contain errors
+PlantUML URL: https://plantuml.com/ie-diagram
+Last Updated: 2025-03-21
+This diagram should be verified against the current database schema for accuracy.
+end note
+
+' Entities (Tables)
+together {
 entity "users" {
-  * id : int [PK]
+  * id : integer <<PK>> <<increments>>
   --
-  * email : nvarchar(100)
-  * auth_subject : nvarchar(100)
-  * first_name : nvarchar(100)
-  * last_name : nvarchar(100)
-  * display_name : nvarchar(200)
-  * roles : nvarchar(255) - comma separated pseudo array
-  [title] : nvarchar(100)
-  * department : nvarchar(100)
-  division : nvarchar(100)
-  branch : nvarchar(100)
-  unit : nvarchar(100)
-  * is_active : bit
-  * created_at : datetime2(0)
-  * updated_at : datetime2(0)
-  deleted_at : datetime2(0)
+  email : string(150) <<notNullable>>
+  auth0_subject : string(100) <<notNullable>>
+  first_name : string(100) <<notNullable>>
+  last_name : string(100) <<notNullable>>
+  display_name : string(200) <<notNullable>>
+  roles : string(255) <<nullable>>
+  deactivated_at : DATETIME2(0) <<nullable>>
+  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  deleted_at : DATETIME2(0) <<nullable>>
+  --
+  + unique(email, indexName: "users_auth0_subject_unique", where deleted_at IS NULL)
+  + unique(auth0_subject, indexName: "users_email_unique", where deleted_at IS NULL)
 }
 
-' Relationships
-' add in the format xxx:id }o..|| yyy:xxx_id
+entity "vendor_users" {
+  * id : integer <<PK>> <<increments>>
+  --
+  vendor_id : integer <<FK>> <<notNullable>>
+  user_id : integer <<FK>> <<notNullable>>
+  program_id : integer <<FK>> <<nullable>>
+  is_active : boolean <<notNullable>> <<default=false>>
+  is_admin : boolean <<notNullable>> <<default=false>>
+  decision_by_user_id : integer <<FK>> <<nullable>>
+  decision_at : DATETIME2(0) <<nullable>>
+  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  deleted_at : DATETIME2(0) <<nullable>>
+  --
+  + unique(vendor_id, user_id, indexName: "vendor_users_vendor_user_unique", where deleted_at IS NULL)
+}
 
-note as Disclaimer
-PlantUML URL: https://plantuml.com/ie-diagram
-This diagram may be out of date and should be verified against the current database schema.
-end note
+entity "program_users" {
+  * id : integer <<PK>> <<increments>>
+  --
+  program_id : integer <<FK>> <<notNullable>>
+  user_id : integer <<FK>> <<notNullable>>
+  roles : string(255) <<nullable>>
+  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  deleted_at : DATETIME2(0) <<nullable>>
+}
+}
+
+together {
+entity "vendors" {
+  * id : integer <<PK>> <<increments>>
+  --
+  slug : string(100) <<notNullable>>
+  status : string(100) <<notNullable>>
+  org : string(10) <<notNullable>>
+  vendor_id : string(50) <<notNullable>>
+  name : string(150) <<notNullable>>
+  short_name : string(50) <<notNullable>>
+  is_active : boolean <<notNullable>> <<default=true>>
+  is_person : boolean <<notNullable>> <<default=false>>
+  is_payable : boolean <<notNullable>> <<default=true>>
+  is_electronic_pay : boolean <<notNullable>> <<default=true>>
+  address_line_1 : string(100) <<notNullable>>
+  address_line_2 : string(100) <<notNullable>>
+  address_province : string(100) <<notNullable>>
+  address_postal : string(20) <<notNullable>>
+  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  deleted_at : DATETIME2(0) <<nullable>>
+  --
+  + unique(org, vendor_id, indexName: "vendors_org_vendor_id_unique", where deleted_at IS NULL)
+  + unique(slug, indexName: "vendors_slug_unique", where deleted_at IS NULL)
+}
+
+entity "vendor_programs" {
+  * id : integer <<PK>> <<increments>>
+  --
+  vendor_id : integer <<FK>> <<notNullable>>
+  program_id : integer <<FK>> <<notNullable>>
+  start_date : DATETIME2(0) <<nullable>>
+  end_date : DATETIME2(0) <<nullable>>
+  requested_by_user_id : integer <<FK>> <<notNullable>>
+  requested_at : DATETIME2(0) <<nullable>>
+  status : string(100) <<notNullable>>
+  review_by_user_id : integer <<FK>> <<nullable>>
+  review_at : DATETIME2(0) <<nullable>>
+  review_notes : string(2000) <<nullable>>
+  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  deleted_at : DATETIME2(0) <<nullable>>
+}
+
+entity "vendor_link_requests" {
+  * id : integer <<PK>> <<increments>>
+  --
+  user_id : integer <<FK>> <<notNullable>>
+  matched_vendor_id : string(50) <<nullable>>
+  business_name : string(150) <<nullable>>
+  operating_name : string(150) <<nullable>>
+  ycor_number : string(50) <<nullable>>
+  address : string(500) <<nullable>>
+  vendor_id : string(50) <<nullable>>
+  status : string(100) <<notNullable>>
+  decision_by_user_id : integer <<FK>> <<nullable>>
+  decision_at : DATETIME2(0) <<nullable>>
+  review_notes : string(2000) <<nullable>>
+  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  deleted_at : DATETIME2(0) <<nullable>>
+}
+
+entity "vendor_documentations" {
+  * id : integer <<PK>> <<increments>>
+  --
+  vendor_id : integer <<FK>> <<notNullable>>
+  documentation_id : integer <<FK>> <<notNullable>>
+  created_by_user_id : integer <<FK>> <<notNullable>>
+  status : string(100) <<notNullable>>
+  expires_at : DATETIME2(0) <<nullable>>
+  review_by_user_id : integer <<FK>> <<nullable>>
+  review_at : DATETIME2(0) <<nullable>>
+  review_notes : string(2000) <<nullable>>
+  text_value : text <<nullable>>
+  file_name : string(200) <<nullable>>
+  mime_type : string(200) <<nullable>>
+  size : integer <<nullable>>
+  content : binary <<nullable>>
+  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  deleted_at : DATETIME2(0) <<nullable>>
+}
+
+}
+
+entity "programs" {
+  * id : integer <<PK>> <<increments>>
+  --
+  slug : string(100) <<notNullable>>
+  start_date : DATETIME2(0) <<nullable>>
+  end_date : DATETIME2(0) <<nullable>>
+  department : string(100) <<notNullable>>
+  offered_by : string(200) <<notNullable>>
+  is_active : boolean <<notNullable>> <<default=true>>
+  name : string(150) <<notNullable>>
+  description : string(2000) <<nullable>>
+  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  deleted_at : DATETIME2(0) <<nullable>>
+  --
+  + unique(slug, indexName: "programs_slug_unique", where deleted_at IS NULL)
+}
+
+entity "histories" {
+  * id : integer <<PK>> <<increments>>
+  --
+  entity_id : integer <<notNullable>>
+  entity_type : string(255) <<notNullable>>
+  title : string(200) <<notNullable>>
+  subtitle : string(400) <<nullable>>
+  details : text <<nullable>>
+  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  deleted_at : DATETIME2(0) <<nullable>>
+}
+
+entity "documentations" {
+  * id : integer <<PK>> <<increments>>
+  --
+  name : string(100) <<notNullable>>
+  description : string(500) <<nullable>>
+  format : string(1000) <<notNullable>>
+  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  deleted_at : DATETIME2(0) <<nullable>>
+}
+
+entity "program_documentations" {
+  * id : integer <<PK>> <<increments>>
+  --
+  program_id : integer <<FK>> <<notNullable>>
+  documentation_id : integer <<FK>> <<notNullable>>
+  purpose : string(500) <<nullable>>
+  created_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  updated_at : DATETIME2(0) <<notNullable>> <<default=GETUTCDATE()>>
+  deleted_at : DATETIME2(0) <<nullable>>
+}
+
+' Relationships (Foreign Keys)
+vendors::id ||--o{ vendor_users::vendor_id
+users::id ||--o{ vendor_users::user_id
+programs::id ||--o{ vendor_users::program_id
+users::id ||--o{ vendor_users
+
+vendors::id ||--o{ vendor_programs::vendor_id
+programs::id ||--o{ vendor_programs::program_id
+users::id ||--o{ vendor_programs::requested_by_user_id
+users::id ||--o{ vendor_programs::review_by_user_id
+
+programs::id ||--o{ program_users::program_id
+users::id ||--o{ program_users::user_id
+
+programs::id ||--o{ program_documentations::program_id
+documentations::id ||--o{ program_documentations::documentation_id
+
+vendors::id ||--o{ vendor_documentations::vendor_id
+documentations::id ||--o{ vendor_documentations::documentation_id
+users::id ||--o{ vendor_documentations::created_by_user_id
+users::id ||--o{ vendor_documentations::review_by_user_id
+
+users::id ||--o{ vendor_link_requests::user_id
+users::id ||--o{ vendor_link_requests::decision_by_user_id
 @enduml
