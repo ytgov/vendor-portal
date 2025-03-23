@@ -1,6 +1,6 @@
 import http from "@/api/http-client"
 
-import { VendorProgram } from "@/api/vendor-programs-api"
+import { Program } from "@/api/programs-api"
 
 /** Keep in sync with api/src/models/vendor.ts */
 export type Vendor = {
@@ -25,7 +25,7 @@ export type Vendor = {
   // Virtuals
 
   // Associations
-  programs: VendorProgram[]
+  programs: Program[] | null
 }
 
 export type VendorWhereOptions = {
