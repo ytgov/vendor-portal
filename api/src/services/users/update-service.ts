@@ -14,7 +14,8 @@ export class UpdateService extends BaseService {
   }
 
   async perform() {
-    throw new Error("Not implemented")
+    const user = await this.user.update(this.attributes)
+    return user
   }
 }
 
