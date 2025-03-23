@@ -21,6 +21,7 @@ export class VendorsController extends BaseController<Vendor> {
         where,
         limit: this.pagination.limit,
         offset: this.pagination.offset,
+        include: ["programs"],
       })
 
       const serializedVendors = IndexSerializer.perform(vendors)
