@@ -2,7 +2,6 @@ import { pick } from "lodash"
 import { Program } from "@/models"
 import BaseSerializer from "@/serializers/base-serializer"
 
-// Define the ProgramIndexView type based on available fields in the Program model
 export type ProgramIndexView = Pick<
   Program,
   | "id"
