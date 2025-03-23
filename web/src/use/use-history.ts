@@ -1,22 +1,22 @@
 import { type Ref, reactive, toRefs, unref, watch } from "vue"
 import { isNil } from "lodash"
 
-import vendorsApi, { type Vendor } from "@/api/vendors-api"
+import historiesApi, { type History } from "@/api/histories-api"
 
-export { type Vendor }
+export { type History }
 
-export function useVendor(id: Ref<number | null | undefined>) {
+export function useHistory(id: Ref<number | null | undefined>) {
   const state = reactive<{
-    vendor: Vendor | null
+    history: History | null
     isLoading: boolean
     isErrored: boolean
   }>({
-    vendor: null,
+    history: null,
     isLoading: false,
     isErrored: false,
   })
 
-  async function fetch(): Promise<Vendor> {
+  async function fetch(): Promise<History> {
     const staticId = unref(id)
     if (isNil(staticId)) {
       throw new Error("id is required")
@@ -24,12 +24,12 @@ export function useVendor(id: Ref<number | null | undefined>) {
 
     state.isLoading = true
     try {
-      const { vendor } = await vendorsApi.get(staticId)
+      const { history } = await historiesApi.get(staticId)
       state.isErrored = false
-      state.vendor = vendor
-      return vendor
+      state.history = history
+      return history
     } catch (error) {
-      console.error("Failed to fetch vendor:", error)
+      console.error("Failed to fetch history:", error)
       state.isErrored = true
       throw error
     } finally {
@@ -37,24 +37,24 @@ export function useVendor(id: Ref<number | null | undefined>) {
     }
   }
 
-  async function save(): Promise<Vendor> {
+  async function save(): Promise<History> {
     const staticId = unref(id)
     if (isNil(staticId)) {
       throw new Error("id is required")
     }
 
-    if (isNil(state.vendor)) {
+    if (isNil(state.history)) {
       throw new Error("No user to save")
     }
 
     state.isLoading = true
     try {
-      const { vendor } = await vendorsApi.update(staticId, state.vendor)
+      const { history } = await historiesApi.update(staticId, state.history)
       state.isErrored = false
-      state.vendor = vendor
-      return vendor
+      state.history = history
+      return history
     } catch (error) {
-      console.error("Failed to save vendor:", error)
+      console.error("Failed to save history:", error)
       state.isErrored = true
       throw error
     } finally {
@@ -80,4 +80,4 @@ export function useVendor(id: Ref<number | null | undefined>) {
   }
 }
 
-export default useVendor
+export default useHistory
