@@ -22,6 +22,7 @@ import VendorUser from "@/models/vendor-user"
 import Program from "@/models/program"
 import Documentation from "@/models/documentation"
 import VendorDocumentation from "@/models/vendor-documentation"
+import VendorProgram from "@/models/vendor-program"
 
 export class Vendor extends BaseModel<InferAttributes<Vendor>, InferCreationAttributes<Vendor>> {
   @Attribute(DataTypes.INTEGER)
@@ -110,6 +111,7 @@ export class Vendor extends BaseModel<InferAttributes<Vendor>, InferCreationAttr
     through: () => VendorUser,
     foreignKey: "vendorId",
     otherKey: "userId",
+    inverse: "vendors",
     throughAssociations: {
       fromSource: "vendorUsers",
       toSource: "vendor",
@@ -120,9 +122,10 @@ export class Vendor extends BaseModel<InferAttributes<Vendor>, InferCreationAttr
   declare users?: NonAttribute<User[]>
 
   @BelongsToMany(() => Program, {
-    through: () => VendorUser,
+    through: () => VendorProgram,
     foreignKey: "vendorId",
     otherKey: "programId",
+    inverse: "vendors",
     throughAssociations: {
       fromSource: "vendorPrograms",
       toSource: "vendor",
