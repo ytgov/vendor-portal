@@ -4,8 +4,8 @@ import { User } from "@/models"
 import { Path, deepPick } from "@/utils/deep-pick"
 
 export type Actions = "show" | "create" | "update" | "destroy"
-export const noRecordsScope = { where: literal("1 = 0") }
-export const allRecordsScope = {}
+export const NO_RECORDS_SCOPE = { where: literal("1 = 0") }
+export const ALL_RECORDS_SCOPE = {}
 
 /**
  * See PolicyFactory below for policy with scope helpers
