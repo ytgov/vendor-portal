@@ -64,8 +64,7 @@
 import { computed, ref, watch } from "vue"
 import { useRouter } from "vue-router"
 
-import useVendors, { VendorQueryOptions } from "@/use/use-vendors"
-// import useVendor from "@/use/use-vendor"
+import { useVendors, VendorQueryOptions } from "@/use/use-vendors"
 
 const props = defineProps<{ vendorId: string }>()
 
