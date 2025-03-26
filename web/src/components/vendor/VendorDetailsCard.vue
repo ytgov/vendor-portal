@@ -1,5 +1,12 @@
 <template>
-  <v-card class="mb-5">
+  <v-skeleton-loader
+    v-if="isNil(vendor)"
+    type="card"
+  />
+  <v-card
+    v-else
+    class="mb-5"
+  >
     <v-card-title>Vendor Information</v-card-title>
     <v-card-text>
       <div class="d-flex mb-3">
@@ -34,10 +41,12 @@
 </template>
 
 <script setup lang="ts">
-import { Vendor } from "@/use/use-vendor"
+import { isNil } from "lodash"
 import { computed } from "vue"
 
-const props = defineProps<{ vendor: Vendor }>()
+import { useVendor } from "@/use/use-vendor"
 
-const vendor = computed(() => props.vendor)
+const props = defineProps<{ vendorId: string }>()
+const vendorIdNumber = computed(() => parseInt(props.vendorId))
+const { vendor } = useVendor(vendorIdNumber)
 </script>

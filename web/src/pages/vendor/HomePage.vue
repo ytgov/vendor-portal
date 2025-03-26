@@ -10,8 +10,8 @@
         cols="12"
         md="6"
       >
-        <VendorDetailsCard :vendor="vendor" />
-        <VendorPeopleCard :vendor="vendor" />
+        <VendorDetailsCard :vendor-id="vendorId" />
+        <VendorPeopleCard :vendor-id="vendorId" />
       </v-col>
       <v-col>
         <v-alert
@@ -19,32 +19,29 @@
           color="success"
           class="mb-5 white-text"
           title="Pending Program Application"
-          >We are still processing an application for the Paid Sick Leave Rebate program, submitted on
-          Monday, November 21, 2024.
+          >We are still processing an application for the Paid Sick Leave Rebate program, submitted
+          on Monday, November 21, 2024.
         </v-alert>
-        <VendorProgramList :vendor="vendor" />
+        <VendorProgramList :vendor-id="vendorId" />
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script setup lang="ts">
+import useVendor from "@/use/use-vendor"
+import { computed, watch } from "vue"
+
+import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
+
 import VendorDetailsCard from "@/components/vendor/VendorDetailsCard.vue"
 import VendorPeopleCard from "@/components/vendor/VendorPeopleCard.vue"
 import VendorProgramList from "@/components/vendor/VendorProgramList.vue"
-import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
-import useVendor from "@/use/use-vendor"
-import { isArray } from "lodash"
-import { computed, watch } from "vue"
-import { useRoute } from "vue-router"
 
-const route = useRoute()
+const props = defineProps<{ vendorId: string }>()
+const vendorIdNumber = computed(() => parseInt(props.vendorId))
 
-const vendorId = computed(() =>
-  isArray(route.params.vendorId) ? route.params.vendorId[0] : route.params.vendorId
-)
-
-const { vendor, isLoading } = useVendor(vendorId)
+const { vendor, isLoading } = useVendor(vendorIdNumber)
 
 watch(
   () => vendor.value,

@@ -83,13 +83,16 @@
 </template>
 
 <script setup lang="ts">
-import useVendor from "@/use/use-vendor"
-import { isArray } from "lodash"
 import { computed, onMounted, ref, watch } from "vue"
-import { useRoute, useRouter } from "vue-router"
-import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
+import { useRouter } from "vue-router"
 
-const route = useRoute()
+import useVendor from "@/use/use-vendor"
+import useBreadcrumbs from "@/use/use-breadcrumbs"
+
+const props = defineProps<{ vendorId: string }>()
+const vendorIdNumber = computed(() => parseInt(props.vendorId))
+const { vendor, isLoading } = useVendor(vendorIdNumber)
+
 const router = useRouter()
 
 const viewBy = ref("Date")
@@ -108,12 +111,6 @@ watch(
     localStorage.setItem("pslrSort", newVal)
   }
 )
-
-const vendorId = computed(() =>
-  isArray(route.params.vendorId) ? route.params.vendorId[0] : route.params.vendorId
-)
-
-const { vendor, isLoading } = useVendor(vendorId)
 
 const submissions = ref([
   {
@@ -170,29 +167,31 @@ const employees = ref([
   },
 ])
 
-watch(
-  () => vendor.value,
-  (newVal) => {
-    if (newVal && newVal.id) setBreadcrumbs()
-  }
-)
-setBreadcrumbs()
+useBreadcrumbs("", [{ title: "Loading...", to: "" }])
 
-function setBreadcrumbs() {
-  if (vendor.value) {
-    useBreadcrumbs(`${vendor.value.name}: PSLR`, [
-      BASE_CRUMB,
-      {
-        title: `${vendor.value.name}`,
-        to: `/vendor/${vendor.value.vendorId}`,
+watch(isLoading, () => {
+  useBreadcrumbs(`${vendor.value?.name}: PSLR`, [
+    {
+      title: `${vendor.value?.name}`,
+      to: {
+        name: "vendor/HomePage",
+        params: {
+          vendorId: `${vendor.value?.vendorId}`,
+        },
       },
-    ])
-  } else {
-    useBreadcrumbs("", [{ title: "Loading...", to: "" }])
-  }
-}
+    },
+  ])
+})
+
 function openSubmission(submissionId: number) {
   console.log(submissionId)
-  router.push(`/vendor/${vendorId.value}/programs/EcDev-PSLR/submissions/${submissionId}`)
+
+  router.push({
+    name: "vendor/PSLRSubmissionViewPage",
+    params: {
+      vendorId: props.vendorId,
+      submissionId,
+    },
+  })
 }
 </script>

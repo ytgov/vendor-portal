@@ -18,8 +18,8 @@
         color="success"
         class="mb-5 white-text"
         title="Pending Link Request"
-        >We are still processing a request to link "CDHOTDOGSTAND" to your account, submitted on Monday,
-        November 21, 2024.
+        >We are still processing a request to link "CDHOTDOGSTAND" to your account, submitted on
+        Monday, November 21, 2024.
       </v-alert>
 
       <VendorLinkCard vendor-id="CDICEFOGANAL" />
