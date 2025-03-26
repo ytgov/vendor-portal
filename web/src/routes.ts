@@ -108,13 +108,13 @@ const routes: RouteRecordRaw[] = [
         props: true,
       },
       {
-        path: ":vendorId/programs/EcDev-PSLR",
+        path: ":vendorId/programs/EcDev-PSLR", // missing :slug ???
         name: "vendor/PSLRVendorPage",
         component: () => import("@/pages/programs/pslr/PSLRVendorPage.vue"),
         props: true,
       },
       {
-        path: ":vendorId/programs/EcDev-PSLR/submissions/:submissionId",
+        path: ":vendorId/programs/EcDev-PSLR/submissions/:submissionId", // missing :slug ???
         name: "vendor/PSLRSubmissionViewPage",
         component: () => import("@/pages/programs/pslr/PSLRSubmissionViewPage.vue"),
         props: true,
