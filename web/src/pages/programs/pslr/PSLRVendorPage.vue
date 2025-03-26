@@ -184,8 +184,6 @@ watch(isLoading, () => {
 })
 
 function openSubmission(submissionId: number) {
-  console.log(submissionId)
-
   router.push({
     name: "vendor/PSLRSubmissionViewPage",
     params: {
