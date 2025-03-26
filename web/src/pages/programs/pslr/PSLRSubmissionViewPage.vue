@@ -105,8 +105,14 @@ function setBreadcrumbs() {
     useBreadcrumbs("", [{ title: "Loading...", to: "" }])
   }
 }
+
 function openSubmission(submissionId: number) {
-  console.log(submissionId)
-  router.push(`/vendor/${props.vendorId}/programs/EcDev-PSLR/submissions/${submissionId}`)
+  router.push({
+    name: "vendor/PSLRSubmissionViewPage",
+    params: {
+      vendorId: props.vendorId,
+      submissionId,
+    },
+  })
 }
 </script>
