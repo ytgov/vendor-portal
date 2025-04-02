@@ -39,7 +39,7 @@ export class Vendor extends BaseModel<InferAttributes<Vendor>, InferCreationAttr
   @NotNull
   declare status: string
 
-  @Attribute(DataTypes.STRING(100))
+  @Attribute(DataTypes.STRING(10))
   @NotNull
   declare org: string
 

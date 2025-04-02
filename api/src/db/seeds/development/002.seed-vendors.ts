@@ -8,7 +8,7 @@ export async function seed(): Promise<void> {
     {
       slug: "ice-fog-analytics",
       status: "active",
-      org: "Ice Fog Analytics Inc.",
+      org: "ICEFOG",
       vendorId: "CDICEFOGANAL",
       name: "Ice Fog Analytics Inc.",
       shortName: "Ice Fog",
@@ -24,7 +24,7 @@ export async function seed(): Promise<void> {
     {
       slug: "john-doe-consulting",
       status: "pending",
-      org: "John Doe Consulting",
+      org: "JOHNDOE",
       vendorId: "CDJOHNDOE",
       name: "John Doe",
       shortName: "J. Doe",
@@ -40,7 +40,7 @@ export async function seed(): Promise<void> {
     {
       slug: "bart-simpson-consulting",
       status: "pending",
-      org: "Bart Simpson Consulting",
+      org: "BARTSIMP",
       vendorId: "CDBARTSIMPSON",
       name: "Bart Simpson",
       shortName: "B. Simpson",
