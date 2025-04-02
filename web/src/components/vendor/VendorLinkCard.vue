@@ -61,30 +61,38 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue"
+import { computed, ref, watch } from "vue"
 import { useRouter } from "vue-router"
 
-import useVendor from "@/use/use-vendor"
+import { useVendors, VendorQueryOptions } from "@/use/use-vendors"
 
 const props = defineProps<{ vendorId: string }>()
-const vendorId = computed(() => {
-  return props.vendorId
-})
 
 const router = useRouter()
-const { vendor, isLoading } = useVendor(vendorId)
 
-const programText = computed(() => {
-  if (vendor.value) {
-    return (
-      `Currently enrolled in ${vendor.value.programs.length} program` +
-      (vendor.value.programs.length != 1 ? "s" : "")
-    )
-  }
-  return ""
+const query = ref<VendorQueryOptions>({
+  where: { vendorId: props.vendorId },
+})
+
+const { vendors, isLoading } = useVendors(query)
+const vendor = computed(() => vendors.value.at(0))
+
+watch(isLoading, () => {
+  const programText = computed(() => {
+    if (vendors.value) {
+      return (
+        `Currently enrolled in ${vendors.value.at(0)?.programs?.length} program` +
+        (vendors.value.at(0)?.programs?.length != 1 ? "s" : "")
+      )
+    }
+    return ""
+  })
+
+  console.log("programText: ", programText.value) // _TODO_ remove me
+  console.log(vendors.value) // _TODO_ remove me
 })
 
 function goToVendor() {
-  router.push({ name: "vendor/HomePage", params: { vendorId: vendor.value?.vendorId } })
+  router.push({ name: "vendor/HomePage", params: { vendorId: vendors.value.at(0)?.vendorId } })
 }
 </script>

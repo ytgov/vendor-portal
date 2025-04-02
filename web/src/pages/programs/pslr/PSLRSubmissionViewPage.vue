@@ -43,20 +43,18 @@
 </template>
 
 <script setup lang="ts">
-import useVendor from "@/use/use-vendor"
-import { isArray } from "lodash"
 import { computed, ref, watch } from "vue"
-import { useRoute, useRouter } from "vue-router"
+import { useRouter } from "vue-router"
+
+import useVendor from "@/use/use-vendor"
 import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
 
-const route = useRoute()
 const router = useRouter()
 
-const vendorId = computed(() =>
-  isArray(route.params.vendorId) ? route.params.vendorId[0] : route.params.vendorId
-)
+const props = defineProps<{ vendorId: string }>()
+const vendorIdNumber = computed(() => parseInt(props.vendorId))
 
-const { vendor, isLoading } = useVendor(vendorId)
+const { vendor, isLoading } = useVendor(vendorIdNumber)
 
 const employees = ref([
   {
@@ -107,8 +105,14 @@ function setBreadcrumbs() {
     useBreadcrumbs("", [{ title: "Loading...", to: "" }])
   }
 }
+
 function openSubmission(submissionId: number) {
-  console.log(submissionId)
-  router.push(`/vendor/${vendorId.value}/programs/EcDev-PSLR/submissions/${submissionId}`)
+  router.push({
+    name: "vendor/PSLRSubmissionViewPage",
+    params: {
+      vendorId: props.vendorId,
+      submissionId,
+    },
+  })
 }
 </script>

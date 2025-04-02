@@ -5,7 +5,6 @@ export async function up(knex: Knex): Promise<void> {
     table.increments("id").notNullable().primary()
     table.integer("vendor_id").notNullable().references("id").inTable("vendors")
     table.integer("user_id").notNullable().references("id").inTable("users")
-    table.integer("program_id").references("id").inTable("programs")
     table.boolean("is_active").notNullable().defaultTo(false)
     table.boolean("is_admin").notNullable().defaultTo(false)
 

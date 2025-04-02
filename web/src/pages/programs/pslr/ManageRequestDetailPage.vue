@@ -28,17 +28,7 @@
         </v-card-text>
       </v-card>
 
-      <VendorPeopleCard
-        :vendor="{
-          name: 'Ice Fog Analytics Inc.',
-          vendorId: 'CDICEFOGANAL',
-          id: 1,
-          address: '',
-          createdAt: '',
-          updatedAt: '',
-          programs: [],
-        }"
-      />
+      <VendorPeopleCard vendor-id="1" />
     </v-col>
 
     <v-col

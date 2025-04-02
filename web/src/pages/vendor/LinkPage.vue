@@ -225,9 +225,20 @@ function doSearch() {
   if (vendorId.value === "CDICEFOGANAL") {
     matchedVendor.value = {
       id: 123,
+      slug: "",
+      status: "",
+      org: "",
       vendorId: "CDICEFOGANAL",
       name: "Ice Fog Analytics Inc.",
-      address: "",
+      shortName: "",
+      isActive: true,
+      isPerson: true,
+      isPayable: true,
+      isElectronicPay: true,
+      addressLine1: "",
+      addressLine2: "",
+      addressProvince: "",
+      addressPostal: "",
       createdAt: "",
       updatedAt: "",
       programs: [],
@@ -238,6 +249,7 @@ function doSearch() {
     error.value = "No match was found for that Vendor ID"
   }
 }
+
 function doLink() {
   snack.success("Request Submitted")
   router.push({ name: "individual/HomePage" })

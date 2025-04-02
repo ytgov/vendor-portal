@@ -69,6 +69,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
+.envrc
 .env
 .env.test
 .env.production
@@ -109,3 +110,8 @@ db/sapassword.env
 
 # DB Data
 db/data
+
+# Other
+notes.md
+note.md
+now.sql

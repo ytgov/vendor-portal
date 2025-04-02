@@ -1,3 +1,13 @@
 // Controllers
 export { CurrentUserController } from "./current-user-controller"
+export { DocumentationsController } from "./documentations-controller"
+export { HistoriesController } from "./histories-controller"
+export { ProgramDocumentationsController } from "./program-documentations-controller"
+export { ProgramsController } from "./programs-controller"
+export { ProgramUsersController } from "./program-users-controller"
 export { UsersController } from "./users-controller"
+export { VendorDocumentationsController } from "./vendor-documentations-controller"
+export { VendorLinkRequestsController } from "./vendor-link-requests-controller"
+export { VendorProgramsController } from "./vendor-programs-controller"
+export { VendorsController } from "./vendors-controller"
+export { VendorUsersController } from "./vendor-users-controller"

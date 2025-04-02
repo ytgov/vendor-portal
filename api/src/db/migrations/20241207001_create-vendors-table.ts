@@ -13,8 +13,8 @@ export async function up(knex: Knex): Promise<void> {
     table.boolean("is_person").notNullable().defaultTo(false)
     table.boolean("is_payable").notNullable().defaultTo(true)
     table.boolean("is_electronic_pay").notNullable().defaultTo(true)
-    table.string("address_line_1", 100).notNullable()
-    table.string("address_line_2", 100).notNullable()
+    table.string("address_line1", 100).notNullable()
+    table.string("address_line2", 100).notNullable()
     table.string("address_province", 100).notNullable()
     table.string("address_postal", 20).notNullable()
 

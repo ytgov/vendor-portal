@@ -17,7 +17,20 @@ import migrator from "@/db/migrator"
 
 import { jwtMiddleware, ensureAndAuthorizeCurrentUser } from "@/middlewares"
 
-import { CurrentUserController, UsersController } from "@/controllers"
+import {
+  CurrentUserController,
+  DocumentationsController,
+  HistoriesController,
+  ProgramDocumentationsController,
+  ProgramsController,
+  ProgramUsersController,
+  UsersController,
+  VendorDocumentationsController,
+  VendorLinkRequestsController,
+  VendorProgramsController,
+  VendorsController,
+  VendorUsersController,
+} from "@/controllers"
 
 export const router = Router()
 
@@ -30,18 +43,117 @@ router.route("/_status").get((_req: Request, res: Response) => {
 })
 
 router.use("/migrate", migrator.migrationRouter)
-
-// api routes
 router.use("/api", jwtMiddleware, ensureAndAuthorizeCurrentUser)
 
+// Users
 router.route("/api/current-user").get(CurrentUserController.show)
-
 router.route("/api/users").get(UsersController.index).post(UsersController.create)
 router
   .route("/api/users/:id")
   .get(UsersController.show)
   .patch(UsersController.update)
   .delete(UsersController.destroy)
+
+// Documentations
+router
+  .route("/api/documentations")
+  .get(DocumentationsController.index)
+  .post(DocumentationsController.create)
+router
+  .route("/api/documentations/:documentationId")
+  .get(DocumentationsController.show)
+  .patch(DocumentationsController.update)
+  .delete(DocumentationsController.destroy)
+
+// Histories
+router.route("/api/histories").get(HistoriesController.index).post(HistoriesController.create)
+router
+  .route("/api/histories/:historyId")
+  .get(HistoriesController.show)
+  .patch(HistoriesController.update)
+  .delete(HistoriesController.destroy)
+
+// Program Documentations
+router
+  .route("/api/program-documentations")
+  .get(ProgramDocumentationsController.index)
+  .post(ProgramDocumentationsController.create)
+router
+  .route("/api/program-documentations/:programDocumentationId")
+  .get(ProgramDocumentationsController.show)
+  .patch(ProgramDocumentationsController.update)
+  .delete(ProgramDocumentationsController.destroy)
+
+// Program Users
+router
+  .route("/api/program-users")
+  .get(ProgramUsersController.index)
+  .post(ProgramUsersController.create)
+router
+  .route("/api/program-users/:programUserId")
+  .get(ProgramUsersController.show)
+  .patch(ProgramUsersController.update)
+  .delete(ProgramUsersController.destroy)
+
+// Program
+router.route("/api/programs").get(ProgramsController.index).post(ProgramsController.create)
+router
+  .route("/api/programs/:programId")
+  .get(ProgramsController.show)
+  .patch(ProgramsController.update)
+  .delete(ProgramsController.destroy)
+
+// Vendor Documentations
+router
+  .route("/api/vendor-documentations")
+  .get(VendorDocumentationsController.index)
+  .post(VendorDocumentationsController.create)
+router
+  .route("/api/vendor-documentations/:vendorDocumentationId")
+  .get(VendorDocumentationsController.show)
+  .patch(VendorDocumentationsController.update)
+  .delete(VendorDocumentationsController.destroy)
+
+// Vendor Link Requests
+router
+  .route("/api/vendor-link-requests")
+  .get(VendorLinkRequestsController.index)
+  .post(VendorLinkRequestsController.create)
+router
+  .route("/api/vendor-link-requests/:vendorLinkRequestId")
+  .get(VendorLinkRequestsController.show)
+  .patch(VendorLinkRequestsController.update)
+  .delete(VendorLinkRequestsController.destroy)
+
+// Vendor Program
+router
+  .route("/api/vendor-programs")
+  .get(VendorProgramsController.index)
+  .post(VendorProgramsController.create)
+router
+  .route("/api/vendor-programs/:vendorProgramId")
+  .get(VendorProgramsController.show)
+  .patch(VendorProgramsController.update)
+  .delete(VendorProgramsController.destroy)
+
+// Vendor Users
+router
+  .route("/api/vendor-users")
+  .get(VendorUsersController.index)
+  .post(VendorUsersController.create)
+router
+  .route("/api/vendor-users/:vendorUserId")
+  .get(VendorUsersController.show)
+  .patch(VendorUsersController.update)
+  .delete(VendorUsersController.destroy)
+
+// Vendors
+router.route("/api/vendors").get(VendorsController.index).post(VendorsController.create)
+router
+  .route("/api/vendors/:vendorId")
+  .get(VendorsController.show)
+  .patch(VendorsController.update)
+  .delete(VendorsController.destroy)
 
 // if no other routes match, return a 404
 router.use("/api", (_req: Request, res: Response) => {
