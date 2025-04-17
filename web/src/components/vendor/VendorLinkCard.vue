@@ -78,6 +78,7 @@ const { vendors, isLoading } = useVendors(query)
 const vendor = computed(() => vendors.value.at(0))
 
 watch(isLoading, () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const programText = computed(() => {
     if (vendors.value) {
       return (
@@ -87,9 +88,6 @@ watch(isLoading, () => {
     }
     return ""
   })
-
-  console.log("programText: ", programText.value) // _TODO_ remove me
-  console.log(vendors.value) // _TODO_ remove me
 })
 
 function goToVendor() {
