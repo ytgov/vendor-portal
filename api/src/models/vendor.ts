@@ -150,7 +150,7 @@ export class Vendor extends BaseModel<InferAttributes<Vendor>, InferCreationAttr
 
   // Scopes
   static establishScopes(): void {
-    this.addSearchScope(["org", "name"])
+    this.addSearchScope(["org", "vendorId", "name"])
   }
 }
 

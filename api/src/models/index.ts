@@ -29,6 +29,7 @@ db.addModels([
 
 // Lazy load scopes
 User.establishScopes()
+Vendor.establishScopes()
 
 export {
   Documentation,
