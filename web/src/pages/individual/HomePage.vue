@@ -13,14 +13,7 @@
     >
       <h3 class="mb-3">Linked Vendor Accounts</h3>
 
-      <v-alert
-        type="info"
-        color="success"
-        class="mb-5 white-text"
-        title="Pending Link Request"
-        >We are still processing a request to link "CDHOTDOGSTAND" to your account, submitted on
-        Monday, November 21, 2024.
-      </v-alert>
+      <VendorLinkRequestAlerts />
 
       <VendorLinkCard vendor-id="CDICEFOGANAL" />
     </v-col>
@@ -28,9 +21,11 @@
 </template>
 
 <script setup lang="ts">
+import useBreadcrumbs from "@/use/use-breadcrumbs"
+
 import AccountDetailsCard from "@/components/individual/AccountDetailsCard.vue"
 import VendorLinkCard from "@/components/vendor/VendorLinkCard.vue"
-import useBreadcrumbs from "@/use/use-breadcrumbs"
+import VendorLinkRequestAlerts from "@/components/vendor/VendorLinkRequestAlerts.vue"
 
 useBreadcrumbs("Vendor Portal Home", [])
 </script>
