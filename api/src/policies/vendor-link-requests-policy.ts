@@ -2,7 +2,7 @@ import { Attributes, FindOptions } from "@sequelize/core"
 
 import { Path } from "@/utils/deep-pick"
 import { VendorLinkRequest, User } from "@/models"
-import { ALL_RECORDS_SCOPE, NO_RECORDS_SCOPE, PolicyFactory } from "@/policies/base-policy"
+import { ALL_RECORDS_SCOPE, PolicyFactory } from "@/policies/base-policy"
 
 export class VendorLinkRequestsPolicy extends PolicyFactory(VendorLinkRequest) {
   show(): boolean {
@@ -10,15 +10,15 @@ export class VendorLinkRequestsPolicy extends PolicyFactory(VendorLinkRequest) {
       return true
     }
 
-    return false
-  }
-
-  create(): boolean {
-    if (this.user.isSystemAdmin) {
+    if (this.user.id == this.record.userId) {
       return true
     }
 
     return false
+  }
+
+  create(): boolean {
+    return true
   }
 
   update(): boolean {
@@ -61,6 +61,10 @@ export class VendorLinkRequestsPolicy extends PolicyFactory(VendorLinkRequest) {
       return ALL_RECORDS_SCOPE
     }
 
-    return NO_RECORDS_SCOPE
+    return {
+      where: {
+        userId: user.id,
+      },
+    }
   }
 }
