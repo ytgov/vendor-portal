@@ -2,7 +2,7 @@ import { Attributes, FindOptions } from "@sequelize/core"
 
 import { Path } from "@/utils/deep-pick"
 import { Vendor, User } from "@/models"
-import { ALL_RECORDS_SCOPE, NO_RECORDS_SCOPE, PolicyFactory } from "@/policies/base-policy"
+import { ALL_RECORDS_SCOPE, PolicyFactory } from "@/policies/base-policy"
 
 export class VendorsPolicy extends PolicyFactory(Vendor) {
   show(): boolean {
@@ -60,11 +60,7 @@ export class VendorsPolicy extends PolicyFactory(Vendor) {
     return [...this.permittedAttributes()]
   }
 
-  static policyScope(user: User): FindOptions<Attributes<Vendor>> {
-    if (user.isSystemAdmin) {
-      return ALL_RECORDS_SCOPE
-    }
-
-    return NO_RECORDS_SCOPE
+  static policyScope(_user: User): FindOptions<Attributes<Vendor>> {
+    return ALL_RECORDS_SCOPE
   }
 }
