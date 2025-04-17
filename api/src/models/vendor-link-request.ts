@@ -13,15 +13,25 @@ import {
   Default,
   NotNull,
   PrimaryKey,
+  ValidateAttribute,
 } from "@sequelize/core/decorators-legacy"
 
 import BaseModel from "@/models/base-model"
 import User from "@/models/user"
 
+/** Keep in sync with web/src/api/vendor-link-requests-api.ts */
+export enum VendorLinkRequestStatuses {
+  PENDING = "pending",
+  ACCEPTED = "accepted",
+  REJECTED = "rejected",
+}
+
 export class VendorLinkRequest extends BaseModel<
   InferAttributes<VendorLinkRequest>,
   InferCreationAttributes<VendorLinkRequest>
 > {
+  static readonly Statuses = VendorLinkRequestStatuses
+
   @Attribute(DataTypes.INTEGER)
   @PrimaryKey
   @AutoIncrement
@@ -50,8 +60,14 @@ export class VendorLinkRequest extends BaseModel<
   declare vendorId: CreationOptional<string>
 
   @Attribute(DataTypes.STRING(100))
-  @NotNull
-  declare status: string
+  @ValidateAttribute({
+    isIn: {
+      args: [Object.values(VendorLinkRequestStatuses)],
+      msg: `Status must be one of ${Object.values(VendorLinkRequestStatuses).join(", ")}`,
+    },
+  })
+  @Default(VendorLinkRequestStatuses.PENDING)
+  declare status: CreationOptional<string>
 
   @Attribute(DataTypes.INTEGER)
   declare decisionByUserId: CreationOptional<number>
