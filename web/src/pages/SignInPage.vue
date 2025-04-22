@@ -125,7 +125,7 @@
 import { onMounted } from "vue"
 import { useAuth0 } from "@auth0/auth0-vue"
 
-import { APPLICATION_NAME } from "@/config"
+import { APPLICATION_NAME, PUBLIC_LOGIN_CONNECTION, STAFF_LOGIN_CONNECTION } from "@/config"
 import useCurrentUser from "@/use/use-current-user"
 
 const { reset: resetCurrentUser } = useCurrentUser()
@@ -138,21 +138,21 @@ onMounted(() => {
 
 function vendorSignInClick() {
   loginWithRedirect({
-    authorizationParams: { connection: "Username-Password-Authentication" },
+    authorizationParams: { connection: PUBLIC_LOGIN_CONNECTION },
     appState: { target: "/individual" },
   })
 }
 
 function vendorSignUpClick() {
   loginWithRedirect({
-    authorizationParams: { screen_hint: "signup", connection: "Username-Password-Authentication" },
+    authorizationParams: { screen_hint: "signup", connection: PUBLIC_LOGIN_CONNECTION },
     appState: { target: "/individual" },
   })
 }
 
 function staffSignInClick() {
   loginWithRedirect({
-    authorizationParams: { connection: "YG-Azure-test" },
+    authorizationParams: { connection: STAFF_LOGIN_CONNECTION },
     appState: { target: "/administration" },
   })
 }
