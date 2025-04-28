@@ -77,7 +77,6 @@
                     label="Existing vendor ID"
                     hint="Assigned by Department of Finance, found on remittances"
                     persistent-hint
-                    @update:model-value="clearMatch"
                   />
                   <v-btn
                     class="mb-5"
@@ -174,15 +173,14 @@ import { computed, ref } from "vue"
 import { isEmpty, isNil } from "lodash"
 import { useRouter } from "vue-router"
 
-import { Vendor, VendorQueryOptions } from "@/api/vendors-api"
 import { VendorLinkRequest, vendorLinkRequestsApi } from "@/api/vendor-link-requests-api"
 
 import useSnack from "@/use/use-snack"
 import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
 import useCurrentUser from "@/use/use-current-user"
-import useVendors from "@/use/use-vendors"
 
 import VendorMatchCard from "@/components/vendor/VendorMatchCard.vue"
+import { useVendor, Vendor } from "@/use/use-vendor"
 
 const step = ref(1)
 
@@ -217,30 +215,19 @@ const canContinue = computed(() => {
   return true
 })
 
-function clearMatch() {
-  matchedVendor.value = null
-  error.value = ""
-}
-
 async function doSearch() {
-  const searchQuery = ref<VendorQueryOptions>({
-    filters: {
-      search: vendorId.value,
-    },
-  })
+  try {
+    const vendorIdRef = vendorId.value
+    const { fetch } = useVendor(ref(vendorIdRef))
 
-  const { vendors, fetch } = useVendors(searchQuery)
+    const vendor = await fetch()
 
-  await fetch()
-
-  if (isEmpty(vendors)) {
+    error.value = ""
+    matchedVendor.value = vendor || null
+  } catch {
     matchedVendor.value = null
     error.value = "No match was found for that Vendor ID"
-    return
   }
-
-  error.value = ""
-  matchedVendor.value = vendors.value.at(0) || null
 }
 
 const snack = useSnack()
