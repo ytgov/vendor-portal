@@ -1,5 +1,7 @@
 import http from "@/api/http-client"
 
+import { User } from "@/api/users-api"
+
 /** Keep in sync with api/src/models/vendor-link-request.ts */
 export enum VendorLinkRequestStatuses {
   PENDING = "pending",
@@ -23,6 +25,9 @@ export type VendorLinkRequest = {
   reviewNotes: string | null
   createdAt: string
   updatedAt: string
+
+  // Associations
+  user: User | null
 }
 
 export type VendorLinkRequestWhereOptions = {
