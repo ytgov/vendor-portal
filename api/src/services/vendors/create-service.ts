@@ -23,10 +23,7 @@ export class CreateService extends BaseService {
       isPerson,
       isPayable,
       isElectronicPay,
-      addressLine1,
-      addressLine2,
-      addressProvince,
-      addressPostal,
+
       ...optionalAttributes
     } = this.attributes
 
@@ -54,22 +51,6 @@ export class CreateService extends BaseService {
       throw new Error("shortName is required")
     }
 
-    if (isNil(addressLine1) || isEmpty(addressLine1)) {
-      throw new Error("addressLine1 is required")
-    }
-
-    if (isNil(addressLine2) || isEmpty(addressLine2)) {
-      throw new Error("addressLine2 is required")
-    }
-
-    if (isNil(addressProvince) || isEmpty(addressProvince)) {
-      throw new Error("addressProvince is required")
-    }
-
-    if (isNil(addressPostal) || isEmpty(addressPostal)) {
-      throw new Error("addressPostal is required")
-    }
-
     const vendor = await Vendor.create({
       ...optionalAttributes,
       slug,
@@ -82,10 +63,6 @@ export class CreateService extends BaseService {
       isPerson: isPerson ?? false,
       isPayable: isPayable ?? true,
       isElectronicPay: isElectronicPay ?? true,
-      addressLine1,
-      addressLine2,
-      addressProvince,
-      addressPostal,
     })
 
     return vendor
