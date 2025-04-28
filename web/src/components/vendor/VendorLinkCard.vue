@@ -1,11 +1,10 @@
 <template>
   <v-skeleton-loader
-    v-if="isLoading"
+    v-if="isLoading || isNil(vendor)"
     type="image"
-  ></v-skeleton-loader>
-
+  />
   <v-card
-    v-else-if="vendor"
+    v-else
     class="mb-5"
     @click="goToVendor"
   >
@@ -57,40 +56,23 @@
       </v-btn>
     </v-card-text>
   </v-card>
-  <div v-else>Error loading vendor information</div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue"
+import { ref } from "vue"
 import { useRouter } from "vue-router"
+import { isNil } from "lodash"
 
-import { useVendors, VendorQueryOptions } from "@/use/use-vendors"
+import useVendor from "@/use/use-vendor"
 
 const props = defineProps<{ vendorId: string }>()
+const vendorId = ref(props.vendorId)
 
 const router = useRouter()
 
-const query = ref<VendorQueryOptions>({
-  where: { vendorId: props.vendorId },
-})
-
-const { vendors, isLoading } = useVendors(query)
-const vendor = computed(() => vendors.value.at(0))
-
-watch(isLoading, () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const programText = computed(() => {
-    if (vendors.value) {
-      return (
-        `Currently enrolled in ${vendors.value.at(0)?.programs?.length} program` +
-        (vendors.value.at(0)?.programs?.length != 1 ? "s" : "")
-      )
-    }
-    return ""
-  })
-})
+const { vendor, isLoading } = useVendor(vendorId)
 
 function goToVendor() {
-  router.push({ name: "vendor/HomePage", params: { vendorId: vendors.value.at(0)?.vendorId } })
+  router.push({ name: "vendor/HomePage", params: { vendorId: vendor.value?.vendorId } })
 }
 </script>
