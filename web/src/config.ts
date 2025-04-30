@@ -8,6 +8,8 @@ const prodConfig = {
   audience: "generic-production",
   apiBaseUrl: "",
   applicationName: "Vendor Portal",
+  publicLoginConnection: "",
+  staffLoginConnection: "",
 }
 
 const uatConfig = {
@@ -16,6 +18,8 @@ const uatConfig = {
   audience: "generic-uat",
   apiBaseUrl: "",
   applicationName: "Vendor Portal - UAT",
+  publicLoginConnection: "",
+  staffLoginConnection: "",
 }
 
 const devConfig = {
@@ -24,6 +28,8 @@ const devConfig = {
   audience: "testing",
   apiBaseUrl: "http://localhost:3000",
   applicationName: "Vendor Portal - DEV",
+  publicLoginConnection: "Username-Password-Authentication",
+  staffLoginConnection: "YG-Azure-test",
 }
 
 const localProductionConfig = {
@@ -32,6 +38,8 @@ const localProductionConfig = {
   audience: "testing",
   apiBaseUrl: "http://localhost:8080",
   applicationName: "Vendor Portal - DEV (production)",
+  publicLoginConnection: "",
+  staffLoginConnection: "",
 }
 
 let config = prodConfig
@@ -51,3 +59,6 @@ export const API_BASE_URL = config.apiBaseUrl
 export const AUTH0_DOMAIN = stripTrailingSlash(config.domain)
 export const AUTH0_AUDIENCE = config.audience
 export const AUTH0_CLIENT_ID = config.clientId
+
+export const PUBLIC_LOGIN_CONNECTION = config.publicLoginConnection || ""
+export const STAFF_LOGIN_CONNECTION = config.staffLoginConnection || ""

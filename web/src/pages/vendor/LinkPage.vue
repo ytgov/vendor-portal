@@ -27,9 +27,9 @@
               <v-spacer />
               <v-btn
                 append-icon="mdi-chevron-right"
+                text="Continue"
                 @click="step = 2"
-                >Continue</v-btn
-              >
+              />
             </div>
           </v-card-text>
         </v-card>
@@ -47,12 +47,12 @@
             <v-row class="mt-2">
               <v-col>
                 <v-text-field
-                  v-model="businessName"
+                  v-model="vendorLinkRequest.businessName"
                   label="Business name (required)"
                   required
                 />
                 <v-text-field
-                  v-model="ycorNumber"
+                  v-model="vendorLinkRequest.ycorNumber"
                   class="mb-4"
                   label="YCOR number"
                   hint="Six digit Yukon Corporate Online Registry number"
@@ -60,14 +60,14 @@
                 />
 
                 <v-textarea
-                  v-model="address"
+                  v-model="vendorLinkRequest.address"
                   label="Address"
                   rows="3"
                 />
               </v-col>
               <v-col>
                 <v-text-field
-                  v-model="operatingName"
+                  v-model="vendorLinkRequest.operatingName"
                   label="Operating as"
                 />
                 <div class="d-flex">
@@ -77,16 +77,15 @@
                     label="Existing vendor ID"
                     hint="Assigned by Department of Finance, found on remittances"
                     persistent-hint
-                    @update:model-value="clearMatch"
                   />
                   <v-btn
                     class="mb-5"
                     prepend-icon="mdi-magnify"
                     :disabled="!canSearch"
                     style="height: 48px"
+                    text="Search"
                     @click="doSearch"
-                    >Search</v-btn
-                  >
+                  />
                 </div>
 
                 <div class="d-flex">
@@ -110,16 +109,16 @@
                 color="warning"
                 variant="outlined"
                 prepend-icon="mdi-chevron-left"
+                text="Previous"
                 @click="step = 1"
-                >Previous</v-btn
-              >
+              />
               <v-spacer />
               <v-btn
                 append-icon="mdi-chevron-right"
                 :disabled="!canContinue"
+                text="Continue"
                 @click="step = 3"
-                >Continue</v-btn
-              >
+              />
             </div>
           </v-card-text>
         </v-card>
@@ -152,15 +151,15 @@
                 color="warning"
                 variant="outlined"
                 prepend-icon="mdi-chevron-left"
+                text="Previous"
                 @click="step = 2"
-                >Previous</v-btn
-              >
+              />
               <v-spacer />
               <v-btn
                 append-icon="mdi-check"
+                text="Submit Request"
                 @click="doLink"
-                >Submit Request</v-btn
-              >
+              />
             </div>
           </v-card-text>
         </v-card>
@@ -171,27 +170,24 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue"
-import { isEmpty } from "lodash"
+import { isEmpty, isNil } from "lodash"
 import { useRouter } from "vue-router"
 
-import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
-import VendorMatchCard from "@/components/vendor/VendorMatchCard.vue"
-import { Vendor } from "@/api/vendors-api"
+import { VendorLinkRequest, vendorLinkRequestsApi } from "@/api/vendor-link-requests-api"
+
 import useSnack from "@/use/use-snack"
+import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
 import useCurrentUser from "@/use/use-current-user"
 
-const router = useRouter()
-const snack = useSnack()
-const { currentUser } = useCurrentUser()
-useBreadcrumbs("Link to Vendor", [BASE_CRUMB])
+import VendorMatchCard from "@/components/vendor/VendorMatchCard.vue"
+import { useVendor, Vendor } from "@/use/use-vendor"
 
 const step = ref(1)
 
-const ycorNumber = ref("")
 const vendorId = ref("")
-const businessName = ref("")
-const operatingName = ref("")
-const address = ref("")
+
+const { currentUser } = useCurrentUser<true>()
+const vendorLinkRequest = ref<Partial<VendorLinkRequest>>({ userId: currentUser.value.id })
 
 const error = ref("")
 
@@ -204,54 +200,50 @@ const canSearch = computed(() => {
 
   return true
 })
-const canContinue = computed(() => {
-  if (isEmpty(vendorId.value) && isEmpty(ycorNumber.value)) {
-    return false
-  }
 
-  if (isEmpty(businessName.value) && isEmpty(operatingName.value)) {
+const canContinue = computed(() => {
+  // _TODO_ Is this change valid?
+  if (
+    isNil(matchedVendor.value) ||
+    isEmpty(vendorLinkRequest.value.ycorNumber) ||
+    isEmpty(vendorLinkRequest.value.businessName) ||
+    isEmpty(vendorLinkRequest.value.operatingName)
+  ) {
     return false
   }
 
   return true
 })
 
-function clearMatch() {
-  matchedVendor.value = null
-  error.value = ""
-}
+async function doSearch() {
+  try {
+    const vendorIdRef = vendorId.value
+    const { fetch } = useVendor(ref(vendorIdRef))
 
-function doSearch() {
-  if (vendorId.value === "CDICEFOGANAL") {
-    matchedVendor.value = {
-      id: 123,
-      slug: "",
-      status: "",
-      org: "",
-      vendorId: "CDICEFOGANAL",
-      name: "Ice Fog Analytics Inc.",
-      shortName: "",
-      isActive: true,
-      isPerson: true,
-      isPayable: true,
-      isElectronicPay: true,
-      addressLine1: "",
-      addressLine2: "",
-      addressProvince: "",
-      addressPostal: "",
-      createdAt: "",
-      updatedAt: "",
-      programs: [],
-    }
+    const vendor = await fetch()
+
     error.value = ""
-  } else {
+    matchedVendor.value = vendor || null
+  } catch {
     matchedVendor.value = null
     error.value = "No match was found for that Vendor ID"
   }
 }
 
-function doLink() {
-  snack.success("Request Submitted")
-  router.push({ name: "individual/HomePage" })
+const snack = useSnack()
+
+const router = useRouter()
+
+async function doLink() {
+  try {
+    vendorLinkRequest.value.matchedVendorId = matchedVendor.value?.vendorId
+    await vendorLinkRequestsApi.create(vendorLinkRequest.value)
+    snack.success("Request Submitted")
+    router.push({ name: "individual/HomePage" })
+  } catch (error) {
+    snack.error(`Failed to create vendor link request: ${error}`)
+  }
 }
+
+useBreadcrumbs("Link to Vendor", [BASE_CRUMB])
 </script>

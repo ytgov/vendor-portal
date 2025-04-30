@@ -148,12 +148,8 @@ router
   .delete(VendorUsersController.destroy)
 
 // Vendors
-router.route("/api/vendors").get(VendorsController.index).post(VendorsController.create)
-router
-  .route("/api/vendors/:vendorId")
-  .get(VendorsController.show)
-  .patch(VendorsController.update)
-  .delete(VendorsController.destroy)
+router.route("/api/vendors").get(VendorsController.index)
+router.route("/api/vendors/:vendorId").get(VendorsController.show)
 
 // if no other routes match, return a 404
 router.use("/api", (_req: Request, res: Response) => {

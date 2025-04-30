@@ -15,6 +15,7 @@ export type Vendor = {
   isPerson: boolean
   isPayable: boolean
   isElectronicPay: boolean
+  addressCity: string
   addressLine1: string
   addressLine2: string
   addressProvince: string
@@ -39,6 +40,7 @@ export type VendorWhereOptions = {
   isPerson?: boolean
   isPayable?: boolean
   isElectronicPay?: boolean
+  addressCity?: string
   addressLine1?: string
   addressLine2?: string
   addressProvince?: string
@@ -67,23 +69,8 @@ export const vendorsApi = {
     return data
   },
 
-  async get(vendorId: number): Promise<{ vendor: Vendor }> {
+  async get(vendorId: number | string): Promise<{ vendor: Vendor }> {
     const { data } = await http.get(`/api/vendors/${vendorId}`)
-    return data
-  },
-
-  async create(attributes: Partial<Vendor>): Promise<{ vendor: Vendor }> {
-    const { data } = await http.post("/api/vendors", attributes)
-    return data
-  },
-
-  async update(vendorId: number, attributes: Partial<Vendor>): Promise<{ vendor: Vendor }> {
-    const { data } = await http.patch(`/api/vendors/${vendorId}`, attributes)
-    return data
-  },
-
-  async delete(vendorId: number): Promise<void> {
-    const { data } = await http.delete(`/api/vendors/${vendorId}`)
     return data
   },
 }

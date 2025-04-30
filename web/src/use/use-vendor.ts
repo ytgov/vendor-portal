@@ -5,7 +5,7 @@ import vendorsApi, { type Vendor } from "@/api/vendors-api"
 
 export { type Vendor }
 
-export function useVendor(id: Ref<number | null | undefined>) {
+export function useVendor(id: Ref<number | string | null | undefined>) {
   const state = reactive<{
     vendor: Vendor | null
     isLoading: boolean
@@ -37,31 +37,6 @@ export function useVendor(id: Ref<number | null | undefined>) {
     }
   }
 
-  async function save(): Promise<Vendor> {
-    const staticId = unref(id)
-    if (isNil(staticId)) {
-      throw new Error("id is required")
-    }
-
-    if (isNil(state.vendor)) {
-      throw new Error("No user to save")
-    }
-
-    state.isLoading = true
-    try {
-      const { vendor } = await vendorsApi.update(staticId, state.vendor)
-      state.isErrored = false
-      state.vendor = vendor
-      return vendor
-    } catch (error) {
-      console.error("Failed to save vendor:", error)
-      state.isErrored = true
-      throw error
-    } finally {
-      state.isLoading = false
-    }
-  }
-
   watch(
     () => unref(id),
     async (newId) => {
@@ -76,7 +51,6 @@ export function useVendor(id: Ref<number | null | undefined>) {
     ...toRefs(state),
     fetch,
     refresh: fetch,
-    save,
   }
 }
 

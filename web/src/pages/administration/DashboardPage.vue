@@ -4,48 +4,32 @@
   <v-row>
     <v-col>
       <v-card>
-          <v-list class="py-0">
-            <v-list-item
-              title="Manage Users"
-              :to="{ name: 'administration/UsersPage' }"
-              prepend-icon="mdi-account-group"
-            />
-            <v-divider />
-            <v-list-item
-              title="Manage Programs"
-              :to="{ name: 'administration/ProgramsPage' }"
-              prepend-icon="mdi-handshake"
-            />
-            <v-divider />
-            <v-list-item
-              title="Manage Paid Sick Leave Rebate"
-              :to="{ name: 'administration/PSLRRequestsPage' }"
-              prepend-icon="mdi-emoticon-sick-outline"
-            />
-          </v-list>
+        <v-list class="py-0">
+          <v-list-item
+            title="Manage Users"
+            :to="{ name: 'administration/UsersPage' }"
+            prepend-icon="mdi-account-group"
+          />
+          <v-divider />
+          <v-list-item
+            title="Manage Programs"
+            :to="{ name: 'administration/ProgramsPage' }"
+            prepend-icon="mdi-handshake"
+          />
+          <v-divider />
+          <v-list-item
+            title="Manage Paid Sick Leave Rebate"
+            :to="{ name: 'administration/PSLRRequestsPage' }"
+            prepend-icon="mdi-emoticon-sick-outline"
+          />
+        </v-list>
       </v-card>
     </v-col>
     <v-col>
       <v-card class="mb-5">
         <v-card-title>Pending Vendor Link Requests</v-card-title>
 
-        <v-list class="pt-0">
-          <v-list-item
-            class="pt-0"
-            title="Homer Simpson : Springfield Nuclear Power Plant"
-            subtitle="Submitted December 16, 2024 (3 days ago)"
-          />
-          <v-list-item
-            class="pt-0"
-            title="Michael Johnson : Ice Fog Analytics Inc."
-            subtitle="Submitted December 17, 2024 (2 days ago)"
-          />
-          <v-list-item
-            class="pt-0"
-            title="Brett Favre : Green Bay Packers"
-            subtitle="Submitted December 17, 2024 (8 hours ago)"
-          />
-        </v-list>
+        <VendorLinkRequestsPending />
       </v-card>
 
       <v-card>
@@ -65,6 +49,8 @@
 
 <script lang="ts" setup>
 import useBreadcrumbs from "@/use/use-breadcrumbs"
+
+import VendorLinkRequestsPending from "@/components/vendor/VendorLinkRequestsPending.vue"
 
 useBreadcrumbs("Administration Home", [])
 </script>

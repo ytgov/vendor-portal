@@ -21,6 +21,7 @@ export class VendorLinkRequestsController extends BaseController<VendorLinkReque
         where,
         limit: this.pagination.limit,
         offset: this.pagination.offset,
+        include: ["user"],
       })
 
       const serializedVendorLinkRequests = IndexSerializer.perform(vendorLinkRequests)

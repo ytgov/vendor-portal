@@ -42,6 +42,8 @@ export const DB_TRUST_SERVER_CERTIFICATE = process.env.DB_TRUST_SERVER_CERTIFICA
 
 export const REDIS_CONNECTION_URL = process.env.REDIS_CONNECTION_URL || ""
 
+export const API_GATEWAY_KEY = process.env.API_GATEWAY_KEY || ""
+
 export const DB_HEALTH_CHECK_INTERVAL_SECONDS = parseInt(
   process.env.DB_HEALTH_CHECK_INTERVAL_SECONDS || "5"
 )

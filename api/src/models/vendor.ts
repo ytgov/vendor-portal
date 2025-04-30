@@ -14,6 +14,7 @@ import {
   Index,
   NotNull,
   PrimaryKey,
+  ValidateAttribute,
 } from "@sequelize/core/decorators-legacy"
 
 import BaseModel from "@/models/base-model"
@@ -24,7 +25,14 @@ import Documentation from "@/models/documentation"
 import VendorDocumentation from "@/models/vendor-documentation"
 import VendorProgram from "@/models/vendor-program"
 
+export enum VendorStatuses {
+  ACTIVE = "Active",
+  INACTIVE = "InActive",
+}
+
 export class Vendor extends BaseModel<InferAttributes<Vendor>, InferCreationAttributes<Vendor>> {
+  static readonly Statuses = VendorStatuses
+
   @Attribute(DataTypes.INTEGER)
   @PrimaryKey
   @AutoIncrement
@@ -37,6 +45,12 @@ export class Vendor extends BaseModel<InferAttributes<Vendor>, InferCreationAttr
 
   @Attribute(DataTypes.STRING(100))
   @NotNull
+  @ValidateAttribute({
+    isIn: {
+      args: [Object.values(VendorStatuses)],
+      msg: `Status must be one of ${Object.values(VendorStatuses).join(", ")}`,
+    },
+  })
   declare status: string
 
   @Attribute(DataTypes.STRING(10))
@@ -76,20 +90,19 @@ export class Vendor extends BaseModel<InferAttributes<Vendor>, InferCreationAttr
   declare isElectronicPay: boolean
 
   @Attribute(DataTypes.STRING(100))
-  @NotNull
-  declare addressLine1: string
+  declare addressCity: CreationOptional<string>
 
   @Attribute(DataTypes.STRING(100))
-  @NotNull
-  declare addressLine2: string
+  declare addressLine1: CreationOptional<string>
 
   @Attribute(DataTypes.STRING(100))
-  @NotNull
-  declare addressProvince: string
+  declare addressLine2: CreationOptional<string>
+
+  @Attribute(DataTypes.STRING(100))
+  declare addressProvince: CreationOptional<string>
 
   @Attribute(DataTypes.STRING(20))
-  @NotNull
-  declare addressPostal: string
+  declare addressPostal: CreationOptional<string>
 
   @Attribute(DataTypes.DATE(0))
   @NotNull
@@ -150,7 +163,7 @@ export class Vendor extends BaseModel<InferAttributes<Vendor>, InferCreationAttr
 
   // Scopes
   static establishScopes(): void {
-    this.addSearchScope(["org", "name"])
+    this.addSearchScope(["org", "vendorId", "name"])
   }
 }
 

@@ -37,4 +37,6 @@ import { computed } from "vue"
 const props = defineProps<{ vendor: Vendor }>()
 
 const vendor = computed(() => props.vendor)
+
+// _TODO_ build out address
 </script>

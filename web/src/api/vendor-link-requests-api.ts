@@ -1,5 +1,14 @@
 import http from "@/api/http-client"
 
+import { User } from "@/api/users-api"
+
+/** Keep in sync with api/src/models/vendor-link-request.ts */
+export enum VendorLinkRequestStatuses {
+  PENDING = "pending",
+  ACCEPTED = "accepted",
+  REJECTED = "rejected",
+}
+
 /** Keep in sync with api/src/models/vendor-link-request.ts */
 export type VendorLinkRequest = {
   id: number
@@ -16,6 +25,9 @@ export type VendorLinkRequest = {
   reviewNotes: string | null
   createdAt: string
   updatedAt: string
+
+  // Associations
+  user: User | null
 }
 
 export type VendorLinkRequestWhereOptions = {
@@ -31,7 +43,7 @@ export type VendorLinkRequestWhereOptions = {
   decisionAt?: Date
 }
 
-/** Keep in sync with scopes in api/src/models/vender-link-request.ts */
+/** Keep in sync with scopes in api/src/models/vendor-link-request.ts */
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type VendorLinkRequestFiltersOptions = {}
 
@@ -42,42 +54,42 @@ export type VendorLinkRequestQueryOptions = {
   perPage?: number
 }
 
-export const venderLinkRequestsApi = {
+export const vendorLinkRequestsApi = {
   async list(params: VendorLinkRequestQueryOptions = {}): Promise<{
-    venderLinkRequests: VendorLinkRequest[]
+    vendorLinkRequests: VendorLinkRequest[]
     totalCount: number
   }> {
-    const { data } = await http.get("/api/vender-link-requests", { params })
+    const { data } = await http.get("/api/vendor-link-requests", { params })
     return data
   },
 
-  async get(venderLinkRequestId: number): Promise<{ venderLinkRequest: VendorLinkRequest }> {
-    const { data } = await http.get(`/api/vender-link-requests/${venderLinkRequestId}`)
+  async get(vendorLinkRequestId: number): Promise<{ vendorLinkRequest: VendorLinkRequest }> {
+    const { data } = await http.get(`/api/vendor-link-requests/${vendorLinkRequestId}`)
     return data
   },
 
   async create(
     attributes: Partial<VendorLinkRequest>
-  ): Promise<{ venderLinkRequest: VendorLinkRequest }> {
-    const { data } = await http.post("/api/vender-link-requests", attributes)
+  ): Promise<{ vendorLinkRequest: VendorLinkRequest }> {
+    const { data } = await http.post("/api/vendor-link-requests", attributes)
     return data
   },
 
   async update(
-    venderLinkRequestId: number,
+    vendorLinkRequestId: number,
     attributes: Partial<VendorLinkRequest>
-  ): Promise<{ venderLinkRequest: VendorLinkRequest }> {
+  ): Promise<{ vendorLinkRequest: VendorLinkRequest }> {
     const { data } = await http.patch(
-      `/api/vender-link-requests/${venderLinkRequestId}`,
+      `/api/vendor-link-requests/${vendorLinkRequestId}`,
       attributes
     )
     return data
   },
 
-  async delete(venderLinkRequestId: number): Promise<void> {
-    const { data } = await http.delete(`/api/vender-link-requests/${venderLinkRequestId}`)
+  async delete(vendorLinkRequestId: number): Promise<void> {
+    const { data } = await http.delete(`/api/vendor-link-requests/${vendorLinkRequestId}`)
     return data
   },
 }
 
-export default venderLinkRequestsApi
+export default vendorLinkRequestsApi

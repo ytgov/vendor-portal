@@ -6,11 +6,7 @@ import { ALL_RECORDS_SCOPE, NO_RECORDS_SCOPE, PolicyFactory } from "@/policies/b
 
 export class VendorsPolicy extends PolicyFactory(Vendor) {
   show(): boolean {
-    if (this.user.isSystemAdmin) {
-      return true
-    }
-
-    return false
+    return true
   }
 
   create(): boolean {
@@ -38,22 +34,7 @@ export class VendorsPolicy extends PolicyFactory(Vendor) {
   }
 
   permittedAttributes(): Path[] {
-    return [
-      "slug",
-      "status",
-      "org",
-      "vendorId",
-      "name",
-      "shortName",
-      "isActive",
-      "isPerson",
-      "isPayable",
-      "isElectronicPay",
-      "addressLine1",
-      "addressLine2",
-      "addressProvince",
-      "addressPostal",
-    ]
+    return []
   }
 
   permittedAttributesForCreate(): Path[] {

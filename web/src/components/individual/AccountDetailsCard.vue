@@ -1,5 +1,12 @@
 <template>
-  <v-card class="mb-5">
+  <v-skeleton-loader
+    v-if="isLoading || isNil(currentUser)"
+    type="image"
+  />
+  <v-card
+    v-else
+    class="mb-5"
+  >
     <v-card-title>My Account</v-card-title>
     <v-card-text>
       <div>
@@ -10,7 +17,9 @@
             color="#7A9A01"
             >mdi-account</v-icon
           >
-          <div class="ml-2 text-subtitle-1"><strong>Name: </strong><br />Michael Johnson</div>
+          <div class="ml-2 text-subtitle-1">
+            <strong>Name: </strong><br />{{ currentUser?.displayName }}
+          </div>
         </div>
 
         <div class="d-flex mb-3">
@@ -21,7 +30,7 @@
             >mdi-email</v-icon
           >
           <div class="ml-2 text-subtitle-1">
-            <strong>Email: </strong><br />michael@icefoganalytics.com
+            <strong>Email: </strong><br />{{ currentUser?.email }}
           </div>
         </div>
 
@@ -60,3 +69,11 @@
     </v-card-text>
   </v-card>
 </template>
+
+<script setup lang="ts">
+import { isNil } from "lodash"
+
+import useCurrentUser from "@/use/use-current-user"
+
+const { currentUser, isLoading } = useCurrentUser()
+</script>

@@ -54,6 +54,12 @@ const routes: RouteRecordRaw[] = [
         name: "administration/PSLRManageRequestDetailPage",
         component: () => import("@/pages/programs/pslr/ManageRequestDetailPage.vue"),
       },
+      {
+        path: "vendor-link-requests/:vendorLinkRequestId",
+        name: "administration/VendorLinkRequest",
+        component: () => import("@/pages/vendor-link-requests/LinkPage.vue"),
+        props: true,
+      },
     ],
   },
   {
