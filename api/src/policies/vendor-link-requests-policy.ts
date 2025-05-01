@@ -18,7 +18,15 @@ export class VendorLinkRequestsPolicy extends PolicyFactory(VendorLinkRequest) {
   }
 
   create(): boolean {
-    return true
+    if (this.user.isSystemAdmin) {
+      return true
+    }
+
+    if (this.record.status === VendorLinkRequest.Statuses.PENDING) {
+      return true
+    }
+
+    return false
   }
 
   update(): boolean {
