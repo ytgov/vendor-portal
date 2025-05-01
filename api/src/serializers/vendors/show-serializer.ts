@@ -20,6 +20,8 @@ export type ProjectShowView = Pick<
   | "addressLine2"
   | "addressProvince"
   | "addressPostal"
+  | "updatedAt"
+  | "createdAt"
 >
 
 export class ShowSerializer extends BaseSerializer<Vendor> {
@@ -40,6 +42,8 @@ export class ShowSerializer extends BaseSerializer<Vendor> {
         "addressLine2",
         "addressProvince",
         "addressPostal",
+        "updatedAt",
+        "createdAt",
       ]),
     }
   }
