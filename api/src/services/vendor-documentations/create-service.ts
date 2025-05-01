@@ -1,5 +1,7 @@
+import { readFile } from "fs/promises"
+
+import { isEmpty, isNil, isString } from "lodash"
 import { CreationAttributes } from "@sequelize/core"
-import { isEmpty, isNil } from "lodash"
 
 import { VendorDocumentation } from "@/models"
 import BaseService from "@/services/base-service"
@@ -7,13 +9,15 @@ import BaseService from "@/services/base-service"
 export type VendorDocumentationCreationAttributes = Partial<CreationAttributes<VendorDocumentation>>
 
 export class CreateService extends BaseService {
-  constructor(private attributes: VendorDocumentationCreationAttributes) {
+  constructor(
+    private attributes: VendorDocumentationCreationAttributes,
+    private content: any // ignoring this until PR
+  ) {
     super()
   }
 
   async perform(): Promise<VendorDocumentation> {
-    const { vendorId, documentationId, createdByUserId, status, ...optionalAttributes } =
-      this.attributes
+    const { vendorId, documentationId, createdByUserId, ...optionalAttributes } = this.attributes
 
     if (isNil(vendorId)) {
       throw new Error("vendorId is required")
@@ -27,16 +31,25 @@ export class CreateService extends BaseService {
       throw new Error("createdByUserId is required")
     }
 
-    if (isNil(status) || isEmpty(status)) {
-      throw new Error("status is required")
+    if (isNil(this.content) || isEmpty(this.content) || !isString(this.content.path)) {
+      const vendorDocumentation = await VendorDocumentation.create({
+        ...optionalAttributes,
+        vendorId,
+        documentationId,
+        createdByUserId,
+      })
+
+      return vendorDocumentation
     }
+
+    const contentBuffer = await readFile(this.content.path)
 
     const vendorDocumentation = await VendorDocumentation.create({
       ...optionalAttributes,
       vendorId,
       documentationId,
       createdByUserId,
-      status,
+      content: contentBuffer,
     })
 
     return vendorDocumentation
