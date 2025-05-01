@@ -1,5 +1,5 @@
 import { CreationAttributes } from "@sequelize/core"
-import { isEmpty, isNil } from "lodash"
+import { isNil } from "lodash"
 
 import { VendorProgram } from "@/models"
 import BaseService from "@/services/base-service"
@@ -27,16 +27,11 @@ export class CreateService extends BaseService {
       throw new Error("requestedByUserId is required")
     }
 
-    if (isNil(status) || isEmpty(status)) {
-      throw new Error("status is required")
-    }
-
     const vendorProgram = await VendorProgram.create({
       ...optionalAttributes,
       vendorId,
       programId,
       requestedByUserId,
-      status,
     })
 
     return vendorProgram
