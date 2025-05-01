@@ -1,14 +1,14 @@
 <template>
   <v-select
     label="Vendor"
-    :items="items"
+    :items="vendors"
     item-title="name"
     item-value="id"
   />
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import useVendors from "@/use/use-vendors"
 
-const items = ref([{ id: 12, name: "Ice Fog Analytics Inc." }])
+const { vendors } = useVendors()
 </script>

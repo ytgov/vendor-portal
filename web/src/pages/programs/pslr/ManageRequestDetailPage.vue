@@ -86,7 +86,7 @@
   </v-row>
 </template>
 <script setup lang="ts">
-import VendorPeopleCard from "@/components/vendor/VendorPeopleCard.vue"
+import VendorPeopleCard from "@/components/vendors/VendorPeopleCard.vue"
 import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
 
 useBreadcrumbs("PSLR Application Request", [

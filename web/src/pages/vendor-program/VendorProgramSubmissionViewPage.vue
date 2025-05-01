@@ -12,18 +12,18 @@
         <v-card class="pb-2">
           <v-card-title>Employees</v-card-title>
           <v-list-item
-            v-for="(program, idx) of employees"
-            :key="program.id"
+            v-for="(employee, idx) of employees"
+            :key="employee.id"
             class="mx-2"
             variant="outlined"
             :style="{ 'border-top': idx === 0 ? '1px black solid' : 'none' }"
-            @click="openSubmission(program.id)"
+            @click="openSubmission(employee.id)"
           >
             <div class="py-2">
               <v-list-item-title class="text-subtitle-1 font-weight-bold mb-2">
-                {{ program.name }}
+                {{ employee.name }}
               </v-list-item-title>
-              <v-list-item-subtitle>{{ program.hours }} Hours</v-list-item-subtitle>
+              <v-list-item-subtitle>{{ employee.hours }} Hours</v-list-item-subtitle>
               <p class="text-subtitle-2"></p>
             </div>
           </v-list-item>
@@ -46,15 +46,18 @@
 import { computed, ref, watch } from "vue"
 import { useRouter } from "vue-router"
 
+import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useVendor from "@/use/use-vendor"
-import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
+import useProgram from "@/use/use-program"
 
 const router = useRouter()
 
-const props = defineProps<{ vendorId: string }>()
-const vendorIdNumber = computed(() => parseInt(props.vendorId))
+const props = defineProps<{ vendorId: string; programId: string; submissionId: string }>()
+const vendorId = ref(props.vendorId)
+const programIdNumber = computed(() => parseInt(props.programId))
 
-const { vendor, isLoading } = useVendor(vendorIdNumber)
+const { vendor, isLoading } = useVendor(vendorId)
+const { program } = useProgram(programIdNumber)
 
 const employees = ref([
   {
@@ -86,19 +89,19 @@ watch(
     if (newVal && newVal.id) setBreadcrumbs()
   }
 )
+
 setBreadcrumbs()
 
 function setBreadcrumbs() {
-  if (vendor.value) {
+  if (vendor.value && program.value) {
     useBreadcrumbs("", [
-      BASE_CRUMB,
       {
         title: `${vendor.value?.name}`,
         to: `/vendor/${vendor.value?.vendorId}`,
       },
       {
-        title: `Paid Sick Leave Rebate`,
-        to: `/vendor/${vendor.value?.vendorId}/programs/EcDev-PSLR`,
+        title: `${program.value.name}`,
+        to: `/vendor/${vendor.value?.vendorId}/programs/${program.value.id}`,
       },
     ])
   } else {
@@ -108,10 +111,11 @@ function setBreadcrumbs() {
 
 function openSubmission(submissionId: number) {
   router.push({
-    name: "vendor/PSLRSubmissionViewPage",
+    name: "vendor-program/SubmissionViewPage",
     params: {
       vendorId: props.vendorId,
-      submissionId,
+      programId: props.programId,
+      submissionId: submissionId,
     },
   })
 }

@@ -54,6 +54,12 @@
         :to="{ name: 'administration/ProgramsPage' }"
         prepend-icon="mdi-handshake"
       />
+      <v-list-item
+        v-if="isSystemAdmin"
+        title="Manage Documentations"
+        :to="{ name: 'administration/DocumentationsPage' }"
+        prepend-icon="mdi-handshake"
+      />
     </v-list>
   </v-navigation-drawer>
 </template>

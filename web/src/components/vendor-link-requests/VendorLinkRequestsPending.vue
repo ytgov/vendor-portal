@@ -18,13 +18,13 @@
 import { DateTime } from "luxon"
 import { computed, ref } from "vue"
 import { useRouter } from "vue-router"
+import { template } from "lodash"
 
 import { VendorLinkRequest, VendorLinkRequestStatuses } from "@/api/vendor-link-requests-api"
 
 import useVendorLinkRequests, {
   type VendorLinkRequestQueryOptions,
 } from "@/use/use-vendor-link-requests"
-import { template } from "lodash"
 
 const query = ref<VendorLinkRequestQueryOptions>({
   where: {

@@ -42,11 +42,11 @@
 
 <script setup lang="ts">
 import { isNil } from "lodash"
-import { computed } from "vue"
+import { ref } from "vue"
 
 import { useVendor } from "@/use/use-vendor"
 
 const props = defineProps<{ vendorId: string }>()
-const vendorIdNumber = computed(() => parseInt(props.vendorId))
-const { vendor } = useVendor(vendorIdNumber)
+const vendorId = ref(props.vendorId)
+const { vendor } = useVendor(vendorId)
 </script>

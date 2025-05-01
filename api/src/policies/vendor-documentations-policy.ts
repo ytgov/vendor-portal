@@ -18,6 +18,13 @@ export class VendorDocumentationsPolicy extends PolicyFactory(VendorDocumentatio
       return true
     }
 
+    if (
+      this.record.createdByUserId === this.user.id &&
+      this.record.status === VendorDocumentation.Statuses.PENDING
+    ) {
+      return true
+    }
+
     return false
   }
 

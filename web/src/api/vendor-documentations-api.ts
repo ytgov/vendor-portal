@@ -7,9 +7,9 @@ export type VendorDocumentation = {
   documentationId: number
   createdByUserId: number
   status: string
-  expiresAt: Date | null
+  expiresAt: string | null
   reviewByUserId: number | null
-  reviewAt: Date | null
+  reviewAt: string | null
   reviewNotes: string | null
   textValue: string | null
   fileName: string | null
@@ -25,9 +25,9 @@ export type VendorDocumentationWhereOptions = {
   documentationId?: number
   createdByUserId?: number
   status?: string
-  expiresAt?: Date
+  expiresAt?: string
   reviewByUserId?: number
-  reviewAt?: Date
+  reviewAt?: string
   fileName?: string
   mimeType?: string
 }
@@ -60,7 +60,9 @@ export const vendorDocumentationsApi = {
   async create(
     attributes: Partial<VendorDocumentation>
   ): Promise<{ vendorDocumentation: VendorDocumentation }> {
-    const { data } = await http.post("/api/vendor-documentations", attributes)
+    const { data } = await http.post("/api/vendor-documentations", attributes, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
     return data
   },
 

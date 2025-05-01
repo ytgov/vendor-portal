@@ -15,8 +15,10 @@ export type DocumentationWhereOptions = {
 }
 
 /** Keep in sync with scopes in api/src/models/documentation.ts */
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type DocumentationFiltersOptions = {}
+export type DocumentationFiltersOptions = {
+  search?: string | string[]
+  inProgram?: number
+}
 
 export type DocumentationQueryOptions = {
   where?: DocumentationWhereOptions

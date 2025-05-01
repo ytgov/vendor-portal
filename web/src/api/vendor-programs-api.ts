@@ -5,13 +5,13 @@ export type VendorProgram = {
   id: number
   vendorId: number
   programId: number
-  startDate: Date | null
-  endDate: Date | null
+  startDate: string | null
+  endDate: string | null
   requestedByUserId: number
-  requestedAt: Date | null
+  requestedAt: string | null
   status: string
   reviewByUserId: number | null
-  reviewAt: Date | null
+  reviewAt: string | null
   reviewNotes: string | null
   createdAt: string
   updatedAt: string
@@ -20,13 +20,13 @@ export type VendorProgram = {
 export type VendorProgramWhereOptions = {
   vendorId?: number
   programId?: number
-  startDate?: Date
-  endDate?: Date
+  startDate?: string
+  endDate?: string
   requestedByUserId?: number
-  requestedAt?: Date
+  requestedAt?: string
   status?: string
   reviewByUserId?: number
-  reviewAt?: Date
+  reviewAt?: string
 }
 
 /** Keep in sync with scopes in api/src/models/vendor-program.ts */

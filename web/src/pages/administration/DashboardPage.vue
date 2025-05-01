@@ -50,7 +50,7 @@
 <script lang="ts" setup>
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 
-import VendorLinkRequestsPending from "@/components/vendor/VendorLinkRequestsPending.vue"
+import VendorLinkRequestsPending from "@/components/vendor-link-requests/VendorLinkRequestsPending.vue"
 
 useBreadcrumbs("Administration Home", [])
 </script>

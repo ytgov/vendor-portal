@@ -13,6 +13,8 @@ export type ProgramIndexView = Pick<
   | "isActive"
   | "name"
   | "description"
+  | "updatedAt"
+  | "createdAt"
 >
 
 export class IndexSerializer extends BaseSerializer<Program> {
@@ -28,6 +30,8 @@ export class IndexSerializer extends BaseSerializer<Program> {
         "isActive",
         "name",
         "description",
+        "updatedAt",
+        "createdAt",
       ]),
     }
   }

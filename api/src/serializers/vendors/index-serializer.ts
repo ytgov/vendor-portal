@@ -20,6 +20,8 @@ export type VendorIndexView = Pick<
   | "addressLine2"
   | "addressProvince"
   | "addressPostal"
+  | "updatedAt"
+  | "createdAt"
 >
 
 export class IndexSerializer extends BaseSerializer<Vendor> {
@@ -41,6 +43,8 @@ export class IndexSerializer extends BaseSerializer<Vendor> {
         "addressLine2",
         "addressProvince",
         "addressPostal",
+        "updatedAt",
+        "createdAt",
       ]),
     }
   }

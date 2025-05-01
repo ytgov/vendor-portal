@@ -14,6 +14,8 @@ export type ProgramShowView = Pick<
   | "isActive"
   | "name"
   | "description"
+  | "updatedAt"
+  | "createdAt"
 >
 
 export class ShowSerializer extends BaseSerializer<Program> {
@@ -28,6 +30,8 @@ export class ShowSerializer extends BaseSerializer<Program> {
         "isActive",
         "name",
         "description",
+        "updatedAt",
+        "createdAt",
       ]),
     }
   }
