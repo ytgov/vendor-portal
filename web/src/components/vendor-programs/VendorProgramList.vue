@@ -1,13 +1,11 @@
 <template>
-  <h3 class="mb-3">Enrolled Programs</h3>
-
   <v-skeleton-loader
-    v-if="isNil(vendor)"
+    v-if="isNil(programs)"
     type="card"
   />
   <div v-else>
     <v-card
-      v-for="program of vendor.programs"
+      v-for="program of programs"
       :key="program.id"
       class="mb-5"
       @click="openVendorProgram(program.id)"
@@ -33,7 +31,7 @@
             >mdi-calendar</v-icon
           >
           <div class="ml-2 text-subtitle-1">
-            <strong>Enrolled Since: </strong><br />November 2, 2023
+            <strong>Enrolled Since: </strong><br />{{ formatDateHumanReadable(program.createdAt) }}
           </div>
         </div>
       </v-card-text>
@@ -47,27 +45,43 @@
 
 <script setup lang="ts">
 import { isNil } from "lodash"
-import { computed } from "vue"
+import { ref, watch } from "vue"
 import { useRouter } from "vue-router"
+
+import { formatDateHumanReadable } from "@/utils/formatters"
+
+import programsApi, { Program, ProgramQueryOptions } from "@/api/programs-api"
 
 import { useVendor } from "@/use/use-vendor"
 
 const router = useRouter()
 
 const props = defineProps<{ vendorId: string }>()
-const vendorIdNumber = computed(() => parseInt(props.vendorId))
-const { vendor } = useVendor(vendorIdNumber)
+const vendorId = ref(props.vendorId)
+const { vendor } = useVendor(vendorId)
+
+const programs = ref<Program[] | null>(null)
+
+watch(
+  () => vendor.value,
+  async () => {
+    if (!isNil(vendor.value)) {
+      const query: ProgramQueryOptions = {
+        filters: {
+          withAcceptedVendor: vendor.value.id,
+        },
+      }
+
+      const data = await programsApi.list(query)
+      programs.value = data.programs
+    }
+  }
+)
 
 function openVendorProgram(programId: number) {
-  /**
-   * Seems like there is a predefined list of programs?
-   */
-
-  console.log("opening vendor program with id: ", programId)
-
   router.push({
-    name: "vendor/PSLRVendorPage",
-    params: { vendorId: props.vendorId },
+    name: "vendor-program/VendorProgramPage",
+    params: { vendorId: props.vendorId, programId },
   })
 }
 </script>

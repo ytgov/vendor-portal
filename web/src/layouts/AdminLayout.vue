@@ -3,7 +3,7 @@
     v-model="showDrawer"
     :show-rail="showRail"
   />
- 
+
   <v-app-bar
     flat
     color="white"
@@ -72,8 +72,6 @@ watch(
 )
 
 function toggleDrawer() {
-  console.log(mdAndUp.value, showRail.value)
-
   if (!mdAndUp.value) showDrawer.value = !showDrawer.value
   else {
     showRail.value = !showRail.value
