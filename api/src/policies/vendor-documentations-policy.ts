@@ -18,6 +18,10 @@ export class VendorDocumentationsPolicy extends PolicyFactory(VendorDocumentatio
       return true
     }
 
+    if (this.record.createdByUserId === this.user.id) {
+      return true
+    }
+
     return false
   }
 
