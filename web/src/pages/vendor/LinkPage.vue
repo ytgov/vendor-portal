@@ -179,7 +179,7 @@ import useSnack from "@/use/use-snack"
 import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
 import useCurrentUser from "@/use/use-current-user"
 
-import VendorMatchCard from "@/components/vendor/VendorMatchCard.vue"
+import VendorMatchCard from "@/components/vendors/VendorMatchCard.vue"
 import { useVendor, Vendor } from "@/use/use-vendor"
 
 const step = ref(1)
