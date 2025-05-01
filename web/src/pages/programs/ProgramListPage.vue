@@ -8,7 +8,7 @@
         cols="12"
         md="6"
       >
-        <PSLRProgramInfoCard
+        <ProgramInfoCard
           :program-id="`${program.id}`"
           :show-apply="true"
         />
@@ -18,10 +18,10 @@
 </template>
 
 <script setup lang="ts">
-import PSLRProgramInfoCard from "@/components/programs/ProgramInfoCard.vue"
-
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import usePrograms from "@/use/use-programs"
+
+import ProgramInfoCard from "@/components/programs/ProgramInfoCard.vue"
 
 const { programs } = usePrograms()
 
