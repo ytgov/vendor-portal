@@ -26,8 +26,11 @@ export type ProgramWhereOptions = {
 }
 
 /** Keep in sync with scopes in api/src/models/program.ts */
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type ProgramFiltersOptions = {}
+export type ProgramFiltersOptions = {
+  search?: string | string[]
+  withPendingVendor?: number
+  withAcceptedVendor?: number
+}
 
 export type ProgramQueryOptions = {
   where?: ProgramWhereOptions
