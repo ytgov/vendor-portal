@@ -77,7 +77,10 @@ export class VendorDocumentationsController extends BaseController<VendorDocumen
       }
 
       const permittedAttributes = policy.permitAttributesForCreate(this.request.body)
-      const newVendorDocumentation = await CreateService.perform(permittedAttributes)
+      const newVendorDocumentation = await CreateService.perform(
+        permittedAttributes,
+        this.request.body.content
+      )
       return this.response.status(201).json({ vendorDocumentation: newVendorDocumentation })
     } catch (error) {
       logger.error(`VendorDocumentation creation failed: ${error}`, { error })
