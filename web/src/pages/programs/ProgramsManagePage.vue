@@ -82,7 +82,7 @@ const searchFilter = computed<Pick<ProgramFiltersOptions, "search">>(() => {
   }
 
   return {
-    search: `${search.value}`,
+    search: search.value,
   }
 })
 
