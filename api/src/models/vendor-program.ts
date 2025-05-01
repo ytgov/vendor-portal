@@ -13,15 +13,25 @@ import {
   Default,
   NotNull,
   PrimaryKey,
+  ValidateAttribute,
 } from "@sequelize/core/decorators-legacy"
 
 import BaseModel from "@/models/base-model"
 import User from "@/models/user"
 
+/** Keep in sync with web/src/api/vendor-programs-api.ts */
+export enum VendorProgramStatuses {
+  PENDING = "pending",
+  ACCEPTED = "accepted",
+  REJECTED = "rejected",
+}
+
 export class VendorProgram extends BaseModel<
   InferAttributes<VendorProgram>,
   InferCreationAttributes<VendorProgram>
 > {
+  static readonly Statuses = VendorProgramStatuses
+
   @Attribute(DataTypes.INTEGER)
   @PrimaryKey
   @AutoIncrement
@@ -46,11 +56,19 @@ export class VendorProgram extends BaseModel<
   declare requestedByUserId: number
 
   @Attribute(DataTypes.DATE(0))
+  @NotNull
+  @Default(sql.fn("getutcdate"))
   declare requestedAt: CreationOptional<Date>
 
   @Attribute(DataTypes.STRING(100))
-  @NotNull
-  declare status: string
+  @ValidateAttribute({
+    isIn: {
+      args: [Object.values(VendorProgramStatuses)],
+      msg: `Status must be one of ${Object.values(VendorProgramStatuses).join(", ")}`,
+    },
+  })
+  @Default(VendorProgramStatuses.PENDING)
+  declare status: CreationOptional<string>
 
   @Attribute(DataTypes.INTEGER)
   declare reviewByUserId: CreationOptional<number>

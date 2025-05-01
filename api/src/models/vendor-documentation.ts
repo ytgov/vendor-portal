@@ -13,15 +13,25 @@ import {
   Default,
   NotNull,
   PrimaryKey,
+  ValidateAttribute,
 } from "@sequelize/core/decorators-legacy"
 
 import BaseModel from "@/models/base-model"
 import User from "@/models/user"
 
+/** Keep in sync with web/src/api/vendor-documentations-api.ts */
+export enum VendorLinkRequestStatuses {
+  PENDING = "pending",
+  APPROVED = "approved",
+  REJECTED = "rejected",
+}
+
 export class VendorDocumentation extends BaseModel<
   InferAttributes<VendorDocumentation>,
   InferCreationAttributes<VendorDocumentation>
 > {
+  static readonly Statuses = VendorLinkRequestStatuses
+
   @Attribute(DataTypes.INTEGER)
   @PrimaryKey
   @AutoIncrement
@@ -40,8 +50,14 @@ export class VendorDocumentation extends BaseModel<
   declare createdByUserId: number
 
   @Attribute(DataTypes.STRING(100))
-  @NotNull
-  declare status: string // enum?
+  @ValidateAttribute({
+    isIn: {
+      args: [Object.values(VendorLinkRequestStatuses)],
+      msg: `Status must be one of ${Object.values(VendorLinkRequestStatuses).join(", ")}`,
+    },
+  })
+  @Default(VendorLinkRequestStatuses.PENDING)
+  declare status: CreationOptional<string>
 
   @Attribute(DataTypes.DATE(0))
   declare expiresAt: CreationOptional<Date>
