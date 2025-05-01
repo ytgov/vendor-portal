@@ -27,7 +27,6 @@
         :items-length="totalCount"
         :loading="isLoading"
         style="border: 1px #ccc solid; border-radius: 3px"
-        @update:page="updatePage"
       >
       </v-data-table-server>
     </v-card-text>
@@ -104,14 +103,6 @@ const documentationsQuery = computed<DocumentationQueryOptions>(() => {
 const { documentations, totalCount, isLoading, refresh } = useDocumentations(documentationsQuery)
 
 useBreadcrumbs("Manage Documentations", [ADMIN_CRUMB])
-
-// Necessary to avoid wiping page value due to bug in Vuetify table implementation
-// which causes page value to be wiped if changed during loading state.
-function updatePage(newPage: number) {
-  if (isLoading.value) return
-
-  page.value = newPage
-}
 
 defineExpose({ refresh })
 </script>

@@ -21,7 +21,6 @@
         :loading="isLoading"
         style="border: 1px #ccc solid; border-radius: 3px"
         @click:row="(_event: unknown, { item }: ProgramTableRow) => goToProgramEdit(item.id)"
-        @update:page="updatePage"
       >
       </v-data-table-server>
     </v-card-text>
@@ -109,14 +108,6 @@ function goToProgramEdit(programId: number) {
     name: "administration/ProgramManagePage",
     params: { programId },
   })
-}
-
-// Necessary to avoid wiping page value due to bug in Vuetify table implementation
-// which causes page value to be wiped if changed during loading state.
-function updatePage(newPage: number) {
-  if (isLoading.value) return
-
-  page.value = newPage
 }
 
 defineExpose({ refresh })
