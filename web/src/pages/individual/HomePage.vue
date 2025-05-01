@@ -11,10 +11,8 @@
       cols="12"
       md="6"
     >
-      <h3 class="mb-3">Linked Vendor Accounts</h3>
-
       <VendorLinkRequestAlerts />
-
+      <h3 class="mb-3">Linked Vendor Accounts</h3>
       <VendorLinkCard vendor-id="CDICEFOGANAL" />
     </v-col>
   </v-row>
@@ -24,8 +22,8 @@
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 
 import AccountDetailsCard from "@/components/individual/AccountDetailsCard.vue"
-import VendorLinkCard from "@/components/vendor/VendorLinkCard.vue"
-import VendorLinkRequestAlerts from "@/components/vendor/VendorLinkRequestAlerts.vue"
+import VendorLinkCard from "@/components/vendors/VendorLinkCard.vue"
+import VendorLinkRequestAlerts from "@/components/vendor-link-requests/VendorLinkRequestAlerts.vue"
 
 useBreadcrumbs("Vendor Portal Home", [])
 </script>
