@@ -31,7 +31,8 @@
             >mdi-calendar</v-icon
           >
           <div class="ml-2 text-subtitle-1">
-            <strong>Enrolled Since: </strong><br />{{ formatDateHumanReadable(program.createdAt) }}
+            <strong>Enrolled Since: </strong><br />
+            {{ formatDate(program.createdAt) }}
           </div>
         </div>
       </v-card-text>
@@ -48,7 +49,7 @@ import { isNil } from "lodash"
 import { ref, watch } from "vue"
 import { useRouter } from "vue-router"
 
-import { formatDateHumanReadable } from "@/utils/formatters"
+import { formatDate } from "@/utils/formatters"
 
 import programsApi, { Program, ProgramQueryOptions } from "@/api/programs-api"
 

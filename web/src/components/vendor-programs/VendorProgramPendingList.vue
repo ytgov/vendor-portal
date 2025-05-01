@@ -13,7 +13,7 @@
       title="Pending Program Application"
     >
       We are still processing an application for the {{ program.name }} program, submitted on
-      {{ formatDateHumanReadable(program.createdAt) }}.
+      {{ formatDate(program.createdAt) }}.
     </v-alert>
   </div>
 </template>
@@ -22,7 +22,7 @@
 import { isNil } from "lodash"
 import { ref, watch } from "vue"
 
-import { formatDateHumanReadable } from "@/utils/formatters"
+import { formatDate } from "@/utils/formatters"
 
 import programsApi, { Program, ProgramQueryOptions } from "@/api/programs-api"
 

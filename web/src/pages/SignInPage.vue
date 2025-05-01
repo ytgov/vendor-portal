@@ -152,7 +152,7 @@ function vendorSignUpClick() {
 
 function staffSignInClick() {
   loginWithRedirect({
-    authorizationParams: { connection: STAFF_LOGIN_CONNECTION },
+    //authorizationParams: { connection: STAFF_LOGIN_CONNECTION },
     appState: { target: "/administration" },
   })
 }
