@@ -17,10 +17,11 @@ import {
 } from "@sequelize/core/decorators-legacy"
 
 import BaseModel from "@/models/base-model"
-import ProgramUser from "@/models/program-user"
-import User from "@/models/user"
 import Documentation from "@/models/documentation"
 import ProgramDocumentation from "@/models/program-documentation"
+import ProgramUser from "@/models/program-user"
+import User from "@/models/user"
+import VendorProgram from "@/models/vendor-program"
 
 export class Program extends BaseModel<InferAttributes<Program>, InferCreationAttributes<Program>> {
   @Attribute(DataTypes.INTEGER)
@@ -104,6 +105,34 @@ export class Program extends BaseModel<InferAttributes<Program>, InferCreationAt
   // Scopes
   static establishScopes(): void {
     this.addSearchScope(["department", "name"])
+
+    this.addScope("withPendingVendor", (vendorId: number) => {
+      return {
+        include: [
+          {
+            association: "vendorPrograms",
+            where: {
+              vendorId,
+              status: VendorProgram.Statuses.PENDING,
+            },
+          },
+        ],
+      }
+    })
+
+    this.addScope("withAcceptedVendor", (vendorId: number) => {
+      return {
+        include: [
+          {
+            association: "vendorPrograms",
+            where: {
+              vendorId,
+              status: VendorProgram.Statuses.ACCEPTED,
+            },
+          },
+        ],
+      }
+    })
   }
 }
 

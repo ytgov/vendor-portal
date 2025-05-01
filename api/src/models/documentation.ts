@@ -53,7 +53,22 @@ export class Documentation extends BaseModel<
   // Associations
 
   // Scopes
-  static establishScopes(): void {}
+  static establishScopes(): void {
+    this.addSearchScope(["name"])
+
+    this.addScope("inProgram", (programId: number) => {
+      return {
+        include: [
+          {
+            association: "programDocumentations",
+            where: {
+              programId,
+            },
+          },
+        ],
+      }
+    })
+  }
 }
 
 export default Documentation

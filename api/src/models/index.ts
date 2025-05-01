@@ -28,6 +28,8 @@ db.addModels([
 ])
 
 // Lazy load scopes
+Documentation.establishScopes()
+Program.establishScopes()
 User.establishScopes()
 Vendor.establishScopes()
 
