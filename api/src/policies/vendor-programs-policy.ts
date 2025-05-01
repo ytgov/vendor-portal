@@ -18,6 +18,10 @@ export class VendorProgramsPolicy extends PolicyFactory(VendorProgram) {
       return true
     }
 
+    if (this.record.status === VendorProgram.Statuses.PENDING) {
+      return true
+    }
+
     return false
   }
 
