@@ -15,7 +15,7 @@
       />
     </v-card-title>
     <v-card-text>
-      <ProgramDocumentationsDataTableServer :where="{ programId: programIdNumber }" />
+      <DocumentationsDataTableServer :filters="{ inProgram: programIdNumber }" />
     </v-card-text>
   </v-card>
 </template>
@@ -27,7 +27,7 @@ import { computed } from "vue"
 import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
 import useProgram from "@/use/use-program"
 
-import ProgramDocumentationsDataTableServer from "@/components/program-documentations/ProgramDocumentationsDataTableServer.vue"
+import DocumentationsDataTableServer from "@/components/documentations/DocumentationsDataTableServer.vue"
 
 const props = defineProps<{ programId: string }>()
 const programIdNumber = computed(() => parseInt(props.programId))

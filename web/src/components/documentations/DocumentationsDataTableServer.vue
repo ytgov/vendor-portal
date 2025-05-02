@@ -9,11 +9,16 @@
     style="border: 1px #ccc solid; border-radius: 3px"
     @click:row="rowClicked"
   >
+    <template #item.createdAt="{ value }">
+      {{ formatDate(value) }}
+    </template>
   </v-data-table-server>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from "vue"
+
+import { formatDate } from "@/utils/formatters"
 
 import useRouteQueryPagination from "@/use/utils/use-route-query-pagination"
 import useDocumentations, {
@@ -25,7 +30,7 @@ import useDocumentations, {
 
 const headers = ref([
   { title: "ID", key: "id" },
-  { title: "Purpose", key: "purpose" },
+  { title: "Name", key: "name" },
   { title: "Created At", key: "createdAt" },
 ])
 
