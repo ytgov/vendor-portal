@@ -45,11 +45,11 @@
 
 <script setup lang="ts">
 import { isNil } from "lodash"
-import { ref } from "vue"
+import { toRefs } from "vue"
 
 import { useVendor } from "@/use/use-vendor"
 
-const props = defineProps<{ vendorId: string }>()
-const vendorId = ref(props.vendorId)
+const props = defineProps<{ vendorId: number }>()
+const { vendorId } = toRefs(props)
 const { vendor } = useVendor(vendorId)
 </script>

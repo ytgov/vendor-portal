@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import { isNil } from "lodash"
-import { ref, watch } from "vue"
+import { ref, toRefs, watch } from "vue"
 import { useRouter } from "vue-router"
 
 import { formatDate } from "@/utils/formatters"
@@ -57,8 +57,8 @@ import { useVendor } from "@/use/use-vendor"
 
 const router = useRouter()
 
-const props = defineProps<{ vendorId: string }>()
-const vendorId = ref(props.vendorId)
+const props = defineProps<{ vendorId: number }>()
+const { vendorId } = toRefs(props)
 const { vendor } = useVendor(vendorId)
 
 const programs = ref<Program[] | null>(null)

@@ -9,22 +9,22 @@
         cols="12"
         md="6"
       >
-        <VendorDetailsCard :vendor-id="vendorId" />
-        <VendorPeopleCard :vendor-id="vendorId" />
+        <VendorDetailsCard :vendor-id="vendor.id" />
+        <VendorPeopleCard :vendor-id="vendor.id" />
       </v-col>
       <v-col>
-        <VendorProgramPendingList :vendor-id="vendorId" />
+        <VendorProgramPendingList :vendor-id="vendor.id" />
 
         <h3 class="mb-3">Enrolled Programs</h3>
 
-        <VendorProgramList :vendor-id="vendorId" />
+        <VendorProgramList :vendor-id="vendor.id" />
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue"
+import { computed, toRefs } from "vue"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useVendor from "@/use/use-vendor"
@@ -35,7 +35,8 @@ import VendorProgramPendingList from "@/components/vendor-programs/VendorProgram
 import VendorProgramList from "@/components/vendor-programs/VendorProgramList.vue"
 
 const props = defineProps<{ vendorId: string }>()
-const vendorId = ref(props.vendorId)
+const { vendorId } = toRefs(props)
+
 const { vendor, isLoading } = useVendor(vendorId)
 
 const breadcrumbs = computed(() => {
