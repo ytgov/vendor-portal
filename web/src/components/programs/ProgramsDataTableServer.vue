@@ -3,22 +3,25 @@
     v-model:items-per-page="perPage"
     :page="page"
     :headers="headers"
-    :search="search"
     :items="programs"
     :items-length="totalCount"
     :loading="isLoading"
     style="border: 1px #ccc solid; border-radius: 3px"
+    @click:row="rowClicked"
   >
   </v-data-table-server>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from "vue"
-import { useRoute, useRouter } from "vue-router"
-import { useRouteQuery } from "@vueuse/router"
 
-import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
-import usePrograms, { ProgramQueryOptions } from "@/use/use-programs"
+import useRouteQueryPagination from "@/use/utils/use-route-query-pagination"
+import usePrograms, {
+  Program,
+  ProgramFiltersOptions,
+  ProgramQueryOptions,
+  ProgramWhereOptions,
+} from "@/use/use-programs"
 
 const headers = ref([
   { title: "ID", key: "id" },
@@ -26,31 +29,27 @@ const headers = ref([
   { title: "Created At", key: "createdAt" },
 ])
 
-const search = ref("")
+const props = withDefaults(
+  defineProps<{
+    filters?: ProgramFiltersOptions
+    where?: ProgramWhereOptions
+    waiting?: boolean
+  }>(),
+  {
+    filters: () => ({}),
+    where: () => ({}),
+    waiting: false,
+  }
+)
 
-const route = useRoute()
-const router = useRouter()
-
-const page = useRouteQuery<number>("page", 1, {
-  route,
-  router,
-  transform: {
-    get: (value: number) => value,
-    set: (value: number) => value,
-  },
-})
-
-const perPage = useRouteQuery<number>("perPage", 10, {
-  route,
-  router,
-  transform: {
-    get: (value: number) => value,
-    set: (value: number) => value,
-  },
+const { page, perPage } = useRouteQueryPagination({
+  routeQuerySuffix: "Programs",
 })
 
 const programsQuery = computed<ProgramQueryOptions>(() => {
   return {
+    where: props.where,
+    filters: props.filters,
     perPage: perPage.value,
     page: page.value,
   }
@@ -58,7 +57,22 @@ const programsQuery = computed<ProgramQueryOptions>(() => {
 
 const { programs, totalCount, isLoading, refresh } = usePrograms(programsQuery)
 
-useBreadcrumbs("Manage Program Documentations", [ADMIN_CRUMB])
+type ProgramTableRow = {
+  item: Program
+}
+
+const emit = defineEmits<{ click: [programId: number] }>()
+
+function rowClicked(_event: unknown, row: ProgramTableRow) {
+  const programId = row.item.id
+  emit("click", programId)
+}
 
 defineExpose({ refresh })
 </script>
+
+<style>
+.v-data-table__tr:hover {
+  background-color: #eeeeee !important;
+}
+</style>
