@@ -15,7 +15,26 @@
       />
     </v-card-title>
     <v-card-text>
-      <DocumentationsDataTableServer :filters="{ inProgram: programIdNumber }" />
+      <v-row>
+        <v-col>
+          <h3 class="mt-3 mb-3">Vendors in program</h3>
+          <VendorProgramsDataTableServer
+            :where="{ programId: programIdNumber, status: VendorProgramStatuses.ACCEPTED }"
+          />
+        </v-col>
+        <v-col>
+          <h3 class="mt-3 mb-3">Vendors applying for program</h3>
+          <VendorProgramsDataTableServer
+            :where="{ programId: programIdNumber, status: VendorProgramStatuses.PENDING }"
+          />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <h3 class="mb-3">Documentations</h3>
+          <DocumentationsDataTableServer :filters="{ inProgram: programIdNumber }" />
+        </v-col>
+      </v-row>
     </v-card-text>
   </v-card>
 </template>
@@ -24,10 +43,13 @@
 import { isNil } from "lodash"
 import { computed } from "vue"
 
+import { VendorProgramStatuses } from "@/api/vendor-programs-api"
+
 import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
 import useProgram from "@/use/use-program"
 
 import DocumentationsDataTableServer from "@/components/documentations/DocumentationsDataTableServer.vue"
+import VendorProgramsDataTableServer from "@/components/vendor-programs/VendorProgramsDataTableServer.vue"
 
 const props = defineProps<{ programId: string }>()
 const programIdNumber = computed(() => parseInt(props.programId))
