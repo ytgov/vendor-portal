@@ -52,5 +52,5 @@ import useBreadcrumbs from "@/use/use-breadcrumbs"
 
 import VendorLinkRequestsPending from "@/components/vendor-link-requests/VendorLinkRequestsPending.vue"
 
-useBreadcrumbs("Administration Home", [])
+useBreadcrumbs("Administration Dashboard", [])
 </script>

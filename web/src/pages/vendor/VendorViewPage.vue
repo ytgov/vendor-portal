@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { computed, ref } from "vue"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useVendor from "@/use/use-vendor"
@@ -38,20 +38,13 @@ const props = defineProps<{ vendorId: string }>()
 const vendorId = ref(props.vendorId)
 const { vendor, isLoading } = useVendor(vendorId)
 
-watch(
-  () => vendor.value,
-  (newVal) => {
-    if (newVal && newVal.id) setBreadcrumbs()
-  }
-)
-
-setBreadcrumbs()
-
-function setBreadcrumbs() {
+const breadcrumbs = computed(() => {
   if (vendor.value) {
-    useBreadcrumbs("", [{ title: `${vendor.value.name}`, to: "" }])
-  } else {
-    useBreadcrumbs("", [{ title: "Loading...", to: "" }])
+    return [{ title: `${vendor.value.name}`, to: "" }]
   }
-}
+
+  return [{ title: "Loading...", to: "" }]
+})
+
+useBreadcrumbs("", breadcrumbs)
 </script>

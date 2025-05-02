@@ -80,7 +80,7 @@ const vendorId = ref(props.vendorId)
 const programIdNumber = computed(() => parseInt(props.programId))
 
 const { vendor, isLoading: isVendorLoading } = useVendor(vendorId)
-const { program, isLoading: isProgramLoading } = useProgram(programIdNumber)
+const { program } = useProgram(programIdNumber)
 
 const router = useRouter()
 
@@ -156,31 +156,6 @@ const employees = ref([
   },
 ])
 
-useBreadcrumbs("", [{ title: "Loading...", to: "" }])
-
-watch(isVendorLoading, () => setBreadcrumbs())
-watch(isProgramLoading, () => setBreadcrumbs())
-
-setBreadcrumbs()
-
-function setBreadcrumbs() {
-  if (vendor.value && program.value) {
-    useBreadcrumbs("", [
-      {
-        title: `${vendor.value?.name}`,
-        to: {
-          name: "vendor/HomePage",
-          params: {
-            vendorId: `${vendor.value?.vendorId}`,
-          },
-        },
-      },
-      { title: `${program.value.name}`, to: "" },
-    ])
-  } else {
-    useBreadcrumbs("", [{ title: "Loading...", to: "" }])
-  }
-}
 function openSubmission(submissionId: number) {
   router.push({
     name: "vendor-program/SubmissionViewPage",
@@ -191,4 +166,25 @@ function openSubmission(submissionId: number) {
     },
   })
 }
+
+const breadcrumbs = computed(() => {
+  if (vendor.value && program.value) {
+    return [
+      {
+        title: `${vendor.value?.name}`,
+        to: {
+          name: "vendor/HomePage",
+          params: {
+            vendorId: `${vendor.value?.vendorId}`,
+          },
+        },
+      },
+      { title: `${program.value.name}`, to: "" },
+    ]
+  }
+
+  return [{ title: "Loading...", to: "" }]
+})
+
+useBreadcrumbs("", breadcrumbs)
 </script>

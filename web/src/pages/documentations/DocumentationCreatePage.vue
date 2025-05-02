@@ -17,5 +17,9 @@
 </template>
 
 <script setup lang="ts">
+import useBreadcrumbs from "@/use/use-breadcrumbs"
+
 import DocumentationCreateForm from "@/components/documentations/DocumentationCreateForm.vue"
+
+useBreadcrumbs("Create Documentation", [])
 </script>

@@ -45,7 +45,7 @@ import { computed } from "vue"
 
 import { VendorProgramStatuses } from "@/api/vendor-programs-api"
 
-import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
+import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useProgram from "@/use/use-program"
 
 import DocumentationsDataTableServer from "@/components/documentations/DocumentationsDataTableServer.vue"
@@ -55,5 +55,5 @@ const props = defineProps<{ programId: string }>()
 const programIdNumber = computed(() => parseInt(props.programId))
 const { program, isLoading } = useProgram(programIdNumber)
 
-useBreadcrumbs("Manage Programs", [ADMIN_CRUMB])
+useBreadcrumbs("Manage Program", [])
 </script>

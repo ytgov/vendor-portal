@@ -43,8 +43,13 @@ import ProgramInfoCard from "@/components/programs/ProgramInfoCard.vue"
 
 defineProps<{ programId: string }>()
 
-useBreadcrumbs("", [
-  { title: "Programs available in this portal ", to: "/programs" },
+useBreadcrumbs("Apply to a Program", [
+  {
+    title: "Programs available in this portal",
+    to: {
+      name: "programs/HomePage",
+    },
+  },
   { title: "Apply", to: "" },
 ])
 </script>

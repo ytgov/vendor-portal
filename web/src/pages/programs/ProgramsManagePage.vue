@@ -33,7 +33,7 @@ import { computed, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useRouteQuery } from "@vueuse/router"
 
-import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
+import useBreadcrumbs from "@/use/use-breadcrumbs"
 import usePrograms, {
   Program,
   ProgramFiltersOptions,
@@ -101,14 +101,14 @@ const programsQuery = computed<ProgramQueryOptions>(() => {
 
 const { programs, totalCount, isLoading, refresh } = usePrograms(programsQuery)
 
-useBreadcrumbs("Manage Programs", [ADMIN_CRUMB])
-
 function goToProgramEdit(programId: number) {
   router.push({
     name: "administration/ProgramManagePage",
     params: { programId },
   })
 }
+
+useBreadcrumbs("Manage Programs", [])
 
 defineExpose({ refresh })
 </script>
