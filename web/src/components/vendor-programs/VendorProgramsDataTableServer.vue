@@ -9,7 +9,22 @@
     style="border: 1px #ccc solid; border-radius: 3px"
     @click:row="rowClicked"
   >
-    <template #item.createdAt="{ value }">
+    <template #item.status="{ value }">
+      <VendorProgramStatusChip :status="value" />
+    </template>
+    <template #item.vendorId="{ value }">
+      <VendorChip :vendor-id="value" />
+    </template>
+    <template #item.startDate="{ value }">
+      {{ formatDate(value) }}
+    </template>
+    <template #item.endDate="{ value }">
+      {{ formatDate(value) }}
+    </template>
+    <template #item.requestedByUserId="{ value }">
+      <UserChip :user-id="value" />
+    </template>
+    <template #item.requestedAt="{ value }">
       {{ formatDate(value) }}
     </template>
   </v-data-table-server>
@@ -28,11 +43,17 @@ import useVendorPrograms, {
   VendorProgramWhereOptions,
 } from "@/use/use-vendor-programs"
 
+import UserChip from "@/components/users/UserChip.vue"
+import VendorChip from "@/components/vendors/VendorChip.vue"
+import VendorProgramStatusChip from "@/components/vendor-programs/VendorProgramStatusChip.vue"
+
 const headers = ref([
-  { title: "ID", key: "id" },
-  { title: "Vendor ID", key: "vendorId" },
-  { title: "Program ID", key: "programId" },
-  { title: "Created At", key: "createdAt" },
+  // { title: "Status", key: "status" },
+  { title: "Vendor", key: "vendorId" },
+  { title: "Start Date", key: "startDate" },
+  { title: "End Date", key: "endDate" },
+  { title: "Requested By User ID", key: "requestedByUserId" },
+  { title: "Requested At", key: "requestedAt" },
 ])
 
 const props = withDefaults(
