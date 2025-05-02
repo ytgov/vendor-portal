@@ -16,6 +16,8 @@ export type VendorProgramShowView = Pick<
   | "reviewByUserId"
   | "reviewAt"
   | "reviewNotes"
+  | "updatedAt"
+  | "createdAt"
 >
 
 export class ShowSerializer extends BaseSerializer<VendorProgram> {
@@ -32,6 +34,8 @@ export class ShowSerializer extends BaseSerializer<VendorProgram> {
         "reviewByUserId",
         "reviewAt",
         "reviewNotes",
+        "updatedAt",
+        "createdAt",
       ]),
     }
   }

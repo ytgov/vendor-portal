@@ -21,9 +21,9 @@ import User from "@/models/user"
 
 /** Keep in sync with web/src/api/vendor-programs-api.ts */
 export enum VendorProgramStatuses {
-  PENDING = "pending",
-  ACCEPTED = "accepted",
-  REJECTED = "rejected",
+  PENDING = "Pending",
+  ACCEPTED = "Accepted",
+  REJECTED = "Rejected",
 }
 
 export class VendorProgram extends BaseModel<

@@ -16,6 +16,8 @@ export type VendorProgramIndexView = Pick<
   | "reviewByUserId"
   | "reviewAt"
   | "reviewNotes"
+  | "updatedAt"
+  | "createdAt"
 >
 
 export class IndexSerializer extends BaseSerializer<VendorProgram> {
@@ -33,6 +35,8 @@ export class IndexSerializer extends BaseSerializer<VendorProgram> {
         "reviewByUserId",
         "reviewAt",
         "reviewNotes",
+        "updatedAt",
+        "createdAt",
       ]),
     }
   }

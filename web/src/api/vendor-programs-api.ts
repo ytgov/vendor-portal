@@ -1,6 +1,12 @@
 import http from "@/api/http-client"
 
 /** Keep in sync with api/src/models/vendor-program.ts */
+export enum VendorProgramStatuses {
+  PENDING = "Pending",
+  ACCEPTED = "Accepted",
+  REJECTED = "Rejected",
+}
+
 export type VendorProgram = {
   id: number
   vendorId: number
