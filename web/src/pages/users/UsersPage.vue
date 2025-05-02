@@ -96,7 +96,7 @@ function goToUserEdit(userId: number) {
 
 useBreadcrumbs("Manage Users", [
   {
-    title: "Manage Users",
+    title: "Users",
     to: {
       name: "administration/UsersPage",
     },

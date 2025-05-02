@@ -108,7 +108,14 @@ function goToProgramEdit(programId: number) {
   })
 }
 
-useBreadcrumbs("Manage Programs", [])
+useBreadcrumbs("Manage Programs", [
+  {
+    title: "Programs",
+    to: {
+      name: "administration/ProgramsPage",
+    },
+  },
+])
 
 defineExpose({ refresh })
 </script>

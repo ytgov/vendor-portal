@@ -21,5 +21,18 @@ import useBreadcrumbs from "@/use/use-breadcrumbs"
 
 import DocumentationCreateForm from "@/components/documentations/DocumentationCreateForm.vue"
 
-useBreadcrumbs("Create Documentation", [])
+useBreadcrumbs("Create Documentation", [
+  {
+    title: "Documentations",
+    to: {
+      name: "administration/DocumentationsPage",
+    },
+  },
+  {
+    title: "Create Documentation",
+    to: {
+      name: "administration/DocumentationCreatePage",
+    },
+  },
+])
 </script>

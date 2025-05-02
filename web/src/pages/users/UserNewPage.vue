@@ -30,7 +30,7 @@ const { smAndDown } = useDisplay()
 
 useBreadcrumbs("New User", [
   {
-    title: "All Users",
+    title: "Users",
     to: { name: "administration/UsersPage" },
   },
   {

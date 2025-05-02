@@ -46,10 +46,28 @@ const props = defineProps<{
 const userId = computed(() => parseInt(props.userId))
 const { user, refresh } = useUser(userId)
 
-useBreadcrumbs("Edit User", [
-  {
-    title: "Manage Users",
-    to: { name: "administration/UsersPage" },
-  },
-])
+const breadcrumbs = computed(() => {
+  if (isNil(user.value)) {
+    return [
+      {
+        title: "Users",
+        to: { name: "administration/UsersPage" },
+      },
+      { title: "Loading...", to: "" },
+    ]
+  }
+
+  return [
+    {
+      title: "Users",
+      to: { name: "administration/UsersPage" },
+    },
+    {
+      title: user.value.displayName,
+      to: "",
+    },
+  ]
+})
+
+useBreadcrumbs("Edit User", breadcrumbs)
 </script>

@@ -55,5 +55,32 @@ const props = defineProps<{ programId: string }>()
 const programIdNumber = computed(() => parseInt(props.programId))
 const { program, isLoading } = useProgram(programIdNumber)
 
-useBreadcrumbs("Manage Program", [])
+const breadcrumbs = computed(() => {
+  if (isNil(program.value)) {
+    return [
+      {
+        title: "Programs",
+        to: {
+          name: "administration/ProgramsPage",
+        },
+      },
+      { title: "Loading...", to: "" },
+    ]
+  }
+
+  return [
+    {
+      title: "Programs",
+      to: {
+        name: "administration/ProgramsPage",
+      },
+    },
+    {
+      title: `Manage ${program.value.name}`,
+      to: "",
+    },
+  ]
+})
+
+useBreadcrumbs("Manage Program", breadcrumbs)
 </script>
