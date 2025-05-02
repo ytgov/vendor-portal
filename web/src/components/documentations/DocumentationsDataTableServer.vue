@@ -29,8 +29,8 @@ import useDocumentations, {
 } from "@/use/use-documentations"
 
 const headers = ref([
-  { title: "ID", key: "id" },
   { title: "Name", key: "name" },
+  { title: "Format", key: "format" },
   { title: "Created At", key: "createdAt" },
 ])
 
