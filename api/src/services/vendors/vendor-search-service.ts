@@ -2,14 +2,11 @@ import axios from "axios"
 import { isNil } from "lodash"
 import { CreationAttributes } from "@sequelize/core"
 
-import { API_GATEWAY_KEY } from "@/config"
+import { VENDOR_AUTH_HEADER, VENDOR_API_URL } from "@/config"
 import { Vendor } from "@/models/vendor"
 
 import BaseService from "@/services/base-service"
 import { UpdateService, CreateService } from "@/services/vendors"
-
-const VENDOR_API_URL = "https://api.gov.yk.ca/finance/api/v1/vendor"
-const AUTH_HEADER = { "Ocp-Apim-Subscription-Key": API_GATEWAY_KEY }
 
 export type VendorCreationAttributes = Partial<CreationAttributes<Vendor>>
 
@@ -67,7 +64,7 @@ export class VendorSearchService extends BaseService {
   private async findVendor(term: string) {
     const body = { term: term }
     return axios
-      .post(`${VENDOR_API_URL}/search`, body, { headers: AUTH_HEADER })
+      .post(`${VENDOR_API_URL}/search`, body, { headers: VENDOR_AUTH_HEADER })
       .then(async (resp) => {
         return resp.data.data
       })
@@ -80,7 +77,7 @@ export class VendorSearchService extends BaseService {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async getVendor(vendorId: string): Promise<any | undefined> {
     return axios
-      .get(`${VENDOR_API_URL}/${vendorId}`, { headers: AUTH_HEADER })
+      .get(`${VENDOR_API_URL}/${vendorId}`, { headers: VENDOR_AUTH_HEADER })
       .then(async (resp) => {
         if (resp.data.meta.item_count !== 1) return
 

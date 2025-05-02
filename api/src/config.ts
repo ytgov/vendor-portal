@@ -42,7 +42,10 @@ export const DB_TRUST_SERVER_CERTIFICATE = process.env.DB_TRUST_SERVER_CERTIFICA
 
 export const REDIS_CONNECTION_URL = process.env.REDIS_CONNECTION_URL || ""
 
-export const API_GATEWAY_KEY = process.env.API_GATEWAY_KEY || ""
+export const VENDOR_API_URL =
+  process.env.VENDOR_API_URL || "https://api.gov.yk.ca/finance/api/v1/vendor"
+export const VENDOR_API_GATEWAY_KEY = process.env.API_GATEWAY_KEY || ""
+export const VENDOR_AUTH_HEADER = { "Ocp-Apim-Subscription-Key": VENDOR_API_GATEWAY_KEY }
 
 export const DB_HEALTH_CHECK_INTERVAL_SECONDS = parseInt(
   process.env.DB_HEALTH_CHECK_INTERVAL_SECONDS || "5"
