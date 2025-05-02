@@ -3,11 +3,11 @@
     v-model:items-per-page="perPage"
     :page="page"
     :headers="headers"
-    :search="search"
-    :items="programDocumentations"
+    :items="documentations"
     :items-length="totalCount"
     :loading="isLoading"
     style="border: 1px #ccc solid; border-radius: 3px"
+    @click:row="rowClicked"
   >
   </v-data-table-server>
 </template>
@@ -16,11 +16,12 @@
 import { computed, ref } from "vue"
 
 import useRouteQueryPagination from "@/use/utils/use-route-query-pagination"
-import useProgramDocumentations, {
-  ProgramDocumentationFiltersOptions,
-  ProgramDocumentationWhereOptions,
-  ProgramDocumentationQueryOptions,
-} from "@/use/use-program-documentations"
+import useDocumentations, {
+  Documentation,
+  DocumentationFiltersOptions,
+  DocumentationQueryOptions,
+  DocumentationWhereOptions,
+} from "@/use/use-documentations"
 
 const headers = ref([
   { title: "ID", key: "id" },
@@ -30,8 +31,8 @@ const headers = ref([
 
 const props = withDefaults(
   defineProps<{
-    filters?: ProgramDocumentationFiltersOptions
-    where?: ProgramDocumentationWhereOptions
+    filters?: DocumentationFiltersOptions
+    where?: DocumentationWhereOptions
     waiting?: boolean
   }>(),
   {
@@ -41,13 +42,11 @@ const props = withDefaults(
   }
 )
 
-const search = ref("")
-
 const { page, perPage } = useRouteQueryPagination({
-  routeQuerySuffix: "ProgramDocumentations",
+  routeQuerySuffix: "Documentations",
 })
 
-const programDocumentationsQuery = computed<ProgramDocumentationQueryOptions>(() => {
+const documentationsQuery = computed<DocumentationQueryOptions>(() => {
   return {
     where: props.where,
     filters: props.filters,
@@ -56,9 +55,24 @@ const programDocumentationsQuery = computed<ProgramDocumentationQueryOptions>(()
   }
 })
 
-const { programDocumentations, totalCount, isLoading, refresh } = useProgramDocumentations(
-  programDocumentationsQuery
-)
+const { documentations, totalCount, isLoading, refresh } = useDocumentations(documentationsQuery)
+
+type DocumentationTableRow = {
+  item: Documentation
+}
+
+const emit = defineEmits<{ click: [documentationId: number] }>()
+
+function rowClicked(_event: unknown, row: DocumentationTableRow) {
+  const documentationId = row.item.id
+  emit("click", documentationId)
+}
 
 defineExpose({ refresh })
 </script>
+
+<style>
+.v-data-table__tr:hover {
+  background-color: #eeeeee !important;
+}
+</style>

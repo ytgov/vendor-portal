@@ -3,11 +3,11 @@
     v-model:items-per-page="perPage"
     :page="page"
     :headers="headers"
-    :search="search"
-    :items="programDocumentations"
+    :items="vendorPrograms"
     :items-length="totalCount"
     :loading="isLoading"
     style="border: 1px #ccc solid; border-radius: 3px"
+    @click:row="rowClicked"
   >
   </v-data-table-server>
 </template>
@@ -16,11 +16,12 @@
 import { computed, ref } from "vue"
 
 import useRouteQueryPagination from "@/use/utils/use-route-query-pagination"
-import useProgramDocumentations, {
-  ProgramDocumentationFiltersOptions,
-  ProgramDocumentationWhereOptions,
-  ProgramDocumentationQueryOptions,
-} from "@/use/use-program-documentations"
+import useVendorPrograms, {
+  VendorProgram,
+  VendorProgramFiltersOptions,
+  VendorProgramQueryOptions,
+  VendorProgramWhereOptions,
+} from "@/use/use-vendor-programs"
 
 const headers = ref([
   { title: "ID", key: "id" },
@@ -30,8 +31,8 @@ const headers = ref([
 
 const props = withDefaults(
   defineProps<{
-    filters?: ProgramDocumentationFiltersOptions
-    where?: ProgramDocumentationWhereOptions
+    filters?: VendorProgramFiltersOptions
+    where?: VendorProgramWhereOptions
     waiting?: boolean
   }>(),
   {
@@ -41,13 +42,11 @@ const props = withDefaults(
   }
 )
 
-const search = ref("")
-
 const { page, perPage } = useRouteQueryPagination({
-  routeQuerySuffix: "ProgramDocumentations",
+  routeQuerySuffix: "VendorPrograms",
 })
 
-const programDocumentationsQuery = computed<ProgramDocumentationQueryOptions>(() => {
+const vendorProgramsQuery = computed<VendorProgramQueryOptions>(() => {
   return {
     where: props.where,
     filters: props.filters,
@@ -56,9 +55,24 @@ const programDocumentationsQuery = computed<ProgramDocumentationQueryOptions>(()
   }
 })
 
-const { programDocumentations, totalCount, isLoading, refresh } = useProgramDocumentations(
-  programDocumentationsQuery
-)
+const { vendorPrograms, totalCount, isLoading, refresh } = useVendorPrograms(vendorProgramsQuery)
+
+type VendorProgramTableRow = {
+  item: VendorProgram
+}
+
+const emit = defineEmits<{ click: [vendorProgramId: number] }>()
+
+function rowClicked(_event: unknown, row: VendorProgramTableRow) {
+  const vendorProgramId = row.item.id
+  emit("click", vendorProgramId)
+}
 
 defineExpose({ refresh })
 </script>
+
+<style>
+.v-data-table__tr:hover {
+  background-color: #eeeeee !important;
+}
+</style>

@@ -15,12 +15,7 @@
       />
     </v-card-title>
     <v-card-text>
-      ** Add a program edit form here **
-
-      <v-divider class="my-5" />
-      <h3 class="mb-2">Required Documentation</h3>
-
-      <ProgramDocumentationsDataTableServer :program-id="programId" />
+      <ProgramDocumentationsDataTableServer :where="{ programId: programIdNumber }" />
     </v-card-text>
   </v-card>
 </template>

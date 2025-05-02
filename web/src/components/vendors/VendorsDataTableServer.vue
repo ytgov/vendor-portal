@@ -3,11 +3,11 @@
     v-model:items-per-page="perPage"
     :page="page"
     :headers="headers"
-    :search="search"
-    :items="programDocumentations"
+    :items="vendors"
     :items-length="totalCount"
     :loading="isLoading"
     style="border: 1px #ccc solid; border-radius: 3px"
+    @click:row="rowClicked"
   >
   </v-data-table-server>
 </template>
@@ -16,11 +16,12 @@
 import { computed, ref } from "vue"
 
 import useRouteQueryPagination from "@/use/utils/use-route-query-pagination"
-import useProgramDocumentations, {
-  ProgramDocumentationFiltersOptions,
-  ProgramDocumentationWhereOptions,
-  ProgramDocumentationQueryOptions,
-} from "@/use/use-program-documentations"
+import useVendors, {
+  Vendor,
+  VendorFiltersOptions,
+  VendorQueryOptions,
+  VendorWhereOptions,
+} from "@/use/use-vendors"
 
 const headers = ref([
   { title: "ID", key: "id" },
@@ -30,8 +31,8 @@ const headers = ref([
 
 const props = withDefaults(
   defineProps<{
-    filters?: ProgramDocumentationFiltersOptions
-    where?: ProgramDocumentationWhereOptions
+    filters?: VendorFiltersOptions
+    where?: VendorWhereOptions
     waiting?: boolean
   }>(),
   {
@@ -41,13 +42,11 @@ const props = withDefaults(
   }
 )
 
-const search = ref("")
-
 const { page, perPage } = useRouteQueryPagination({
-  routeQuerySuffix: "ProgramDocumentations",
+  routeQuerySuffix: "Vendors",
 })
 
-const programDocumentationsQuery = computed<ProgramDocumentationQueryOptions>(() => {
+const vendorsQuery = computed<VendorQueryOptions>(() => {
   return {
     where: props.where,
     filters: props.filters,
@@ -56,9 +55,24 @@ const programDocumentationsQuery = computed<ProgramDocumentationQueryOptions>(()
   }
 })
 
-const { programDocumentations, totalCount, isLoading, refresh } = useProgramDocumentations(
-  programDocumentationsQuery
-)
+const { vendors, totalCount, isLoading, refresh } = useVendors(vendorsQuery)
+
+type VendorTableRow = {
+  item: Vendor
+}
+
+const emit = defineEmits<{ click: [vendorId: number] }>()
+
+function rowClicked(_event: unknown, row: VendorTableRow) {
+  const vendorId = row.item.id
+  emit("click", vendorId)
+}
 
 defineExpose({ refresh })
 </script>
+
+<style>
+.v-data-table__tr:hover {
+  background-color: #eeeeee !important;
+}
+</style>
