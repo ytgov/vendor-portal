@@ -1,5 +1,5 @@
 import { Attributes } from "@sequelize/core"
-import { isNil, isUndefined } from "lodash"
+import { isNil } from "lodash"
 
 import db, { VendorLinkRequest, VendorUser } from "@/models"
 import { VendorLinkRequestStatuses } from "@/models/vendor-link-request"
@@ -28,7 +28,7 @@ export class UpdateService extends BaseService {
 
       const foundVendor = await VendorSearchService.perform(this.attributes.matchedVendorId)
 
-      if (isUndefined(foundVendor)) {
+      if (isNil(foundVendor)) {
         throw new Error("Failed to find vendor")
       }
 

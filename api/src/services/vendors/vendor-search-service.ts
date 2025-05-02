@@ -16,8 +16,11 @@ export class VendorSearchService extends BaseService {
   }
 
   async perform() {
-    const vendor = await this.getVendor(this.vendorId)
+    if (typeof this.vendorId === "number" || !isNaN(Number(this.vendorId))) {
+      return await Vendor.findByPk(this.vendorId)
+    }
 
+    const vendor = await this.getVendor(this.vendorId)
     const localVendor = await Vendor.findBySlugOrPk(this.vendorId)
 
     return this.upsertVendor(vendor, localVendor)
