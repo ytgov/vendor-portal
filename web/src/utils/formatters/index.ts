@@ -1,2 +1,2 @@
 export { formatBytes } from "./format-bytes"
-export { formatDate } from "./format-dates"
+export { formatDate, formatDateRelative } from "./format-dates"
