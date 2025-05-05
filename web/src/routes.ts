@@ -87,7 +87,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: "vendor-link-requests/:vendorLinkRequestId",
         name: "administration/VendorLinkRequest",
-        component: () => import("@/pages/vendor-link-requests/LinkPage.vue"),
+        component: () => import("@/pages/administration/vendor-link-requests/LinkPage.vue"),
         props: true,
       },
     ],
