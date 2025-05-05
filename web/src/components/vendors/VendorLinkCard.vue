@@ -33,7 +33,7 @@
           mdi-map
         </v-icon>
         <div class="ml-2 text-subtitle-1">
-          <strong>Address: </strong><br />2 Stope Way<br />Whitehorse YT, Y1A0B3
+          <div v-html="formatAddress(vendor)"></div>
         </div>
       </div>
 
@@ -47,7 +47,13 @@
         </v-icon>
         <div class="ml-2 text-subtitle-1">
           <strong>Programs: </strong><br />
-          Paid Sick Leave Rebate
+
+          <div
+            v-for="(program, index) in programs"
+            :key="index"
+          >
+            {{ program.name }}
+          </div>
         </div>
       </div>
     </v-card-text>
@@ -62,11 +68,12 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs } from "vue"
+import { computed, toRefs } from "vue"
 import { useRouter } from "vue-router"
 import { isNil } from "lodash"
 
-import useVendor from "@/use/use-vendor"
+import useVendor, { Vendor } from "@/use/use-vendor"
+import usePrograms, { ProgramQueryOptions } from "@/use/use-programs"
 
 const props = defineProps<{ vendorId: number }>()
 const { vendorId } = toRefs(props)
@@ -74,6 +81,37 @@ const { vendorId } = toRefs(props)
 const router = useRouter()
 
 const { vendor, isLoading } = useVendor(vendorId)
+
+const programsQuery = computed<ProgramQueryOptions>(() => {
+  if (isNil(vendor.value)) return {} // where 1 == 0 ?
+
+  return {
+    filters: {
+      withAcceptedVendor: vendor.value.id,
+    },
+  }
+})
+
+const { programs } = usePrograms(programsQuery, { skipWatchIf: () => isNil(vendor.value) })
+
+function formatAddress(vendor: Vendor): string {
+  const parts = []
+
+  if (vendor.addressLine1) {
+    parts.push(vendor.addressLine1)
+  } else {
+    parts.push(vendor.addressLine2)
+  }
+
+  parts.push(`${vendor.addressCity} ${vendor.addressProvince}, ${vendor.addressPostal}`)
+
+  parts.filter((part) => part.trim() !== "")
+
+  return `
+    <strong>Address: </strong><br />
+    ${parts.join("<br />")}
+  `
+}
 
 function goToVendor() {
   router.push({ name: "vendor/HomePage", params: { vendorId: vendor.value?.vendorId } })
