@@ -8,17 +8,23 @@
       :key="vendorLinkRequest.id"
       class="pt-0"
       :title="vendorLinkRequest.user?.displayName + ' :: ' + vendorLinkRequest.businessName"
-      :subtitle="makeSubmittedDateString(vendorLinkRequest)"
+      :subtitle="
+        'Submitted ' +
+        formatDate(vendorLinkRequest.createdAt) +
+        ' (' +
+        formatDateRelative(vendorLinkRequest.createdAt) +
+        ')'
+      "
       @click="goToVendorLinkRequest(vendorLinkRequest)"
     />
   </v-list>
 </template>
 
 <script setup lang="ts">
-import { DateTime } from "luxon"
-import { computed, ref } from "vue"
+import { ref } from "vue"
 import { useRouter } from "vue-router"
-import { template } from "lodash"
+
+import { formatDate, formatDateRelative } from "@/utils/formatters"
 
 import { VendorLinkRequest, VendorLinkRequestStatuses } from "@/api/vendor-link-requests-api"
 
@@ -33,27 +39,6 @@ const query = ref<VendorLinkRequestQueryOptions>({
 })
 
 const { vendorLinkRequests } = useVendorLinkRequests(query)
-
-const formatDateString = (date: Date) => {
-  const dateTime = DateTime.fromJSDate(date)
-  return dateTime.toLocaleString({
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  })
-}
-
-const formatTimeAgo = (date: Date) => {
-  const dateTime = DateTime.fromJSDate(date)
-  return dateTime.toRelative({ unit: "days" })
-}
-
-const makeSubmittedDateString = computed(() => (vendorLinkRequest: VendorLinkRequest) => {
-  const submittedDate = new Date(vendorLinkRequest.createdAt)
-  const formattedDate = formatDateString(submittedDate)
-  const timeAgo = formatTimeAgo(submittedDate)
-  return template("Submitted <%= formattedDate %> (<%= timeAgo %>)")({ formattedDate, timeAgo })
-})
 
 const router = useRouter()
 
