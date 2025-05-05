@@ -100,7 +100,7 @@ const documentationsQuery = computed<DocumentationQueryOptions>(() => {
 
 const { documentations, totalCount, isLoading, refresh } = useDocumentations(documentationsQuery)
 
-useBreadcrumbs("Manage Documentations", [ADMIN_CRUMB])
+useBreadcrumbs("Manage Documentation", [ADMIN_CRUMB])
 
 defineExpose({ refresh })
 </script>
