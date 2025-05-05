@@ -10,7 +10,6 @@ import {
   Attribute,
   AutoIncrement,
   BelongsToMany,
-  ColumnName,
   Default,
   Index,
   NotNull,
@@ -93,11 +92,9 @@ export class Vendor extends BaseModel<InferAttributes<Vendor>, InferCreationAttr
   @Attribute(DataTypes.STRING(100))
   declare addressCity: CreationOptional<string>
 
-  @ColumnName("address_line_1")
   @Attribute(DataTypes.STRING(100))
   declare addressLine1: CreationOptional<string>
 
-  @ColumnName("address_line_2")
   @Attribute(DataTypes.STRING(100))
   declare addressLine2: CreationOptional<string>
 
