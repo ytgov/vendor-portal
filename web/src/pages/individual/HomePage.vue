@@ -13,6 +13,7 @@
     >
       <VendorLinkRequestAlerts />
       <h3 class="mb-3">Linked Vendor Accounts</h3>
+
       <VendorLinkCard vendor-id="CDICEFOGANAL" />
     </v-col>
   </v-row>

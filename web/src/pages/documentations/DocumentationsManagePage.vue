@@ -47,10 +47,8 @@ import { useRouteQuery } from "@vueuse/router"
 
 const headers = ref([
   { title: "Name", key: "name" },
-  { title: "Department", key: "department" },
-  { title: "Offered By", key: "offeredBy" },
-  { title: "Start Date", key: "startDate" },
-  { title: "End Date", key: "endDate" },
+  { title: "Format", key: "format" },
+  { title: "Description", key: "description" },
 ])
 
 const search = ref("")

@@ -32,7 +32,7 @@
         cols="12"
         md="6"
       >
-        <v-text-field
+        <documentation-format-select
           v-model="documentation.format"
           label="Format"
           :rules="[required]"
@@ -71,6 +71,7 @@ import { required } from "@/utils/validators"
 import { Documentation, documentationsApi } from "@/api/documentations-api"
 
 import useSnack from "@/use/use-snack"
+import DocumentationFormatSelect from "./DocumentationFormatSelect.vue"
 
 const documentation = ref<Partial<Documentation>>({})
 

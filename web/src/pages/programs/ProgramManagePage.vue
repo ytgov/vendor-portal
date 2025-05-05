@@ -5,7 +5,7 @@
   />
   <v-card v-else>
     <v-card-title class="d-flex flex-md-row">
-      Program
+      {{ program?.name }}
       <v-spacer />
       <v-btn
         :to="{ name: 'administration/ProgramsPage' }"
@@ -15,6 +15,11 @@
       />
     </v-card-title>
     <v-card-text>
+      ** Add a program edit form here **
+
+      <v-divider class="my-5" />
+      <h3 class="mb-2">Required Documentation</h3>
+
       <ProgramDocumentationsDataTableServer :program-id="programId" />
     </v-card-text>
   </v-card>

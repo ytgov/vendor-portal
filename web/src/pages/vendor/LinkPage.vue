@@ -54,14 +54,16 @@
                 <v-text-field
                   v-model="vendorLinkRequest.ycorNumber"
                   class="mb-4"
-                  label="YCOR number"
+                  label="YCOR number (required)"
                   hint="Six digit Yukon Corporate Online Registry number"
                   persistent-hint
+                  required
                 />
 
                 <v-textarea
                   v-model="vendorLinkRequest.address"
-                  label="Address"
+                  label="Address (required)"
+                  required
                   rows="3"
                 />
               </v-col>
@@ -204,10 +206,9 @@ const canSearch = computed(() => {
 const canContinue = computed(() => {
   // _TODO_ Is this change valid?
   if (
-    isNil(matchedVendor.value) ||
     isEmpty(vendorLinkRequest.value.ycorNumber) ||
     isEmpty(vendorLinkRequest.value.businessName) ||
-    isEmpty(vendorLinkRequest.value.operatingName)
+    isEmpty(vendorLinkRequest.value.address)
   ) {
     return false
   }
