@@ -19,7 +19,7 @@ export type VendorLinkRequest = {
   ycorNumber: string | null
   address: string | null
   vendorId: string | null
-  status: string
+  status: VendorLinkRequestStatuses
   decisionByUserId: number | null
   decisionAt: Date | null
   reviewNotes: string | null
@@ -38,7 +38,7 @@ export type VendorLinkRequestWhereOptions = {
   ycorNumber?: string
   address?: string
   vendorId?: string
-  status?: string
+  status?: VendorLinkRequestStatuses
   decisionByUserId?: number
   decisionAt?: Date
 }

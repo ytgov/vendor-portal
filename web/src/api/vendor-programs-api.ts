@@ -15,7 +15,7 @@ export type VendorProgram = {
   endDate: string | null
   requestedByUserId: number
   requestedAt: string | null
-  status: string
+  status: VendorProgramStatuses
   reviewByUserId: number | null
   reviewAt: string | null
   reviewNotes: string | null
@@ -30,7 +30,7 @@ export type VendorProgramWhereOptions = {
   endDate?: string
   requestedByUserId?: number
   requestedAt?: string
-  status?: string
+  status?: VendorProgramStatuses
   reviewByUserId?: number
   reviewAt?: string
 }

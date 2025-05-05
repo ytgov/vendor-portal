@@ -12,7 +12,7 @@ export type VendorDocumentation = {
   vendorId: number
   documentationId: number
   createdByUserId: number
-  status: string
+  status: VendorDocumentationStatuses
   expiresAt: string | null
   reviewByUserId: number | null
   reviewAt: string | null
@@ -30,7 +30,7 @@ export type VendorDocumentationWhereOptions = {
   vendorId?: number
   documentationId?: number
   createdByUserId?: number
-  status?: string
+  status?: VendorDocumentationStatuses
   expiresAt?: string
   reviewByUserId?: number
   reviewAt?: string
