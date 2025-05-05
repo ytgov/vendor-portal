@@ -17,6 +17,7 @@
           v-model="documentation.name"
           label="Name"
           :rules="[required]"
+          @update:model-value="updateIsValid"
         />
       </v-col>
       <v-col
@@ -26,6 +27,7 @@
         <v-text-field
           v-model="documentation.description"
           label="Description"
+          @update:model-value="updateIsValid"
         />
       </v-col>
       <v-col
@@ -36,6 +38,7 @@
           v-model="documentation.format"
           label="Format"
           :rules="[required]"
+          @update:model-value="updateIsValid"
         />
       </v-col>
     </v-row>
@@ -51,9 +54,10 @@
           text="Go back"
         />
         <v-btn
-          class="ml-3"
           type="submit"
+          class="ml-3"
           :loading="isCreating"
+          :disabled="!isValid"
           color="success"
           text="Create Documentation"
         />
@@ -78,9 +82,20 @@ const documentation = ref<Partial<Documentation>>({})
 const formRef = ref<InstanceType<typeof VForm> | null>(null)
 
 const isCreating = ref(false)
+const isValid = ref(false)
 
 const snack = useSnack()
 const emit = defineEmits<{ created: [documentationId: number] }>()
+
+async function updateIsValid() {
+  if (formRef.value === null) {
+    isValid.value = false
+    return
+  }
+
+  const { valid } = await formRef.value.validate()
+  isValid.value = valid
+}
 
 async function validateAndCreate() {
   if (formRef.value === null) return
