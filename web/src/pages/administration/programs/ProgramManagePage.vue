@@ -3,63 +3,50 @@
     v-if="isLoading || isNil(program)"
     type="table"
   />
-  <v-card v-else>
-    <v-card-title class="d-flex flex-md-row">
-      {{ program.name }}
-      <v-spacer />
-      <v-btn
-        :to="{ name: 'administration/ProgramsPage' }"
-        color="primary"
-        variant="outlined"
-        text="Back"
+
+  <TabCard
+    v-else
+    :tabs="tabs"
+  >
+    <v-tabs-window-item :value="0">
+      <v-card>
+        <v-card-text>
+          <h3 class="mb-5">Edit Program</h3>
+          <ProgramEditForm :program-id="program.id" />
+        </v-card-text>
+      </v-card>
+    </v-tabs-window-item>
+    <v-tabs-window-item :value="1">
+      <h3 class="mt-3 mb-3">Vendors in program</h3>
+      <VendorProgramsDataTableServer
+        :where="{ programId: programIdNumber, status: VendorProgramStatuses.ACCEPTED }"
+        @click="goToVendorProgramPage"
       />
-    </v-card-title>
-    <v-card-text>
-      <v-row>
-        <v-col>
-          <v-card>
-            <v-card-text>
-              <h3 class="mb-5">Edit Program</h3>
-              <ProgramEditForm :program-id="program.id" />
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <h3 class="mt-3 mb-3">Vendors in program</h3>
-          <VendorProgramsDataTableServer
-            :where="{ programId: programIdNumber, status: VendorProgramStatuses.ACCEPTED }"
-            @click="goToVendorProgramPage"
-          />
-        </v-col>
-        <v-col>
-          <h3 class="mt-3 mb-3">Vendors applying for program</h3>
-          <VendorProgramsDataTableServer
-            :where="{ programId: programIdNumber, status: VendorProgramStatuses.PENDING }"
-            @click="goToVendorProgramRequestPage"
-          />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <h3 class="mb-3">Documentations</h3>
-          <DocumentationsDataTableServer :filters="{ inProgram: programIdNumber }" />
-        </v-col>
-      </v-row>
-    </v-card-text>
-  </v-card>
+    </v-tabs-window-item>
+    <v-tabs-window-item :value="2">
+      <h3 class="mt-3 mb-3">Vendors applying for program</h3>
+      <VendorProgramsDataTableServer
+        :where="{ programId: programIdNumber, status: VendorProgramStatuses.PENDING }"
+        @click="goToVendorProgramRequestPage"
+    /></v-tabs-window-item>
+    <v-tabs-window-item :value="3">
+      <h3 class="mb-3">Documentations</h3>
+      <DocumentationsDataTableServer :filters="{ inProgram: programIdNumber }" />
+    </v-tabs-window-item>
+  </TabCard>
 </template>
 
 <script setup lang="ts">
 import { isNil } from "lodash"
-import { computed } from "vue"
+import { computed, ref } from "vue"
 import { useRouter } from "vue-router"
 
 import { VendorProgram, VendorProgramStatuses } from "@/api/vendor-programs-api"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useProgram from "@/use/use-program"
+
+import TabCard from "@/components/common/TabCard.vue"
 
 import ProgramEditForm from "@/components/programs/ProgramEditForm.vue"
 import DocumentationsDataTableServer from "@/components/documentations/DocumentationsDataTableServer.vue"
@@ -92,6 +79,21 @@ function goToVendorProgramPage(vendorProgram: VendorProgram) {
   })
 }
 
+const tabs = ref([
+  { value: 0, title: "Edit Program", icon: "mdi-folder-question" },
+  { value: 1, title: "Vendors In Program", icon: "mdi-folder-question" },
+  { value: 2, title: "Vendors Applying", icon: "mdi-folder-question" },
+  { value: 3, title: "Documentations", icon: "mdi-folder-question" },
+])
+
+const pageTitle = computed(() => {
+  if (isNil(program.value)) {
+    return "Loading..."
+  }
+
+  return `Manage ${program.value.name} Program`
+})
+
 const breadcrumbs = computed(() => {
   if (isNil(program.value)) {
     return [
@@ -119,5 +121,5 @@ const breadcrumbs = computed(() => {
   ]
 })
 
-useBreadcrumbs("Manage Program", breadcrumbs)
+useBreadcrumbs(pageTitle, breadcrumbs)
 </script>
