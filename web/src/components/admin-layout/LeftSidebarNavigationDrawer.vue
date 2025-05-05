@@ -42,7 +42,7 @@
         exact
       />
 
-      <v-list-subheader>Manage</v-list-subheader>
+      <v-list-subheader title="Manage" />
 
       <v-list-item
         v-if="isSystemAdmin"
