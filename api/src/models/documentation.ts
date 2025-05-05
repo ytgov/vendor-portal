@@ -11,14 +11,23 @@ import {
   Default,
   NotNull,
   PrimaryKey,
+  ValidateAttribute,
 } from "@sequelize/core/decorators-legacy"
 
 import BaseModel from "@/models/base-model"
+
+/** Keep in sync with web/src/api/documentations-api.ts */
+export enum DocumentationFormats {
+  FILE = "File",
+  TEXT = "Text",
+}
 
 export class Documentation extends BaseModel<
   InferAttributes<Documentation>,
   InferCreationAttributes<Documentation>
 > {
+  static readonly Formats = DocumentationFormats
+
   @Attribute(DataTypes.INTEGER)
   @PrimaryKey
   @AutoIncrement
@@ -32,7 +41,12 @@ export class Documentation extends BaseModel<
   declare description: CreationOptional<string>
 
   @Attribute(DataTypes.STRING(1000))
-  @NotNull
+  @ValidateAttribute({
+    isIn: {
+      args: [Object.values(DocumentationFormats)],
+      msg: `Format must be one of ${Object.values(DocumentationFormats).join(", ")}`,
+    },
+  })
   declare format: string
 
   @Attribute(DataTypes.DATE(0))
