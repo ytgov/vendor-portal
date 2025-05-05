@@ -1,12 +1,12 @@
 <template>
   <v-skeleton-loader
-    v-if="isNil(documentation)"
+    v-if="isNil(program)"
     type="card"
   />
   <v-form
     v-else
     ref="formRef"
-    @submit.prevent="validateAndCreate"
+    @submit.prevent="validateAndSave"
   >
     <v-row>
       <v-col
@@ -14,7 +14,7 @@
         md="6"
       >
         <v-text-field
-          v-model="documentation.name"
+          v-model="program.name"
           label="Name"
           :rules="[required]"
           @update:model-value="updateIsValid"
@@ -24,9 +24,23 @@
         cols="12"
         md="6"
       >
+        <v-checkbox
+          v-model="program.isActive"
+          label="Is Active"
+          :rules="[required]"
+          @update:model-value="updateIsValid"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col
+        cols="12"
+        md="6"
+      >
         <v-text-field
-          v-model="documentation.description"
-          label="Description"
+          v-model="program.department"
+          label="Depertment"
+          :rules="[required]"
           @update:model-value="updateIsValid"
         />
       </v-col>
@@ -34,32 +48,35 @@
         cols="12"
         md="6"
       >
-        <documentation-format-select
-          v-model="documentation.format"
-          label="Format"
+        <v-text-field
+          v-model="program.offeredBy"
+          label="Offered By"
           :rules="[required]"
           @update:model-value="updateIsValid"
         />
       </v-col>
     </v-row>
     <v-row>
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <v-textarea
+          v-model="program.description"
+          label="Description"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col class="d-flex">
         <v-spacer />
-
-        <v-btn
-          :loading="isCreating"
-          color="error"
-          variant="outlined"
-          :to="{ name: 'administration/DocumentationsPage' }"
-          text="Go back"
-        />
         <v-btn
           type="submit"
           class="ml-3"
-          :loading="isCreating"
+          :loading="isUpdating"
           :disabled="!isValid"
           color="success"
-          text="Create Documentation"
+          text="Update"
         />
       </v-col>
     </v-row>
@@ -68,24 +85,26 @@
 
 <script setup lang="ts">
 import { isNil } from "lodash"
-import { ref } from "vue"
+import { ref, toRefs } from "vue"
 import { VForm } from "vuetify/lib/components/index.mjs"
 
 import { required } from "@/utils/validators"
-import { Documentation, documentationsApi } from "@/api/documentations-api"
 
 import useSnack from "@/use/use-snack"
-import DocumentationFormatSelect from "./DocumentationFormatSelect.vue"
+import useProgram from "@/use/use-program"
 
-const documentation = ref<Partial<Documentation>>({})
+const props = defineProps<{ programId: number }>()
+const { programId } = toRefs(props)
+
+const { program, save } = useProgram(programId)
 
 const formRef = ref<InstanceType<typeof VForm> | null>(null)
 
-const isCreating = ref(false)
+const isUpdating = ref(false)
 const isValid = ref(false)
 
 const snack = useSnack()
-const emit = defineEmits<{ created: [documentationId: number] }>()
+const emit = defineEmits<{ updated: [programId: number] }>()
 
 async function updateIsValid() {
   if (formRef.value === null) {
@@ -97,27 +116,28 @@ async function updateIsValid() {
   isValid.value = valid
 }
 
-async function validateAndCreate() {
+async function validateAndSave() {
   if (formRef.value === null) return
 
   const { valid } = await formRef.value.validate()
   if (!valid) return
 
   try {
-    isCreating.value = true
-    const data = await documentationsApi.create(documentation.value)
-    emit("created", data.documentation.id)
+    isUpdating.value = true
 
-    snack.notify("Documentation created", {
+    const program = await save()
+    emit("updated", program.id)
+
+    snack.notify("Program updated", {
       color: "success",
     })
   } catch (error) {
     console.error(error)
-    snack.notify(`Failed to create documentation: ${error}`, {
+    snack.notify(`Failed to update program: ${error}`, {
       color: "error",
     })
   } finally {
-    isCreating.value = false
+    isUpdating.value = false
   }
 }
 </script>

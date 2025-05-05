@@ -5,7 +5,7 @@
   />
   <v-card v-else>
     <v-card-title class="d-flex flex-md-row">
-      {{ program?.name }}
+      {{ program.name }}
       <v-spacer />
       <v-btn
         :to="{ name: 'administration/ProgramsPage' }"
@@ -15,6 +15,16 @@
       />
     </v-card-title>
     <v-card-text>
+      <v-row>
+        <v-col>
+          <v-card>
+            <v-card-text>
+              <h3 class="mb-5">Edit Program</h3>
+              <ProgramEditForm :program-id="program.id" />
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
       <v-row>
         <v-col>
           <h3 class="mt-3 mb-3">Vendors in program</h3>
@@ -44,15 +54,16 @@
 <script setup lang="ts">
 import { isNil } from "lodash"
 import { computed } from "vue"
+import { useRouter } from "vue-router"
 
 import { VendorProgram, VendorProgramStatuses } from "@/api/vendor-programs-api"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useProgram from "@/use/use-program"
 
+import ProgramEditForm from "@/components/programs/ProgramEditForm.vue"
 import DocumentationsDataTableServer from "@/components/documentations/DocumentationsDataTableServer.vue"
 import VendorProgramsDataTableServer from "@/components/vendor-programs/VendorProgramsDataTableServer.vue"
-import { useRouter } from "vue-router"
 
 const props = defineProps<{ programId: string }>()
 const programIdNumber = computed(() => parseInt(props.programId))
