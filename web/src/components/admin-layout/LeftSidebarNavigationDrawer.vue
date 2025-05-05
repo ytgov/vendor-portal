@@ -37,8 +37,8 @@
 
       <v-list-item
         :to="{ name: 'administration/DashboardPage' }"
-        title="Administration Home"
-        prepend-icon="mdi-cog"
+        title="Administration"
+        prepend-icon="mdi-home"
         exact
       />
 
