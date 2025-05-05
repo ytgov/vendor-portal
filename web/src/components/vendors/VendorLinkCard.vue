@@ -33,7 +33,13 @@
           mdi-map
         </v-icon>
         <div class="ml-2 text-subtitle-1">
-          <div v-html="formatAddress(vendor)"></div>
+          <strong>Address:</strong>
+          <div
+            v-for="(line, index) in formatAddressLines(vendor)"
+            :key="index"
+          >
+            {{ line }}
+          </div>
         </div>
       </div>
 
@@ -94,23 +100,18 @@ const programsQuery = computed<ProgramQueryOptions>(() => {
 
 const { programs } = usePrograms(programsQuery, { skipWatchIf: () => isNil(vendor.value) })
 
-function formatAddress(vendor: Vendor): string {
+function formatAddressLines(vendor: Vendor): string[] {
   const parts = []
 
   if (vendor.addressLine1) {
     parts.push(vendor.addressLine1)
-  } else {
+  } else if (vendor.addressLine2) {
     parts.push(vendor.addressLine2)
   }
 
   parts.push(`${vendor.addressCity} ${vendor.addressProvince}, ${vendor.addressPostal}`)
 
-  parts.filter((part) => part.trim() !== "")
-
-  return `
-    <strong>Address: </strong><br />
-    ${parts.join("<br />")}
-  `
+  return parts.filter((part) => part.trim() !== "")
 }
 
 function goToVendor() {
