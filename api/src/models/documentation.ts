@@ -18,8 +18,8 @@ import BaseModel from "@/models/base-model"
 
 /** Keep in sync with web/src/api/documentations-api.ts */
 export enum DocumentationFormats {
-  FILE = "File",
-  TEXT = "Text",
+  FILE = "File Upload",
+  TEXT = "Text Input",
 }
 
 export class Documentation extends BaseModel<
