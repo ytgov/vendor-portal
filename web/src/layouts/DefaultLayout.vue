@@ -15,7 +15,7 @@
       class="ml-2 text-weight-bold"
       style="font-weight: bold"
     >
-      <span v-if="showRail">Vendor Portal</span>
+      <span v-if="showRail">Vendor Portal :</span>
       {{ title }}</v-app-bar-title
     >
     <v-app-bar-title

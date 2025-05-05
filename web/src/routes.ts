@@ -39,6 +39,43 @@ const routes: RouteRecordRaw[] = [
         component: () => import("@/pages/users/UserEditPage.vue"),
         props: true,
       },
+      {
+        path: "programs",
+        name: "administration/ProgramsPage",
+        component: () => import("@/pages/programs/ProgramsManagePage.vue"),
+      },
+      {
+        path: "programs/:programId",
+        name: "administration/ProgramManagePage",
+        component: () => import("@/pages/programs/ProgramManagePage.vue"),
+        props: true,
+      },
+      {
+        path: "programs/pslr",
+        name: "administration/PSLRRequestsPage",
+        component: () => import("@/pages/programs/pslr/ManageRequestPage.vue"),
+      },
+      {
+        path: "programs/pslr/:id",
+        name: "administration/PSLRManageRequestDetailPage",
+        component: () => import("@/pages/programs/pslr/ManageRequestDetailPage.vue"),
+      },
+      {
+        path: "documentations",
+        name: "administration/DocumentationsPage",
+        component: () => import("@/pages/documentations/DocumentationsManagePage.vue"),
+      },
+      {
+        path: "documentations/create",
+        name: "administration/DocumentationCreatePage",
+        component: () => import("@/pages/documentations/DocumentationCreatePage.vue"),
+      },
+      {
+        path: "vendor-link-requests/:vendorLinkRequestId",
+        name: "administration/VendorLinkRequest",
+        component: () => import("@/pages/vendor-link-requests/LinkPage.vue"),
+        props: true,
+      },
     ],
   },
   {
@@ -51,9 +88,14 @@ const routes: RouteRecordRaw[] = [
         name: "programs/HomePage",
         component: () => import("@/pages/programs/ProgramListPage.vue"),
       },
+      {
+        path: ":programId/apply",
+        name: "programs/ApplyPage",
+        component: () => import("@/pages/programs/ProgramApplyPage.vue"),
+        props: true,
+      },
     ],
   },
-
   {
     path: "/individual",
     component: () => import("@/layouts/DefaultLayout.vue"),
@@ -76,19 +118,28 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/layouts/DefaultLayout.vue"),
     children: [
       {
+        path: "link",
+        name: "vendor/LinkPage",
+        component: () => import("@/pages/vendor/LinkPage.vue"),
+        props: true,
+      },
+      {
         path: ":vendorId",
         name: "vendor/HomePage",
-        component: () => import("@/pages/vendor/HomePage.vue"),
+        component: () => import("@/pages/vendor/VendorViewPage.vue"),
+        props: true,
       },
       {
-        path: ":vendorId/programs/EcDev-PSLR",
-        name: "vendor/PSLRVendorPage",
-        component: () => import("@/pages/programs/pslr/PSLRVendorPage.vue"),
+        path: ":vendorId/programs/:programId", // _TODO_ switch to :slug
+        name: "vendor-program/VendorProgramPage",
+        component: () => import("@/pages/vendor-program/VendorProgramPage.vue"),
+        props: true,
       },
       {
-        path: ":vendorId/programs/EcDev-PSLR/submissions/:submissionId",
-        name: "vendor/PSLRSubmissionViewPage",
-        component: () => import("@/pages/programs/pslr/PSLRSubmissionViewPage.vue"),
+        path: ":vendorId/programs/:programId/submissions/:submissionId", // _TODO_ switch to :slug
+        name: "vendor-program/SubmissionViewPage",
+        component: () => import("@/pages/vendor-program/VendorProgramSubmissionViewPage.vue"),
+        props: true,
       },
     ],
   },

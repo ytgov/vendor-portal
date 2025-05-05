@@ -11,11 +11,6 @@ export type UserShowView = Pick<
   | "lastName"
   | "displayName"
   | "roles"
-  | "title"
-  | "department"
-  | "division"
-  | "branch"
-  | "unit"
   | "deactivatedAt"
   | "createdAt"
   | "updatedAt"
@@ -33,11 +28,6 @@ export class ShowSerializer extends BaseSerializer<User> {
         "lastName",
         "displayName",
         "roles",
-        "title",
-        "department",
-        "division",
-        "branch",
-        "unit",
         "deactivatedAt",
         "createdAt",
         "updatedAt",

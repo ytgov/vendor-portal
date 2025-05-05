@@ -1,16 +1,29 @@
 <template>
-  <v-row>
-    <v-col
-      cols="12"
-      md="6"
-    >
-      <PSLRProgramInfoCard />
-    </v-col>
-  </v-row>
+  <div
+    v-for="(program, index) in programs"
+    :key="index"
+  >
+    <v-row>
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <ProgramInfoCard
+          :program-id="`${program.id}`"
+          :show-apply="true"
+        />
+      </v-col>
+    </v-row>
+  </div>
 </template>
-<script setup lang="ts">
-import PSLRProgramInfoCard from "@/components/programs/ecdev-pslr/ProgramInfoCard.vue"
-import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
 
-useBreadcrumbs("Programs available in this portal ", [BASE_CRUMB])
+<script setup lang="ts">
+import useBreadcrumbs from "@/use/use-breadcrumbs"
+import usePrograms from "@/use/use-programs"
+
+import ProgramInfoCard from "@/components/programs/ProgramInfoCard.vue"
+
+const { programs } = usePrograms()
+
+useBreadcrumbs("", [{ title: "Programs available in this portal ", to: "/programs" }])
 </script>

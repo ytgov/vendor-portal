@@ -126,11 +126,20 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-spacer />
-      <v-col class="d-flex justify-end">
+      <v-col class="d-flex">
+        <v-btn
+        prepend-icon="mdi-delete"
+          :loading="isDeleting"
+          text="Delete"
+          color="error"
+          variant="outlined"
+          @click="confirmThenDelete(user)"
+        ></v-btn>
+        <v-spacer />
+
         <v-btn
           :loading="isLoading"
-          color="error"
+          color="secondary"
           variant="outlined"
           v-bind="cancelButtonOptions"
         >
@@ -153,12 +162,14 @@
 import { isNil } from "lodash"
 import { ref, toRefs } from "vue"
 import { useI18n } from "vue-i18n"
+import { useRouter } from "vue-router"
 
 import { type VBtn, type VForm } from "vuetify/lib/components/index.mjs"
 
 import { required } from "@/utils/validators"
 import useSnack from "@/use/use-snack"
-import useUser from "@/use/use-user"
+import useUser, { User } from "@/use/use-user"
+import usersApi from "@/api/users-api"
 
 type CancelButtonOptions = VBtn["$props"]
 
@@ -185,6 +196,7 @@ const { userId } = toRefs(props)
 const { user, save, isLoading } = useUser(userId)
 
 const snack = useSnack()
+const router = useRouter()
 
 const form = ref<InstanceType<typeof VForm> | null>(null)
 
@@ -199,6 +211,26 @@ async function saveWrapper() {
   await save()
   snack.success("User saved!")
   emit("saved", user.value.id)
+}
+
+const isDeleting = ref(false)
+
+async function confirmThenDelete(user: User) {
+  const { displayName, email } = user
+  const result = confirm(`Are you sure you want to delete ${displayName}: ${email}.`)
+  if (result === false) return
+
+  isDeleting.value = true
+  try {
+    await usersApi.delete(user.id)
+
+    router.push({ name: "administration/UsersPage" })
+  } catch (error) {
+    console.error(error)
+    snack.error(`Failed to load directory: ${error}`)
+  } finally {
+    isDeleting.value = false
+  }
 }
 
 const { t } = useI18n()

@@ -27,17 +27,22 @@ export const ADMIN_CRUMB = {
 const state = reactive<{
   breadcrumbs: Breadcrumb[]
   title: string | null
+  showTopBar: boolean
 }>({
   breadcrumbs: [],
   title: null,
+  showTopBar: true,
 })
 
-export function useBreadcrumbs(title?: string, breadcrumbs?: Breadcrumb[]) {
-  if (!isUndefined(title)) {
-    state.title = title
-    console.info("SETTING ITLE", title)
+export function useBreadcrumbs(title?: string, breadcrumbs?: Breadcrumb[], showTopBar?: boolean) {
+  if (!isUndefined(title)) state.title = title
+  if (!isUndefined(breadcrumbs)) {
+    if (state.title != BASE_CRUMB.title) state.breadcrumbs = [BASE_CRUMB, ...breadcrumbs]
+    else {
+      state.breadcrumbs = []
+    }
   }
-  if (!isUndefined(breadcrumbs)) state.breadcrumbs = breadcrumbs
+  state.showTopBar = isUndefined(showTopBar) ? false : (showTopBar ?? false)
 
   return {
     ...toRefs(state),

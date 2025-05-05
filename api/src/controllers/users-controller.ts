@@ -1,11 +1,13 @@
 import { isNil } from "lodash"
 
 import logger from "@/utils/logger"
+
+import BaseController from "@/controllers/base-controller"
+
 import { User } from "@/models"
 import { UsersPolicy } from "@/policies"
-import { CreateService } from "@/services/users"
+import { CreateService, UpdateService } from "@/services/users"
 import { IndexSerializer } from "@/serializers/users"
-import BaseController from "@/controllers/base-controller"
 
 export class UsersController extends BaseController<User> {
   async index() {
@@ -20,13 +22,15 @@ export class UsersController extends BaseController<User> {
         limit: this.pagination.limit,
         offset: this.pagination.offset,
       })
+
       const serializedUsers = IndexSerializer.perform(users)
+
       return this.response.json({
         users: serializedUsers,
         totalCount,
       })
     } catch (error) {
-      logger.error("Error fetching users" + error)
+      logger.error(`Error fetching users: ${error}`, { error })
       return this.response.status(400).json({
         message: `Error fetching users: ${error}`,
       })
@@ -51,7 +55,7 @@ export class UsersController extends BaseController<User> {
 
       return this.response.json({ user, policy })
     } catch (error) {
-      logger.error("Error fetching user" + error)
+      logger.error(`Error fetching user: ${error}`, { error })
       return this.response.status(400).json({
         message: `Error fetching user: ${error}`,
       })
@@ -71,7 +75,7 @@ export class UsersController extends BaseController<User> {
       const user = await CreateService.perform(permittedAttributes)
       return this.response.status(201).json({ user })
     } catch (error) {
-      logger.error("Error creating user" + error)
+      logger.error(`Error creating user: ${error}`, { error })
       return this.response.status(422).json({
         message: `Error creating user: ${error}`,
       })
@@ -81,6 +85,7 @@ export class UsersController extends BaseController<User> {
   async update() {
     try {
       const user = await this.loadUser()
+
       if (isNil(user)) {
         return this.response.status(404).json({
           message: "User not found",
@@ -95,10 +100,10 @@ export class UsersController extends BaseController<User> {
       }
 
       const permittedAttributes = policy.permitAttributes(this.request.body)
-      await user.update(permittedAttributes)
-      return this.response.json({ user })
+      const newUser = await UpdateService.perform(user, permittedAttributes)
+      return this.response.json({ user: newUser })
     } catch (error) {
-      logger.error("Error updating user" + error)
+      logger.error(`Error updating user: ${error}`, { error })
       return this.response.status(422).json({
         message: `Error updating user: ${error}`,
       })
@@ -124,7 +129,7 @@ export class UsersController extends BaseController<User> {
       await user.destroy()
       return this.response.status(204).send()
     } catch (error) {
-      logger.error("Error deleting user" + error)
+      logger.error(`Error deleting user: ${error}`, { error })
       return this.response.status(422).json({
         message: `Error deleting user: ${error}`,
       })

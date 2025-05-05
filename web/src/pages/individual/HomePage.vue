@@ -11,6 +11,7 @@
       cols="12"
       md="6"
     >
+      <VendorLinkRequestAlerts />
       <h3 class="mb-3">Linked Vendor Accounts</h3>
       <VendorLinkCard vendor-id="CDICEFOGANAL" />
     </v-col>
@@ -18,9 +19,19 @@
 </template>
 
 <script setup lang="ts">
-import AccountDetailsCard from "@/components/individual/AccountDetailsCard.vue"
-import VendorLinkCard from "@/components/vendor/VendorLinkCard.vue"
 import useBreadcrumbs from "@/use/use-breadcrumbs"
+
+import AccountDetailsCard from "@/components/individual/AccountDetailsCard.vue"
+import VendorLinkCard from "@/components/vendors/VendorLinkCard.vue"
+import VendorLinkRequestAlerts from "@/components/vendor-link-requests/VendorLinkRequestAlerts.vue"
 
 useBreadcrumbs("Vendor Portal Home", [])
 </script>
+
+<style>
+.white-text .v-alert__content,
+.white-text .v-alert__prepend,
+.white-text .v-alert-title {
+  color: white !important;
+}
+</style>

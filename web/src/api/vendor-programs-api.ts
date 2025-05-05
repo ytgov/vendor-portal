@@ -1,71 +1,76 @@
 import http from "@/api/http-client"
-import { type Policy } from "@/api/base-api"
 
-/** Keep in sync with api/src/models/vendor.ts */
+/** Keep in sync with api/src/models/vendor-program.ts */
 export type VendorProgram = {
   id: number
-  name: string
-  department: string
-  description?: string
-  slug: string
-
+  vendorId: number
+  programId: number
+  startDate: string | null
+  endDate: string | null
+  requestedByUserId: number
+  requestedAt: string | null
+  status: string
+  reviewByUserId: number | null
+  reviewAt: string | null
+  reviewNotes: string | null
   createdAt: string
   updatedAt: string
-
-  // Virtuals
-
-  // Associations
 }
 
-export type VendorWhereOptions = {
-  vendorId?: string
-  name?: string
+export type VendorProgramWhereOptions = {
+  vendorId?: number
+  programId?: number
+  startDate?: string
+  endDate?: string
+  requestedByUserId?: number
+  requestedAt?: string
+  status?: string
+  reviewByUserId?: number
+  reviewAt?: string
 }
 
-export type VendorFiltersOptions = {
-  search?: string | string[]
-  // TODO: implement isActive scope in back-end
+/** Keep in sync with scopes in api/src/models/vendor-program.ts */
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type VendorProgramFiltersOptions = {}
+
+export type VendorProgramQueryOptions = {
+  where?: VendorProgramWhereOptions
+  filters?: VendorProgramFiltersOptions
+  page?: number
+  perPage?: number
 }
 
-export const vendorsApi = {
-  async list(
-    params: {
-      where?: VendorWhereOptions
-      filters?: VendorFiltersOptions
-      page?: number
-      perPage?: number
-    } = {}
-  ): Promise<{
-    vendors: VendorProgram[]
+export const vendorProgramsApi = {
+  async list(params: VendorProgramQueryOptions = {}): Promise<{
+    vendorPrograms: VendorProgram[]
     totalCount: number
   }> {
-    const { data } = await http.get("/api/vendors", {
-      params,
-    })
+    const { data } = await http.get("/api/vendor-programs", { params })
     return data
   },
-  async get(vendorId: number | string): Promise<{
-    vendor: VendorProgram
-    policy: Policy
-  }> {
-    const { data } = await http.get(`/api/vendors/${vendorId}`)
+
+  async get(vendorProgramId: number): Promise<{ vendorProgram: VendorProgram }> {
+    const { data } = await http.get(`/api/vendor-programs/${vendorProgramId}`)
     return data
   },
-  async create(attributes: Partial<VendorProgram>): Promise<{
-    vendor: VendorProgram
-  }> {
-    const { data } = await http.post("/api/vendors", attributes)
+
+  async create(attributes: Partial<VendorProgram>): Promise<{ vendorProgram: VendorProgram }> {
+    const { data } = await http.post("/api/vendor-programs", attributes)
     return data
   },
+
   async update(
-    vendorId: number | string,
+    vendorProgramId: number,
     attributes: Partial<VendorProgram>
-  ): Promise<{
-    vendor: VendorProgram
-  }> {
-    const { data } = await http.patch(`/api/vendors/${vendorId}`, attributes)
+  ): Promise<{ vendorProgram: VendorProgram }> {
+    const { data } = await http.patch(`/api/vendor-programs/${vendorProgramId}`, attributes)
+    return data
+  },
+
+  async delete(vendorProgramId: number): Promise<void> {
+    const { data } = await http.delete(`/api/vendor-programs/${vendorProgramId}`)
     return data
   },
 }
 
-export default vendorsApi
+export default vendorProgramsApi

@@ -78,21 +78,6 @@ export class User extends BaseModel<InferAttributes<User>, InferCreationAttribut
   })
   declare roles: string[]
 
-  @Attribute(DataTypes.STRING(100))
-  declare title: string | null
-
-  @Attribute(DataTypes.STRING(100))
-  declare department: string | null
-
-  @Attribute(DataTypes.STRING(100))
-  declare division: string | null
-
-  @Attribute(DataTypes.STRING(100))
-  declare branch: string | null
-
-  @Attribute(DataTypes.STRING(100))
-  declare unit: string | null
-
   @Attribute(DataTypes.DATE(0))
   declare deactivatedAt: Date | null
 
@@ -119,7 +104,7 @@ export class User extends BaseModel<InferAttributes<User>, InferCreationAttribut
 
   // Scopes
   static establishScopes(): void {
-    this.addSearchScope(["firstName", "lastName", "displayName"])
+    this.addSearchScope(["firstName", "lastName", "displayName", "email"])
   }
 }
 

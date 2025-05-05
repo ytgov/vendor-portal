@@ -1,49 +1,80 @@
 <template>
-  <LeftSidebarNavigationDrawer v-model="showDrawer" />
+  <LeftSidebarNavigationDrawer
+    v-model="showDrawer"
+    :show-rail="showRail"
+  />
 
-  <v-app-bar>
+  <v-app-bar
+    flat
+    color="white"
+    style="border-bottom: 1px #bbb solid"
+  >
     <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
-
     <v-app-bar-title
-      ><span
-        class="cursor-pointer"
-        @click="goToDashboard"
-        >Vendor Portal</span
-      > <strong>Administration</strong></v-app-bar-title
+      v-if="mdAndUp"
+      class="ml-2 text-weight-bold"
+      style="font-weight: bold"
     >
+      <span v-if="showRail">Vendor Portal :</span>
+      {{ title }}</v-app-bar-title
+    >
+    <v-app-bar-title
+      v-if="!mdAndUp"
+      class="ml-2 text-weight-bold"
+      style="font-weight: bold"
+    >
+      <router-link
+        to="/"
+        style="text-decoration: none"
+        >Vendor Portal <strong>Administration</strong></router-link
+      >
+    </v-app-bar-title>
 
     <KebabMenu />
   </v-app-bar>
 
-  <v-main>
+  <v-main class="page-wrapper">
     <SimpleBreadcrumbs />
 
-    <v-container>
+    <v-container fluid>
       <router-view />
     </v-container>
   </v-main>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
-import { useRouter } from "vue-router"
+import { ref, unref, watch } from "vue"
 import { useDisplay } from "vuetify"
 
 import SimpleBreadcrumbs from "@/components/common/SimpleBreadcrumbs.vue"
-import KebabMenu from "@/components/admin-layout/KebabMenu.vue"
+import KebabMenu from "@/components/default-layout/KebabMenu.vue"
 import LeftSidebarNavigationDrawer from "@/components/admin-layout/LeftSidebarNavigationDrawer.vue"
+import useBreadcrumbs from "@/use/use-breadcrumbs"
 
-const { lgAndUp } = useDisplay()
+const { mdAndUp } = useDisplay()
 
-const showDrawer = ref(lgAndUp.value)
+const showDrawer = ref(mdAndUp.value)
+const showRail = ref(!mdAndUp.value)
+
+const { title } = useBreadcrumbs()
+
+watch(
+  () => unref(mdAndUp),
+  (newVal) => {
+    if (!newVal) {
+      showDrawer.value = true
+      showRail.value = false
+    } else {
+      showDrawer.value = false
+      showRail.value = true
+    }
+  }
+)
 
 function toggleDrawer() {
-  showDrawer.value = !showDrawer.value
-}
-
-const router = useRouter()
-
-function goToDashboard() {
-  return router.push({ name: "administration/DashboardPage" })
+  if (!mdAndUp.value) showDrawer.value = !showDrawer.value
+  else {
+    showRail.value = !showRail.value
+  }
 }
 </script>
