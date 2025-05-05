@@ -6,7 +6,6 @@
   <v-form
     v-else
     ref="formRef"
-    @update:model-value="updateIsValid"
     @submit.prevent="validateAndCreate"
   >
     <v-row>
@@ -55,7 +54,7 @@
           type="submit"
           class="ml-3"
           :loading="isCreating"
-          :disabled="!isValid"
+          :disabled="!formRef?.isValid"
           color="success"
           text="Create Documentation"
         />
@@ -80,20 +79,9 @@ const documentation = ref<Partial<Documentation>>({})
 const formRef = ref<InstanceType<typeof VForm> | null>(null)
 
 const isCreating = ref(false)
-const isValid = ref(false)
 
 const snack = useSnack()
 const emit = defineEmits<{ created: [documentationId: number] }>()
-
-async function updateIsValid() {
-  if (formRef.value === null) {
-    isValid.value = false
-    return
-  }
-
-  const { valid } = await formRef.value.validate()
-  isValid.value = valid
-}
 
 async function validateAndCreate() {
   if (formRef.value === null) return
