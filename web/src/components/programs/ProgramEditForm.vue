@@ -6,6 +6,7 @@
   <v-form
     v-else
     ref="formRef"
+    @update:model-value="updateIsValid"
     @submit.prevent="validateAndSave"
   >
     <v-row>
@@ -17,7 +18,6 @@
           v-model="program.name"
           label="Name"
           :rules="[required]"
-          @update:model-value="updateIsValid"
         />
       </v-col>
       <v-col
@@ -28,7 +28,6 @@
           v-model="program.isActive"
           label="Is Active"
           :rules="[required]"
-          @update:model-value="updateIsValid"
         />
       </v-col>
     </v-row>
@@ -41,7 +40,6 @@
           v-model="program.department"
           label="Depertment"
           :rules="[required]"
-          @update:model-value="updateIsValid"
         />
       </v-col>
       <v-col
@@ -52,7 +50,6 @@
           v-model="program.offeredBy"
           label="Offered By"
           :rules="[required]"
-          @update:model-value="updateIsValid"
         />
       </v-col>
     </v-row>

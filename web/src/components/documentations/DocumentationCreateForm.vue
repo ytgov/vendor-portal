@@ -6,6 +6,7 @@
   <v-form
     v-else
     ref="formRef"
+    @update:model-value="updateIsValid"
     @submit.prevent="validateAndCreate"
   >
     <v-row>
@@ -17,7 +18,6 @@
           v-model="documentation.name"
           label="Name"
           :rules="[required]"
-          @update:model-value="updateIsValid"
         />
       </v-col>
       <v-col
@@ -27,7 +27,6 @@
         <v-text-field
           v-model="documentation.description"
           label="Description"
-          @update:model-value="updateIsValid"
         />
       </v-col>
       <v-col
@@ -38,7 +37,6 @@
           v-model="documentation.format"
           label="Format"
           :rules="[required]"
-          @update:model-value="updateIsValid"
         />
       </v-col>
     </v-row>
