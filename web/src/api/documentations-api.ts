@@ -2,8 +2,8 @@ import http from "@/api/http-client"
 
 /** Keep in sync with api/src/models/documentation.ts */
 export enum DocumentationFormats {
-  FILE = "File",
-  TEXT = "Text",
+  FILE = "File Upload",
+  TEXT = "Text Input",
 }
 
 export type Documentation = {
