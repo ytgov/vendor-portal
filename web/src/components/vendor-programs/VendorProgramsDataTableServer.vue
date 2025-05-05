@@ -88,11 +88,10 @@ type VendorProgramTableRow = {
   item: VendorProgram
 }
 
-const emit = defineEmits<{ click: [vendorProgramId: number] }>()
+const emit = defineEmits<{ click: [vendorProgramId: VendorProgram] }>()
 
 function rowClicked(_event: unknown, row: VendorProgramTableRow) {
-  const vendorProgramId = row.item.id
-  emit("click", vendorProgramId)
+  emit("click", row.item)
 }
 
 defineExpose({ refresh })

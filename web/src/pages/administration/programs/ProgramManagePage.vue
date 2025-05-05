@@ -20,12 +20,14 @@
           <h3 class="mt-3 mb-3">Vendors in program</h3>
           <VendorProgramsDataTableServer
             :where="{ programId: programIdNumber, status: VendorProgramStatuses.ACCEPTED }"
+            @click="goToVendorProgramPage"
           />
         </v-col>
         <v-col>
           <h3 class="mt-3 mb-3">Vendors applying for program</h3>
           <VendorProgramsDataTableServer
             :where="{ programId: programIdNumber, status: VendorProgramStatuses.PENDING }"
+            @click="goToVendorProgramRequestPage"
           />
         </v-col>
       </v-row>
@@ -43,17 +45,41 @@
 import { isNil } from "lodash"
 import { computed } from "vue"
 
-import { VendorProgramStatuses } from "@/api/vendor-programs-api"
+import { VendorProgram, VendorProgramStatuses } from "@/api/vendor-programs-api"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useProgram from "@/use/use-program"
 
 import DocumentationsDataTableServer from "@/components/documentations/DocumentationsDataTableServer.vue"
 import VendorProgramsDataTableServer from "@/components/vendor-programs/VendorProgramsDataTableServer.vue"
+import { useRouter } from "vue-router"
 
 const props = defineProps<{ programId: string }>()
 const programIdNumber = computed(() => parseInt(props.programId))
 const { program, isLoading } = useProgram(programIdNumber)
+
+const router = useRouter()
+
+function goToVendorProgramRequestPage(vendorProgram: VendorProgram) {
+  router.push({
+    name: "administration/VendorProgramRequestPage",
+    params: {
+      programId: programIdNumber.value,
+      vendorId: vendorProgram.vendorId,
+      vendorProgramId: vendorProgram.id,
+    },
+  })
+}
+
+function goToVendorProgramPage(vendorProgram: VendorProgram) {
+  router.push({
+    name: "administration/VendorProgramPage",
+    params: {
+      programId: programIdNumber.value,
+      vendorId: vendorProgram.vendorId,
+    },
+  })
+}
 
 const breadcrumbs = computed(() => {
   if (isNil(program.value)) {

@@ -29,7 +29,7 @@
       v-for="(documentation, index) in documentations"
       :key="index"
     >
-      <template v-if="documentation.format === 'text'">
+      <template v-if="documentation.format === DocumentationFormats.TEXT">
         <v-row>
           <v-col
             cols="12"
@@ -43,7 +43,7 @@
           </v-col>
         </v-row>
       </template>
-      <template v-else-if="documentation.format === 'file'">
+      <template v-else-if="documentation.format === DocumentationFormats.FILE">
         <v-row>
           <v-col
             cols="12"
@@ -83,6 +83,7 @@ import { VForm } from "vuetify/lib/components/index.mjs"
 
 import vendorDocumentationsApi, { VendorDocumentation } from "@/api/vendor-documentations-api"
 import vendorProgramsApi, { VendorProgram } from "@/api/vendor-programs-api"
+import { DocumentationFormats } from "@/api/documentations-api"
 
 import useSnack from "@/use/use-snack"
 import useCurrentUser from "@/use/use-current-user"
