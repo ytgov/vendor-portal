@@ -20,15 +20,15 @@
 
 <script setup lang="ts">
 import { isNil } from "lodash"
-import { computed, ref } from "vue"
+import { computed, toRefs } from "vue"
 
 import { formatDate } from "@/utils/formatters"
 
 import useVendor from "@/use/use-vendor"
 import usePrograms from "@/use/use-programs"
 
-const props = defineProps<{ vendorId: string }>()
-const vendorId = ref(props.vendorId)
+const props = defineProps<{ vendorId: number }>()
+const { vendorId } = toRefs(props)
 const { vendor } = useVendor(vendorId)
 
 const query = computed(() => {

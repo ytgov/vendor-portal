@@ -28,7 +28,7 @@
         </v-card-text>
       </v-card>
 
-      <VendorPeopleCard vendor-id="1" />
+      <VendorPeopleCard :vendor-id="1" />
     </v-col>
 
     <v-col
@@ -85,12 +85,7 @@
     </v-col>
   </v-row>
 </template>
+
 <script setup lang="ts">
 import VendorPeopleCard from "@/components/vendors/VendorPeopleCard.vue"
-import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
-
-useBreadcrumbs("PSLR Application Request", [
-  ADMIN_CRUMB,
-  { title: "PSLR Application Requests", to: { name: "administration/PSLRRequestsPage" } },
-])
 </script>

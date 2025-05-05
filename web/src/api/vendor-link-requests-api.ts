@@ -4,9 +4,9 @@ import { User } from "@/api/users-api"
 
 /** Keep in sync with api/src/models/vendor-link-request.ts */
 export enum VendorLinkRequestStatuses {
-  PENDING = "pending",
-  ACCEPTED = "accepted",
-  REJECTED = "rejected",
+  PENDING = "Pending",
+  ACCEPTED = "Accepted",
+  REJECTED = "Rejected",
 }
 
 /** Keep in sync with api/src/models/vendor-link-request.ts */
@@ -19,7 +19,7 @@ export type VendorLinkRequest = {
   ycorNumber: string | null
   address: string | null
   vendorId: string | null
-  status: string
+  status: VendorLinkRequestStatuses
   decisionByUserId: number | null
   decisionAt: Date | null
   reviewNotes: string | null
@@ -38,7 +38,7 @@ export type VendorLinkRequestWhereOptions = {
   ycorNumber?: string
   address?: string
   vendorId?: string
-  status?: string
+  status?: VendorLinkRequestStatuses
   decisionByUserId?: number
   decisionAt?: Date
 }

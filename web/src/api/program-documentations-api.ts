@@ -1,5 +1,7 @@
 import http from "@/api/http-client"
 
+import { Documentation } from "@/api/documentations-api"
+
 /** Keep in sync with api/src/models/program-documentation.ts */
 export type ProgramDocumentation = {
   id: number
@@ -8,6 +10,9 @@ export type ProgramDocumentation = {
   purpose: string | null
   createdAt: string
   updatedAt: string
+
+  // Associations
+  documentation: Documentation | null
 }
 
 export type ProgramDocumentationWhereOptions = {

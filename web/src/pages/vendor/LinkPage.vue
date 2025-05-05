@@ -178,7 +178,7 @@ import { useRouter } from "vue-router"
 import { VendorLinkRequest, vendorLinkRequestsApi } from "@/api/vendor-link-requests-api"
 
 import useSnack from "@/use/use-snack"
-import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
+import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useCurrentUser from "@/use/use-current-user"
 
 import VendorMatchCard from "@/components/vendors/VendorMatchCard.vue"
@@ -246,5 +246,5 @@ async function doLink() {
   }
 }
 
-useBreadcrumbs("Link to Vendor", [BASE_CRUMB])
+useBreadcrumbs("Link to Vendor", [])
 </script>

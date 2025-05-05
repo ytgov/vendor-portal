@@ -147,7 +147,9 @@ export class ProgramDocumentationsController extends BaseController<ProgramDocum
   }
 
   private async loadProgramDocumentation(): Promise<ProgramDocumentation | null> {
-    return ProgramDocumentation.findByPk(this.params.programDocumentationId)
+    return ProgramDocumentation.findByPk(this.params.programDocumentationId, {
+      include: ["documentation"],
+    })
   }
 
   private buildPolicy(programDocumentation: ProgramDocumentation) {

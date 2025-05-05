@@ -1,12 +1,10 @@
 <template>
-  <div style="background-color: #B5D2DA; border-bottom: 1px #bbb solid">
+  <div style="background-color: #b5d2da; border-bottom: 1px #bbb solid">
     <v-container
       v-if="breadcrumbsWithExactTrueByDefault.length > 0"
       fluid
       class="py-0 pb-2 mt-0 pt-2"
     >
-      <h2 v-if="!mdAndUp">{{ title }}</h2>
-
       <v-breadcrumbs
         :items="breadcrumbsWithExactTrueByDefault"
         large
@@ -27,20 +25,19 @@ export { type Breadcrumb } from "@/use/use-breadcrumbs"
 <script lang="ts" setup>
 import { computed } from "vue"
 
-import useBreadcrumbs from "@/use/use-breadcrumbs"
-import { useDisplay } from "vuetify/lib/framework.mjs"
+import { type Breadcrumb } from "@/use/use-breadcrumbs"
 
-const { mdAndUp } = useDisplay()
-const { breadcrumbs, title } = useBreadcrumbs()
+const props = defineProps<{
+  items: Breadcrumb[]
+}>()
 
 // Changes https://vuetifyjs.com/en/components/breadcrumbs/ default behavior.
 // By default v-breadcrumbs will disable all crumbs up to the current page in a nested paths.
 // You can prevent this behavior by using exact: true on each applicable breadcrumb in the items array.
 const breadcrumbsWithExactTrueByDefault = computed(() =>
-  breadcrumbs.value.map((item) => ({
+  props.items.map((item) => ({
     ...item,
     exact: item.exact ?? true,
-    disabled: item.disabled ?? false,
   }))
 )
 </script>

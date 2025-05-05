@@ -7,27 +7,27 @@ export async function seed(): Promise<void> {
   const documentationsAttributes: CreationAttributes<Documentation>[] = [
     {
       name: "YCOR Certificate",
-      format: "File Upload",
+      format: Documentation.Formats.FILE,
     },
     {
       name: "Business License",
-      format: "File Upload",
+      format: Documentation.Formats.FILE,
     },
     {
       name: "CRA Remittance",
-      format: "File Upload",
+      format: Documentation.Formats.FILE,
     },
     {
       name: "Paid Sick Leave Policy",
-      format: "File Upload",
+      format: Documentation.Formats.FILE,
     },
     {
       name: "Mailing Address",
-      format: "Text Input",
+      format: Documentation.Formats.TEXT,
     },
     {
       name: "Physical Address",
-      format: "Text Input",
+      format: Documentation.Formats.TEXT,
     },
   ]
 

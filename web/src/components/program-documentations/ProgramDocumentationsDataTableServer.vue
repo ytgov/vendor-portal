@@ -9,21 +9,23 @@
     :loading="isLoading"
     style="border: 1px #ccc solid; border-radius: 3px"
   >
+    <template #item.createdAt="{ value }">
+      {{ formatDate(value) }}
+    </template>
   </v-data-table-server>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from "vue"
-import { useRoute, useRouter } from "vue-router"
-import { useRouteQuery } from "@vueuse/router"
 
-import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
+import { formatDate } from "@/utils/formatters"
+
+import useRouteQueryPagination from "@/use/utils/use-route-query-pagination"
 import useProgramDocumentations, {
+  ProgramDocumentationFiltersOptions,
+  ProgramDocumentationWhereOptions,
   ProgramDocumentationQueryOptions,
 } from "@/use/use-program-documentations"
-
-const props = defineProps<{ programId: string }>()
-const programIdNumber = computed(() => parseInt(props.programId))
 
 const headers = ref([
   { title: "ID", key: "id" },
@@ -31,34 +33,29 @@ const headers = ref([
   { title: "Created At", key: "createdAt" },
 ])
 
+const props = withDefaults(
+  defineProps<{
+    filters?: ProgramDocumentationFiltersOptions
+    where?: ProgramDocumentationWhereOptions
+    waiting?: boolean
+  }>(),
+  {
+    filters: () => ({}),
+    where: () => ({}),
+    waiting: false,
+  }
+)
+
 const search = ref("")
 
-const route = useRoute()
-const router = useRouter()
-
-const page = useRouteQuery<number>("page", 1, {
-  route,
-  router,
-  transform: {
-    get: (value: number) => value,
-    set: (value: number) => value,
-  },
-})
-
-const perPage = useRouteQuery<number>("perPage", 10, {
-  route,
-  router,
-  transform: {
-    get: (value: number) => value,
-    set: (value: number) => value,
-  },
+const { page, perPage } = useRouteQueryPagination({
+  routeQuerySuffix: "ProgramDocumentations",
 })
 
 const programDocumentationsQuery = computed<ProgramDocumentationQueryOptions>(() => {
   return {
-    where: {
-      programId: programIdNumber.value,
-    },
+    where: props.where,
+    filters: props.filters,
     perPage: perPage.value,
     page: page.value,
   }
@@ -67,8 +64,6 @@ const programDocumentationsQuery = computed<ProgramDocumentationQueryOptions>(()
 const { programDocumentations, totalCount, isLoading, refresh } = useProgramDocumentations(
   programDocumentationsQuery
 )
-
-useBreadcrumbs("Manage Program Documentations", [ADMIN_CRUMB])
 
 defineExpose({ refresh })
 </script>

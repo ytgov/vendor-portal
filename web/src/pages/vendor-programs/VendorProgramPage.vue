@@ -5,15 +5,6 @@
   />
   <div v-if="vendor">
     <v-row>
-      <v-col
-        cols="12"
-        md="5"
-      >
-        <ProgramInfoCard
-          :program-id="programId"
-          :show-apply="false"
-        />
-      </v-col>
       <v-col>
         <h3 class="mb-3">Previous Submissions</h3>
         <v-select
@@ -73,14 +64,12 @@ import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useVendor from "@/use/use-vendor"
 import useProgram from "@/use/use-program"
 
-import ProgramInfoCard from "@/components/programs/ProgramInfoCard.vue"
-
 const props = defineProps<{ vendorId: string; programId: string }>()
 const vendorId = ref(props.vendorId)
 const programIdNumber = computed(() => parseInt(props.programId))
 
 const { vendor, isLoading: isVendorLoading } = useVendor(vendorId)
-const { program, isLoading: isProgramLoading } = useProgram(programIdNumber)
+const { program } = useProgram(programIdNumber)
 
 const router = useRouter()
 
@@ -156,31 +145,6 @@ const employees = ref([
   },
 ])
 
-useBreadcrumbs("", [{ title: "Loading...", to: "" }])
-
-watch(isVendorLoading, () => setBreadcrumbs())
-watch(isProgramLoading, () => setBreadcrumbs())
-
-setBreadcrumbs()
-
-function setBreadcrumbs() {
-  if (vendor.value && program.value) {
-    useBreadcrumbs("", [
-      {
-        title: `${vendor.value?.name}`,
-        to: {
-          name: "vendor/HomePage",
-          params: {
-            vendorId: `${vendor.value?.vendorId}`,
-          },
-        },
-      },
-      { title: `${program.value.name}`, to: "" },
-    ])
-  } else {
-    useBreadcrumbs("", [{ title: "Loading...", to: "" }])
-  }
-}
 function openSubmission(submissionId: number) {
   router.push({
     name: "vendor-program/SubmissionViewPage",
@@ -191,4 +155,36 @@ function openSubmission(submissionId: number) {
     },
   })
 }
+
+const breadcrumbs = computed(() => {
+  const baseCrumbs = [
+    {
+      title: "Programs",
+      to: "administration/ProgramsPage",
+    },
+  ]
+
+  if (vendor.value && program.value) {
+    return [
+      ...baseCrumbs,
+      {
+        title: `Manage ${program.value.name}`,
+        to: {
+          name: "administration/ProgramManagePage",
+          params: {
+            programId: program.value.id,
+          },
+        },
+      },
+      {
+        title: vendor.value.name,
+        to: "",
+      },
+    ]
+  }
+
+  return [...baseCrumbs, { title: "Loading...", to: "" }]
+})
+
+useBreadcrumbs("", breadcrumbs)
 </script>

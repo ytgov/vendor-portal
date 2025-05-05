@@ -1,6 +1,6 @@
-import { isUndefined } from "lodash"
-import { reactive, toRefs } from "vue"
+import { reactive, toRefs, watch, MaybeRefOrGetter, toValue } from "vue"
 import { RouteLocationRaw } from "vue-router"
+import { cloneDeep, isUndefined } from "lodash"
 
 export type Breadcrumb = {
   title: string
@@ -9,44 +9,82 @@ export type Breadcrumb = {
   to: RouteLocationRaw
 }
 
-export const BASE_CRUMB = {
+export const BASE_CRUMB: Breadcrumb = {
   title: "Vendor Portal Home",
   disabled: false,
   to: {
     name: "individual/HomePage",
   },
 }
-export const ADMIN_CRUMB = {
+
+export const ADMIN_CRUMB: Breadcrumb = {
   title: "Administration Dashboard",
   disabled: false,
-  to: { name: "administration/DashboardPage" },
   exact: true,
+  to: { name: "administration/DashboardPage" },
 }
 
 // Global state for breadcrumbs
 const state = reactive<{
+  title?: string
+  baseCrumb: Breadcrumb
   breadcrumbs: Breadcrumb[]
-  title: string | null
-  showTopBar: boolean
 }>({
+  title: "",
+  baseCrumb: BASE_CRUMB,
   breadcrumbs: [],
-  title: null,
-  showTopBar: true,
 })
 
-export function useBreadcrumbs(title?: string, breadcrumbs?: Breadcrumb[], showTopBar?: boolean) {
-  if (!isUndefined(title)) state.title = title
-  if (!isUndefined(breadcrumbs)) {
-    if (state.title != BASE_CRUMB.title) state.breadcrumbs = [BASE_CRUMB, ...breadcrumbs]
-    else {
-      state.breadcrumbs = []
+// TODO: Consider supporting config option for setting base crumb?
+export function useBreadcrumbs(
+  title?: MaybeRefOrGetter<string>,
+  breadcrumbs?: MaybeRefOrGetter<Breadcrumb[]>,
+  options?: MaybeRefOrGetter<{
+    baseCrumb?: Breadcrumb
+  }>
+) {
+  watch(
+    () => toValue(title),
+    (newTitle) => {
+      if (isUndefined(newTitle)) return
+
+      state.title = newTitle
+    },
+    {
+      immediate: true,
     }
-  }
-  state.showTopBar = isUndefined(showTopBar) ? false : (showTopBar ?? false)
+  )
+
+  watch(
+    () => cloneDeep(toValue(breadcrumbs)),
+    (newBreadcrumbs) => {
+      if (isUndefined(newBreadcrumbs)) return
+
+      state.breadcrumbs = [state.baseCrumb, ...newBreadcrumbs]
+    },
+    {
+      immediate: true,
+      deep: true,
+    }
+  )
+
+  watch(
+    () => cloneDeep(toValue(options)),
+    (newOptions) => {
+      if (isUndefined(newOptions)) return
+
+      if (!isUndefined(newOptions.baseCrumb)) {
+        state.baseCrumb = newOptions.baseCrumb
+      }
+    },
+    {
+      immediate: true,
+      deep: true,
+    }
+  )
 
   return {
     ...toRefs(state),
-    update: useBreadcrumbs,
   }
 }
 

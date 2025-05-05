@@ -20,17 +20,17 @@ import BaseModel from "@/models/base-model"
 import User from "@/models/user"
 
 /** Keep in sync with web/src/api/vendor-documentations-api.ts */
-export enum VendorLinkRequestStatuses {
-  PENDING = "pending",
-  APPROVED = "approved",
-  REJECTED = "rejected",
+export enum VendorDocumentationStatuses {
+  PENDING = "Pending",
+  APPROVED = "Approved",
+  REJECTED = "Rejected",
 }
 
 export class VendorDocumentation extends BaseModel<
   InferAttributes<VendorDocumentation>,
   InferCreationAttributes<VendorDocumentation>
 > {
-  static readonly Statuses = VendorLinkRequestStatuses
+  static readonly Statuses = VendorDocumentationStatuses
 
   @Attribute(DataTypes.INTEGER)
   @PrimaryKey
@@ -52,11 +52,11 @@ export class VendorDocumentation extends BaseModel<
   @Attribute(DataTypes.STRING(100))
   @ValidateAttribute({
     isIn: {
-      args: [Object.values(VendorLinkRequestStatuses)],
-      msg: `Status must be one of ${Object.values(VendorLinkRequestStatuses).join(", ")}`,
+      args: [Object.values(VendorDocumentationStatuses)],
+      msg: `Status must be one of ${Object.values(VendorDocumentationStatuses).join(", ")}`,
     },
   })
-  @Default(VendorLinkRequestStatuses.PENDING)
+  @Default(VendorDocumentationStatuses.PENDING)
   declare status: CreationOptional<string>
 
   @Attribute(DataTypes.DATE(0))

@@ -21,9 +21,9 @@ import User from "@/models/user"
 
 /** Keep in sync with web/src/api/vendor-link-requests-api.ts */
 export enum VendorLinkRequestStatuses {
-  PENDING = "pending",
-  ACCEPTED = "accepted",
-  REJECTED = "rejected",
+  PENDING = "Pending",
+  ACCEPTED = "Accepted",
+  REJECTED = "Rejected",
 }
 
 export class VendorLinkRequest extends BaseModel<
