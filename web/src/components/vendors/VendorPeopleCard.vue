@@ -30,5 +30,7 @@ const vendorUserQuery = computed<VendorUserQueryOptions>(() => {
   }
 })
 
-const { vendorUsers } = useVendorUsers(vendorUserQuery)
+const { vendorUsers } = useVendorUsers(vendorUserQuery, {
+  skipWatchIf: () => isNil(vendorId.value),
+})
 </script>
