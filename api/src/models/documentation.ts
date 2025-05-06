@@ -3,6 +3,7 @@ import {
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
+  Op,
   sql,
 } from "@sequelize/core"
 import {
@@ -80,6 +81,25 @@ export class Documentation extends BaseModel<
             },
           },
         ],
+      }
+    })
+
+    this.addScope("notInProgram", (programId: number) => {
+      return {
+        where: {
+          id: {
+            [Op.notIn]: sql`(
+              SELECT
+                documentation_id
+              FROM
+                program_documentations
+              WHERE
+                deleted_at IS NULL
+                AND program_id = :programId
+            )`,
+          },
+        },
+        replacements: { programId },
       }
     })
   }

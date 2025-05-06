@@ -25,13 +25,19 @@
                   }})</strong
                 >
               </p>
-              <p class="mb-2">By: <strong>Michael Johnson</strong> (michael@icefoganalytics.com)</p>
+              <div v-if="!isNil(requestedByUser)">
+                <p class="mb-2">
+                  By:
+                  <strong> {{ requestedByUser.displayName }}</strong> ({{ requestedByUser.email }})
+                </p>
 
-              <p class="mb-5">
-                <a href="mailto:michael@icefoganalytics.com">
-                  <v-icon class="mr-2">mdi-email</v-icon>Send Michael Johnson an email</a
-                >
-              </p>
+                <p class="mb-5">
+                  <a :href="`mailto:${requestedByUser.email}`">
+                    <v-icon class="mr-2">mdi-email</v-icon>Send {{ requestedByUser.displayName }} an
+                    email</a
+                  >
+                </p>
+              </div>
 
               <div
                 class="d-flex"
@@ -71,6 +77,7 @@ import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useProgram from "@/use/use-program"
 import useVendor from "@/use/use-vendor"
 import useVendorProgram from "@/use/use-vendor-program"
+import useUser from "@/use/use-user"
 
 import VendorPeopleCard from "@/components/vendors/VendorPeopleCard.vue"
 import VendorProgramAttachments from "@/components/vendor-programs/VendorProgramAttachments.vue"
@@ -84,6 +91,9 @@ const vendorProgramIdNumber = computed(() => parseInt(props.vendorProgramId))
 const { vendor } = useVendor(vendorIdNumber)
 const { program } = useProgram(programIdNumber)
 const { vendorProgram } = useVendorProgram(vendorProgramIdNumber)
+
+const requestedByUserId = computed(() => vendorProgram.value?.requestedByUserId)
+const { user: requestedByUser } = useUser(requestedByUserId)
 
 const breadcrumbs = computed(() => {
   const baseCrumbs = [

@@ -44,84 +44,89 @@
               If you know the existing Vendor ID, please enter it below and hit search.
             </p>
             <p class="mb-4">YCOR number or Existing Vendor ID is required.</p>
-            <v-row class="mt-2">
-              <v-col>
-                <v-text-field
-                  v-model="vendorLinkRequest.businessName"
-                  label="Business name (required)"
-                  required
-                />
-                <v-text-field
-                  v-model="vendorLinkRequest.ycorNumber"
-                  class="mb-4"
-                  label="YCOR number (required)"
-                  hint="Six digit Yukon Corporate Online Registry number"
-                  persistent-hint
-                  required
-                />
-
-                <v-textarea
-                  v-model="vendorLinkRequest.address"
-                  label="Address (required)"
-                  required
-                  rows="3"
-                />
-              </v-col>
-              <v-col>
-                <v-text-field
-                  v-model="vendorLinkRequest.operatingName"
-                  label="Operating as"
-                />
-                <div class="d-flex">
+            <v-form
+              ref="formRef"
+              v-model="isValid"
+            >
+              <v-row class="mt-2">
+                <v-col>
                   <v-text-field
-                    v-model="vendorId"
-                    class="mb-4 mr-5"
-                    label="Existing vendor ID"
-                    hint="Assigned by Department of Finance, found on remittances"
+                    v-model="vendorLinkRequest.businessName"
+                    label="Business name (required)"
+                    :rules="[required]"
+                  />
+                  <v-text-field
+                    v-model="vendorLinkRequest.ycorNumber"
+                    class="mb-4"
+                    label="YCOR number (required)"
+                    hint="Six digit Yukon Corporate Online Registry number"
                     persistent-hint
+                    :rules="[required, length(6)]"
                   />
-                  <v-btn
-                    class="mb-5"
-                    prepend-icon="mdi-magnify"
-                    :disabled="!canSearch"
-                    style="height: 48px"
-                    text="Search"
-                    @click="doSearch"
-                  />
-                </div>
 
-                <div class="d-flex">
-                  <div
-                    v-if="error"
-                    class="text-subtitle-1 text-error"
-                    style="line-height: 36px"
-                  >
-                    <v-icon>mdi-alert-circle</v-icon>
-                    {{ error }}
+                  <v-textarea
+                    v-model="vendorLinkRequest.address"
+                    label="Address (required)"
+                    rows="3"
+                    :rules="[required]"
+                  />
+                </v-col>
+                <v-col>
+                  <v-text-field
+                    v-model="vendorLinkRequest.operatingName"
+                    label="Operating as"
+                  />
+                  <div class="d-flex">
+                    <v-text-field
+                      v-model="vendorId"
+                      class="mb-4 mr-5"
+                      label="Existing vendor ID"
+                      hint="Assigned by Department of Finance, found on remittances"
+                      persistent-hint
+                    />
+                    <v-btn
+                      class="mb-5"
+                      prepend-icon="mdi-magnify"
+                      :disabled="!canSearch"
+                      style="height: 48px"
+                      text="Search"
+                      @click="doSearch"
+                    />
                   </div>
-                </div>
-                <div v-if="matchedVendor">
-                  <VendorMatchCard :vendor="matchedVendor" />
-                </div>
-              </v-col>
-            </v-row>
 
-            <div class="d-flex">
-              <v-btn
-                color="warning"
-                variant="outlined"
-                prepend-icon="mdi-chevron-left"
-                text="Previous"
-                @click="step = 1"
-              />
-              <v-spacer />
-              <v-btn
-                append-icon="mdi-chevron-right"
-                :disabled="!canContinue"
-                text="Continue"
-                @click="step = 3"
-              />
-            </div>
+                  <div class="d-flex">
+                    <div
+                      v-if="error"
+                      class="text-subtitle-1 text-error"
+                      style="line-height: 36px"
+                    >
+                      <v-icon>mdi-alert-circle</v-icon>
+                      {{ error }}
+                    </div>
+                  </div>
+                  <div v-if="matchedVendor">
+                    <VendorMatchCard :vendor="matchedVendor" />
+                  </div>
+                </v-col>
+              </v-row>
+
+              <div class="d-flex">
+                <v-btn
+                  color="warning"
+                  variant="outlined"
+                  prepend-icon="mdi-chevron-left"
+                  text="Previous"
+                  @click="step = 1"
+                />
+                <v-spacer />
+                <v-btn
+                  append-icon="mdi-chevron-right"
+                  :disabled="!canContinue || !isValid"
+                  text="Continue"
+                  @click="step = 3"
+                />
+              </div>
+            </v-form>
           </v-card-text>
         </v-card>
       </template>
@@ -171,18 +176,21 @@
 </template>
 
 <script setup lang="ts">
+import { isEmpty } from "lodash"
 import { computed, ref } from "vue"
-import { isEmpty, isNil } from "lodash"
 import { useRouter } from "vue-router"
+import { VForm } from "vuetify/lib/components/index.mjs"
+
+import { required, length } from "@/utils/validators"
 
 import { VendorLinkRequest, vendorLinkRequestsApi } from "@/api/vendor-link-requests-api"
 
 import useSnack from "@/use/use-snack"
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useCurrentUser from "@/use/use-current-user"
+import { useVendor, Vendor } from "@/use/use-vendor"
 
 import VendorMatchCard from "@/components/vendors/VendorMatchCard.vue"
-import { useVendor, Vendor } from "@/use/use-vendor"
 
 const step = ref(1)
 
@@ -191,9 +199,13 @@ const vendorId = ref("")
 const { currentUser } = useCurrentUser<true>()
 const vendorLinkRequest = ref<Partial<VendorLinkRequest>>({ userId: currentUser.value.id })
 
+const isValid = ref(false)
+
 const error = ref("")
 
 const matchedVendor = ref<Vendor | null>(null)
+
+const formRef = ref<InstanceType<typeof VForm> | null>(null)
 
 const canSearch = computed(() => {
   if (isEmpty(vendorId.value)) {
@@ -204,7 +216,6 @@ const canSearch = computed(() => {
 })
 
 const canContinue = computed(() => {
-  // _TODO_ Is this change valid?
   if (
     isEmpty(vendorLinkRequest.value.ycorNumber) ||
     isEmpty(vendorLinkRequest.value.businessName) ||

@@ -1,40 +1,45 @@
 import { type Ref, reactive, toRefs, ref, unref, watch } from "vue"
 
-import usersApi, {
-  type User,
-  type UserWhereOptions,
-  type UserFiltersOptions,
-  type UserQueryOptions,
-} from "@/api/users-api"
+import vendorUsersApi, {
+  type VendorUser,
+  type VendorUserWhereOptions,
+  type VendorUserFiltersOptions,
+  type VendorUserQueryOptions,
+} from "@/api/vendor-users-api"
 
-export { type User, type UserWhereOptions, type UserFiltersOptions, type UserQueryOptions }
+export {
+  type VendorUser,
+  type VendorUserQueryOptions,
+  type VendorUserWhereOptions,
+  type VendorUserFiltersOptions,
+}
 
-export function useUsers(
-  queryOptions: Ref<UserQueryOptions> = ref({}),
+export function useVendorUsers(
+  queryOptions: Ref<VendorUserQueryOptions> = ref({}),
   { skipWatchIf = () => false }: { skipWatchIf?: () => boolean } = {}
 ) {
   const state = reactive<{
-    users: User[]
+    vendorUsers: VendorUser[]
     totalCount: number
     isLoading: boolean
     isErrored: boolean
   }>({
-    users: [],
+    vendorUsers: [],
     totalCount: 0,
     isLoading: false,
     isErrored: false,
   })
 
-  async function fetch(): Promise<User[]> {
+  async function fetch(): Promise<VendorUser[]> {
     state.isLoading = true
     try {
-      const { users, totalCount } = await usersApi.list(unref(queryOptions))
+      const { vendorUsers, totalCount } = await vendorUsersApi.list(unref(queryOptions))
       state.isErrored = false
-      state.users = users
+      state.vendorUsers = vendorUsers
       state.totalCount = totalCount
-      return users
+      return vendorUsers
     } catch (error) {
-      console.error("Failed to fetch users:", error)
+      console.error("Failed to fetch vendorUsers:", error)
       state.isErrored = true
       throw error
     } finally {
@@ -59,4 +64,4 @@ export function useUsers(
   }
 }
 
-export default useUsers
+export default useVendorUsers

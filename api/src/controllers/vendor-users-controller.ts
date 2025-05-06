@@ -135,7 +135,9 @@ export class VendorUsersController extends BaseController<VendorUser> {
   }
 
   private async loadVendorUser(): Promise<VendorUser | null> {
-    return VendorUser.findByPk(this.params.vendorUserId)
+    return VendorUser.findByPk(this.params.vendorUserId, {
+      include: ["vendor", "user", "decisionByUser"],
+    })
   }
 
   private buildPolicy(vendorUser: VendorUser) {

@@ -54,8 +54,6 @@ export class VendorLinkRequestsPolicy extends PolicyFactory(VendorLinkRequest) {
       "address",
       "vendorId",
       "status",
-      "decisionByUserId",
-      "decisionAt",
       "reviewNotes",
     ]
   }

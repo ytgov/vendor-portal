@@ -4,7 +4,7 @@ import { Vendor } from "@/models"
 
 import BaseSerializer from "@/serializers/base-serializer"
 
-export type ProjectShowView = Pick<
+export type VendorShowView = Pick<
   Vendor,
   | "slug"
   | "status"
@@ -25,7 +25,7 @@ export type ProjectShowView = Pick<
 >
 
 export class ShowSerializer extends BaseSerializer<Vendor> {
-  perform(): ProjectShowView {
+  perform(): VendorShowView {
     return {
       ...pick(this.record, [
         "slug",

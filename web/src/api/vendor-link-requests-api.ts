@@ -21,7 +21,7 @@ export type VendorLinkRequest = {
   vendorId: string | null
   status: VendorLinkRequestStatuses
   decisionByUserId: number | null
-  decisionAt: Date | null
+  decisionAt: string | null
   reviewNotes: string | null
   createdAt: string
   updatedAt: string
@@ -40,7 +40,7 @@ export type VendorLinkRequestWhereOptions = {
   vendorId?: string
   status?: VendorLinkRequestStatuses
   decisionByUserId?: number
-  decisionAt?: Date
+  decisionAt?: string
 }
 
 /** Keep in sync with scopes in api/src/models/vendor-link-request.ts */

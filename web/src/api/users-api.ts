@@ -1,4 +1,5 @@
 import http from "@/api/http-client"
+
 import { type Policy } from "@/api/base-api"
 
 /** Keep in sync with api/src/models/user.ts */
@@ -29,7 +30,6 @@ export type User = {
   isActive: boolean
 
   // Associations
-  // add as needed
 }
 
 export type UserWhereOptions = {
@@ -43,19 +43,19 @@ export type UserWhereOptions = {
 
 export type UserFiltersOptions = {
   search?: string | string[]
-  // TODO: implement isActive scope in back-end
+  inVendor?: number
+}
+
+export type UserQueryOptions = {
+  where?: UserWhereOptions
+  filters?: UserFiltersOptions
+  page?: number
+  perPage?: number
 }
 
 export const usersApi = {
   UserRoles,
-  async list(
-    params: {
-      where?: UserWhereOptions
-      filters?: UserFiltersOptions
-      page?: number
-      perPage?: number
-    } = {}
-  ): Promise<{
+  async list(params: UserQueryOptions = {}): Promise<{
     users: User[]
     totalCount: number
   }> {
@@ -71,18 +71,11 @@ export const usersApi = {
     const { data } = await http.get(`/api/users/${userId}`)
     return data
   },
-  async create(attributes: Partial<User>): Promise<{
-    user: User
-  }> {
+  async create(attributes: Partial<User>): Promise<{ user: User }> {
     const { data } = await http.post("/api/users", attributes)
     return data
   },
-  async update(
-    userId: number,
-    attributes: Partial<User>
-  ): Promise<{
-    user: User
-  }> {
+  async update(userId: number, attributes: Partial<User>): Promise<{ user: User }> {
     const { data } = await http.patch(`/api/users/${userId}`, attributes)
     return data
   },

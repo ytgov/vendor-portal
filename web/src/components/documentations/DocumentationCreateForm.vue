@@ -6,6 +6,7 @@
   <v-form
     v-else
     ref="formRef"
+    v-model="isValid"
     @submit.prevent="validateAndCreate"
   >
     <v-row>
@@ -17,7 +18,6 @@
           v-model="documentation.name"
           label="Name"
           :rules="[required]"
-          @update:model-value="updateIsValid"
         />
       </v-col>
       <v-col
@@ -27,7 +27,6 @@
         <v-text-field
           v-model="documentation.description"
           label="Description"
-          @update:model-value="updateIsValid"
         />
       </v-col>
       <v-col
@@ -38,7 +37,6 @@
           v-model="documentation.format"
           label="Format"
           :rules="[required]"
-          @update:model-value="updateIsValid"
         />
       </v-col>
     </v-row>
@@ -81,21 +79,11 @@ const documentation = ref<Partial<Documentation>>({})
 
 const formRef = ref<InstanceType<typeof VForm> | null>(null)
 
-const isCreating = ref(false)
 const isValid = ref(false)
+const isCreating = ref(false)
 
 const snack = useSnack()
 const emit = defineEmits<{ created: [documentationId: number] }>()
-
-async function updateIsValid() {
-  if (formRef.value === null) {
-    isValid.value = false
-    return
-  }
-
-  const { valid } = await formRef.value.validate()
-  isValid.value = valid
-}
 
 async function validateAndCreate() {
   if (formRef.value === null) return

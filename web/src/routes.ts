@@ -77,12 +77,14 @@ const routes: RouteRecordRaw[] = [
       {
         path: "documentations",
         name: "administration/DocumentationsPage",
-        component: () => import("@/pages/documentations/DocumentationsManagePage.vue"),
+        component: () =>
+          import("@/pages/administration/documentations/DocumentationsManagePage.vue"),
       },
       {
         path: "documentations/create",
         name: "administration/DocumentationCreatePage",
-        component: () => import("@/pages/documentations/DocumentationCreatePage.vue"),
+        component: () =>
+          import("@/pages/administration/documentations/DocumentationCreatePage.vue"),
       },
       {
         path: "vendor-link-requests/:vendorLinkRequestId",
