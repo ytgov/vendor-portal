@@ -24,6 +24,7 @@ export type DocumentationWhereOptions = {
 export type DocumentationFiltersOptions = {
   search?: string | string[]
   inProgram?: number
+  notInProgram?: number
 }
 
 export type DocumentationQueryOptions = {
