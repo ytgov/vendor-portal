@@ -44,7 +44,10 @@
               If you know the existing Vendor ID, please enter it below and hit search.
             </p>
             <p class="mb-4">YCOR number or Existing Vendor ID is required.</p>
-            <v-form ref="formRef">
+            <v-form
+              ref="formRef"
+              v-model="isValid"
+            >
               <v-row class="mt-2">
                 <v-col>
                   <v-text-field
@@ -118,7 +121,7 @@
                 <v-spacer />
                 <v-btn
                   append-icon="mdi-chevron-right"
-                  :disabled="!canContinue || !formRef?.isValid"
+                  :disabled="!canContinue || !isValid"
                   text="Continue"
                   @click="step = 3"
                 />
@@ -195,6 +198,8 @@ const vendorId = ref("")
 
 const { currentUser } = useCurrentUser<true>()
 const vendorLinkRequest = ref<Partial<VendorLinkRequest>>({ userId: currentUser.value.id })
+
+const isValid = ref(false)
 
 const error = ref("")
 

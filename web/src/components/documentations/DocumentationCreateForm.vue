@@ -6,6 +6,7 @@
   <v-form
     v-else
     ref="formRef"
+    v-model="isValid"
     @submit.prevent="validateAndCreate"
   >
     <v-row>
@@ -54,7 +55,7 @@
           type="submit"
           class="ml-3"
           :loading="isCreating"
-          :disabled="!formRef?.isValid"
+          :disabled="!isValid"
           color="success"
           text="Create Documentation"
         />
@@ -78,6 +79,7 @@ const documentation = ref<Partial<Documentation>>({})
 
 const formRef = ref<InstanceType<typeof VForm> | null>(null)
 
+const isValid = ref(false)
 const isCreating = ref(false)
 
 const snack = useSnack()

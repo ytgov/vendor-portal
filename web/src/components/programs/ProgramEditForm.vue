@@ -6,6 +6,7 @@
   <v-form
     v-else
     ref="formRef"
+    v-model="isValid"
     @submit.prevent="validateAndSave"
   >
     <v-row>
@@ -70,7 +71,7 @@
           type="submit"
           class="ml-3"
           :loading="isUpdating"
-          :disabled="!formRef?.isValid"
+          :disabled="!isValid"
           color="success"
           text="Update"
         />
@@ -96,6 +97,7 @@ const { program, save } = useProgram(programId)
 
 const formRef = ref<InstanceType<typeof VForm> | null>(null)
 
+const isValid = ref(false)
 const isUpdating = ref(false)
 
 const snack = useSnack()
