@@ -8,13 +8,7 @@
       :key="vendorLinkRequest.id"
       class="pt-0"
       :title="vendorLinkRequest.user?.displayName + ' :: ' + vendorLinkRequest.businessName"
-      :subtitle="
-        'Submitted ' +
-        formatDate(vendorLinkRequest.createdAt) +
-        ' (' +
-        formatDateRelative(vendorLinkRequest.createdAt) +
-        ')'
-      "
+      :subtitle="buildSubtitle(vendorLinkRequest)"
       @click="goToVendorLinkRequest(vendorLinkRequest)"
     />
   </v-list>
@@ -41,6 +35,16 @@ const query = ref<VendorLinkRequestQueryOptions>({
 const { vendorLinkRequests } = useVendorLinkRequests(query)
 
 const router = useRouter()
+
+function buildSubtitle(vendorLinkRequest: VendorLinkRequest) {
+  return (
+    "Submitted " +
+    formatDate(vendorLinkRequest.createdAt) +
+    " (" +
+    formatDateRelative(vendorLinkRequest.createdAt) +
+    ")"
+  )
+}
 
 function goToVendorLinkRequest(vendorLinkRequest: VendorLinkRequest) {
   router.push({
