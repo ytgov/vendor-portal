@@ -58,7 +58,7 @@
                     label="YCOR number (required)"
                     hint="Six digit Yukon Corporate Online Registry number"
                     persistent-hint
-                    :rules="[required]"
+                    :rules="[required, length(6)]"
                   />
 
                   <v-textarea
@@ -178,15 +178,16 @@ import { computed, ref } from "vue"
 import { useRouter } from "vue-router"
 import { VForm } from "vuetify/lib/components/index.mjs"
 
-import { required } from "@/utils/validators"
+import { required, length } from "@/utils/validators"
+
 import { VendorLinkRequest, vendorLinkRequestsApi } from "@/api/vendor-link-requests-api"
 
 import useSnack from "@/use/use-snack"
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useCurrentUser from "@/use/use-current-user"
+import { useVendor, Vendor } from "@/use/use-vendor"
 
 import VendorMatchCard from "@/components/vendors/VendorMatchCard.vue"
-import { useVendor, Vendor } from "@/use/use-vendor"
 
 const step = ref(1)
 
