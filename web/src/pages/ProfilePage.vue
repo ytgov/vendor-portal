@@ -1,13 +1,18 @@
 <template>
-  <v-skeleton-loader v-if="isNil(currentUser)" />
-  <v-container v-else>
-    <UserEditForm
-      class="mt-2"
-      :user-id="currentUser.id"
-      :cancel-button-options="{ to: { name: 'administration/UsersPage' } }"
-      @saved="refresh"
-    />
-  </v-container>
+  <v-skeleton-loader
+    v-if="isNil(currentUser)"
+    type="card"
+  />
+  <v-card v-else>
+    <v-card-text>
+      <UserEditForm
+        class="mt-2"
+        :user-id="currentUser.id"
+        :cancel-button-options="{ to: { name: 'administration/UsersPage' } }"
+        @saved="refresh"
+      />
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts" setup>
@@ -20,7 +25,12 @@ import UserEditForm from "@/components/users/UserEditForm.vue"
 
 const { currentUser, refresh } = useCurrentUser<true>()
 
-useBreadcrumbs("My Profile", [])
+useBreadcrumbs("My Profile", [
+  {
+    title: "Edit Profile",
+    to: "",
+  },
+])
 </script>
 
 <style scoped></style>
