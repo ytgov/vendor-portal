@@ -32,7 +32,7 @@
                 </p>
 
                 <p class="mb-5">
-                  <a :href="'mailto:' + requestedByUser.email">
+                  <a :href="`mailto:${requestedByUser.email}`">
                     <v-icon class="mr-2">mdi-email</v-icon>Send {{ requestedByUser.displayName }} an
                     email</a
                   >
