@@ -26,8 +26,9 @@
       <router-link
         to="/"
         style="text-decoration: none"
-        >Vendor Portal <strong>Administration</strong></router-link
       >
+        Vendor Portal <strong>Administration</strong>
+      </router-link>
     </v-app-bar-title>
 
     <KebabMenu />
