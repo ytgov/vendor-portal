@@ -34,7 +34,7 @@
   </v-app-bar>
 
   <v-main class="page-wrapper">
-    <SimpleBreadcrumbs />
+    <AppBreadcrumbs :items="breadcrumbs" />
 
     <v-container fluid>
       <router-view />
@@ -46,17 +46,20 @@
 import { ref, unref, watch } from "vue"
 import { useDisplay } from "vuetify"
 
-import SimpleBreadcrumbs from "@/components/common/SimpleBreadcrumbs.vue"
+import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
+
 import KebabMenu from "@/components/default-layout/KebabMenu.vue"
 import LeftSidebarNavigationDrawer from "@/components/default-layout/LeftSidebarNavigationDrawer.vue"
-import useBreadcrumbs from "@/use/use-breadcrumbs"
+import AppBreadcrumbs from "@/components/common/AppBreadcrumbs.vue"
 
 const { mdAndUp } = useDisplay()
 
 const showDrawer = ref(mdAndUp.value)
 const showRail = ref(!mdAndUp.value)
 
-const { title } = useBreadcrumbs()
+const { title, breadcrumbs } = useBreadcrumbs(undefined, undefined, {
+  baseCrumb: BASE_CRUMB,
+})
 
 watch(
   () => unref(mdAndUp),

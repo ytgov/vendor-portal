@@ -14,8 +14,9 @@
           class="mt-2"
           size="40"
           color="#7A9A01"
-          >mdi-store</v-icon
         >
+          mdi-store
+        </v-icon>
         <div class="ml-2 text-subtitle-1">
           <strong>Vendor ID: </strong><br />{{ vendor.vendorId }}
         </div>
@@ -26,8 +27,9 @@
           class="mt-2"
           size="40"
           color="#7A9A01"
-          >mdi-map</v-icon
         >
+          mdi-map
+        </v-icon>
         <div class="ml-2 text-subtitle-1">
           <strong>Address: </strong><br />2 Stope Way<br />Whitehorse YT, Y1A0B3
         </div>
@@ -42,11 +44,11 @@
 
 <script setup lang="ts">
 import { isNil } from "lodash"
-import { ref } from "vue"
+import { toRefs } from "vue"
 
 import { useVendor } from "@/use/use-vendor"
 
-const props = defineProps<{ vendorId: string }>()
-const vendorId = ref(props.vendorId)
+const props = defineProps<{ vendorId: number }>()
+const { vendorId } = toRefs(props)
 const { vendor } = useVendor(vendorId)
 </script>

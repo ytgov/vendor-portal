@@ -1,14 +1,21 @@
 <template>
   <v-skeleton-loader
-    v-if="isNil(programs)"
+    v-if="isNil(documentations)"
     type="table"
   />
   <v-card>
     <v-card-text>
-      <div>
+      <div class="d-flex">
         <v-text-field
           v-model="search"
           label="Search"
+        />
+        <v-btn
+          color="primary"
+          class="ml-4"
+          :to="{ name: 'administration/DocumentationCreatePage' }"
+          style="height: 40px"
+          text="Create Documentation"
         />
       </div>
       <v-data-table-server
@@ -16,11 +23,10 @@
         :page="page"
         :headers="headers"
         :search="search"
-        :items="programs"
+        :items="documentations"
         :items-length="totalCount"
         :loading="isLoading"
         style="border: 1px #ccc solid; border-radius: 3px"
-        @click:row="(_event: unknown, { item }: ProgramTableRow) => goToProgramEdit(item.id)"
       >
       </v-data-table-server>
     </v-card-text>
@@ -31,25 +37,18 @@
 import { isEmpty, isNil } from "lodash"
 import { computed, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
+
+import useBreadcrumbs from "@/use/use-breadcrumbs"
+import useDocumentations, {
+  DocumentationFiltersOptions,
+  DocumentationQueryOptions,
+} from "@/use/use-documentations"
 import { useRouteQuery } from "@vueuse/router"
-
-import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
-import usePrograms, {
-  Program,
-  ProgramFiltersOptions,
-  ProgramQueryOptions,
-} from "@/use/use-programs"
-
-type ProgramTableRow = {
-  item: Program
-}
 
 const headers = ref([
   { title: "Name", key: "name" },
-  { title: "Department", key: "department" },
-  { title: "Offered By", key: "offeredBy" },
-  { title: "Start Date", key: "startDate" },
-  { title: "End Date", key: "endDate" },
+  { title: "Format", key: "format" },
+  { title: "Description", key: "description" },
 ])
 
 const search = ref("")
@@ -75,23 +74,23 @@ const perPage = useRouteQuery<number>("perPage", 10, {
   },
 })
 
-const searchFilter = computed<Pick<ProgramFiltersOptions, "search">>(() => {
+const searchFilter = computed<Pick<DocumentationFiltersOptions, "search">>(() => {
   if (isEmpty(search.value)) {
     return {}
   }
 
   return {
-    search: search.value,
+    search: `${search.value}`,
   }
 })
 
-const filters = computed<ProgramFiltersOptions>(() => {
+const filters = computed<DocumentationFiltersOptions>(() => {
   return {
     ...searchFilter.value,
   }
 })
 
-const programsQuery = computed<ProgramQueryOptions>(() => {
+const documentationsQuery = computed<DocumentationQueryOptions>(() => {
   return {
     filters: filters.value,
     perPage: perPage.value,
@@ -99,22 +98,16 @@ const programsQuery = computed<ProgramQueryOptions>(() => {
   }
 })
 
-const { programs, totalCount, isLoading, refresh } = usePrograms(programsQuery)
+const { documentations, totalCount, isLoading, refresh } = useDocumentations(documentationsQuery)
 
-useBreadcrumbs("Manage Programs", [ADMIN_CRUMB])
-
-function goToProgramEdit(programId: number) {
-  router.push({
-    name: "administration/ProgramManagePage",
-    params: { programId },
-  })
-}
+useBreadcrumbs("Manage Documentations", [
+  {
+    title: "Documentations",
+    to: {
+      name: "administration/DocumentationsPage",
+    },
+  },
+])
 
 defineExpose({ refresh })
 </script>
-
-<style>
-.v-data-table__tr:hover {
-  background-color: #eeeeee !important;
-}
-</style>

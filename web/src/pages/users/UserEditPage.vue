@@ -34,7 +34,7 @@
 import { computed } from "vue"
 import { isNil } from "lodash"
 
-import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
+import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useUser from "@/use/use-user"
 
 import UserEditForm from "@/components/users/UserEditForm.vue"
@@ -46,17 +46,28 @@ const props = defineProps<{
 const userId = computed(() => parseInt(props.userId))
 const { user, refresh } = useUser(userId)
 
-const displayName = computed(() => {
-  if (user.value === null) return "loading..."
+const breadcrumbs = computed(() => {
+  if (isNil(user.value)) {
+    return [
+      {
+        title: "Users",
+        to: { name: "administration/UsersPage" },
+      },
+      { title: "Loading...", to: "" },
+    ]
+  }
 
-  return user.value.displayName
+  return [
+    {
+      title: "Users",
+      to: { name: "administration/UsersPage" },
+    },
+    {
+      title: user.value.displayName,
+      to: "",
+    },
+  ]
 })
 
-useBreadcrumbs("Edit User", [
-  ADMIN_CRUMB,
-  {
-    title: "Manage Users",
-    to: { name: "administration/UsersPage" },
-  },
-])
+useBreadcrumbs("Edit User", breadcrumbs)
 </script>

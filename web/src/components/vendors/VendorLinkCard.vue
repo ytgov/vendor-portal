@@ -16,8 +16,9 @@
           class="mt-2"
           size="40"
           color="#7A9A01"
-          >mdi-store</v-icon
         >
+          mdi-store
+        </v-icon>
         <div class="ml-2 text-subtitle-1">
           <strong>Vendor ID: </strong><br />{{ vendor.vendorId }}
         </div>
@@ -28,10 +29,17 @@
           class="mt-2"
           size="40"
           color="#7A9A01"
-          >mdi-map</v-icon
         >
+          mdi-map
+        </v-icon>
         <div class="ml-2 text-subtitle-1">
-          <strong>Address: </strong><br />2 Stope Way<br />Whitehorse YT, Y1A0B3
+          <strong>Address:</strong>
+          <div
+            v-for="(line, index) in formatAddressLines(vendor)"
+            :key="index"
+          >
+            {{ line }}
+          </div>
         </div>
       </div>
 
@@ -40,37 +48,71 @@
           class="mt-2"
           size="40"
           color="#7A9A01"
-          >mdi-handshake</v-icon
         >
+          mdi-handshake
+        </v-icon>
         <div class="ml-2 text-subtitle-1">
           <strong>Programs: </strong><br />
-          Paid Sick Leave Rebate
+
+          <div
+            v-for="(program, index) in programs"
+            :key="index"
+          >
+            {{ program.name }}
+          </div>
         </div>
       </div>
     </v-card-text>
     <v-card-text>
       <v-btn
         block
+        text="Go To Vendor"
         @click="goToVendor"
-        >Go To Vendor
-      </v-btn>
+      />
     </v-card-text>
   </v-card>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { computed, toRefs } from "vue"
 import { useRouter } from "vue-router"
 import { isNil } from "lodash"
 
-import useVendor from "@/use/use-vendor"
+import useVendor, { Vendor } from "@/use/use-vendor"
+import usePrograms, { ProgramQueryOptions } from "@/use/use-programs"
 
-const props = defineProps<{ vendorId: string }>()
-const vendorId = ref(props.vendorId)
+const props = defineProps<{ vendorId: number }>()
+const { vendorId } = toRefs(props)
 
 const router = useRouter()
 
 const { vendor, isLoading } = useVendor(vendorId)
+
+const programsQuery = computed<ProgramQueryOptions>(() => {
+  if (isNil(vendor.value)) return {} // where 1 == 0 ?
+
+  return {
+    filters: {
+      withAcceptedVendor: vendor.value.id,
+    },
+  }
+})
+
+const { programs } = usePrograms(programsQuery, { skipWatchIf: () => isNil(vendor.value) })
+
+function formatAddressLines(vendor: Vendor): string[] {
+  const parts = []
+
+  if (vendor.addressLine1) {
+    parts.push(vendor.addressLine1)
+  } else if (vendor.addressLine2) {
+    parts.push(vendor.addressLine2)
+  }
+
+  parts.push(`${vendor.addressCity} ${vendor.addressProvince}, ${vendor.addressPostal}`)
+
+  return parts.filter((part) => part.trim() !== "")
+}
 
 function goToVendor() {
   router.push({ name: "vendor/HomePage", params: { vendorId: vendor.value?.vendorId } })

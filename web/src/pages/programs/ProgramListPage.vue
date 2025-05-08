@@ -25,5 +25,7 @@ import ProgramInfoCard from "@/components/programs/ProgramInfoCard.vue"
 
 const { programs } = usePrograms()
 
-useBreadcrumbs("", [{ title: "Programs available in this portal ", to: "/programs" }])
+useBreadcrumbs("Available Programs", [
+  { title: "Programs available in this portal ", to: "/programs" },
+])
 </script>

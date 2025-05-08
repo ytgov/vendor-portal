@@ -1,12 +1,18 @@
 import http from "@/api/http-client"
 
 /** Keep in sync with api/src/models/vendor-documentation.ts */
+export enum VendorDocumentationStatuses {
+  PENDING = "Pending",
+  APPROVED = "Approved",
+  REJECTED = "Rejected",
+}
+
 export type VendorDocumentation = {
   id: number
   vendorId: number
   documentationId: number
   createdByUserId: number
-  status: string
+  status: VendorDocumentationStatuses
   expiresAt: string | null
   reviewByUserId: number | null
   reviewAt: string | null
@@ -24,7 +30,7 @@ export type VendorDocumentationWhereOptions = {
   vendorId?: number
   documentationId?: number
   createdByUserId?: number
-  status?: string
+  status?: VendorDocumentationStatuses
   expiresAt?: string
   reviewByUserId?: number
   reviewAt?: string

@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue"
+import { computed, ref } from "vue"
 import { useRouter } from "vue-router"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
@@ -83,32 +83,6 @@ const employees = ref([
   },
 ])
 
-watch(
-  () => vendor.value,
-  (newVal) => {
-    if (newVal && newVal.id) setBreadcrumbs()
-  }
-)
-
-setBreadcrumbs()
-
-function setBreadcrumbs() {
-  if (vendor.value && program.value) {
-    useBreadcrumbs("", [
-      {
-        title: `${vendor.value?.name}`,
-        to: `/vendor/${vendor.value?.vendorId}`,
-      },
-      {
-        title: `${program.value.name}`,
-        to: `/vendor/${vendor.value?.vendorId}/programs/${program.value.id}`,
-      },
-    ])
-  } else {
-    useBreadcrumbs("", [{ title: "Loading...", to: "" }])
-  }
-}
-
 function openSubmission(submissionId: number) {
   router.push({
     name: "vendor-program/SubmissionViewPage",
@@ -119,4 +93,23 @@ function openSubmission(submissionId: number) {
     },
   })
 }
+
+const breadcrumbs = computed(() => {
+  if (vendor.value && program.value) {
+    return [
+      {
+        title: `${vendor.value?.name}`,
+        to: `/vendor/${vendor.value?.vendorId}`,
+      },
+      {
+        title: `${program.value.name}`,
+        to: `/vendor/${vendor.value?.vendorId}/programs/${program.value.id}`,
+      },
+    ]
+  }
+
+  return [{ title: "Loading...", to: "" }]
+})
+
+useBreadcrumbs("", breadcrumbs)
 </script>

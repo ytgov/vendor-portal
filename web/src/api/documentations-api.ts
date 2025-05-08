@@ -1,23 +1,30 @@
 import http from "@/api/http-client"
 
 /** Keep in sync with api/src/models/documentation.ts */
+export enum DocumentationFormats {
+  FILE = "File Upload",
+  TEXT = "Text Input",
+}
+
 export type Documentation = {
   id: number
   name: string
   description: string | null
-  format: string
+  format: DocumentationFormats
   createdAt: string
   updatedAt: string
 }
 
 export type DocumentationWhereOptions = {
   name?: string
+  format?: DocumentationFormats
 }
 
 /** Keep in sync with scopes in api/src/models/documentation.ts */
 export type DocumentationFiltersOptions = {
   search?: string | string[]
   inProgram?: number
+  notInProgram?: number
 }
 
 export type DocumentationQueryOptions = {

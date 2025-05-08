@@ -3,17 +3,20 @@ import {
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
+  type NonAttribute,
   sql,
 } from "@sequelize/core"
 import {
   Attribute,
   AutoIncrement,
+  BelongsTo,
   Default,
   NotNull,
   PrimaryKey,
 } from "@sequelize/core/decorators-legacy"
 
 import BaseModel from "@/models/base-model"
+import Documentation from "@/models/documentation"
 
 export class ProgramDocumentation extends BaseModel<
   InferAttributes<ProgramDocumentation>,
@@ -51,6 +54,14 @@ export class ProgramDocumentation extends BaseModel<
   // Magic Attributes
 
   // Associations
+  @BelongsTo(() => Documentation, {
+    foreignKey: { allowNull: false, name: "documentationId" },
+    inverse: {
+      as: "programDocumentations",
+      type: "hasMany",
+    },
+  })
+  declare documentation?: NonAttribute<Documentation>
 
   // Scopes
   static establishScopes(): void {}

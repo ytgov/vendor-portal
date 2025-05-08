@@ -42,9 +42,7 @@ import { useRouter } from "vue-router"
 import useUsers, { User } from "@/use/use-users"
 import { useRouteQuery } from "@vueuse/router"
 
-import { ADMIN_CRUMB, useBreadcrumbs } from "@/use/use-breadcrumbs"
-
-useBreadcrumbs("Manage Users", [ADMIN_CRUMB])
+import { useBreadcrumbs } from "@/use/use-breadcrumbs"
 
 type UserTableRow = {
   item: User
@@ -95,6 +93,15 @@ function goToUserEdit(userId: number) {
     params: { userId },
   })
 }
+
+useBreadcrumbs("Manage Users", [
+  {
+    title: "Users",
+    to: {
+      name: "administration/UsersPage",
+    },
+  },
+])
 
 defineExpose({ refresh })
 </script>

@@ -13,7 +13,7 @@
     >
       <VendorLinkRequestAlerts />
       <h3 class="mb-3">Linked Vendor Accounts</h3>
-      <VendorLinkCard vendor-id="CDICEFOGANAL" />
+      <VendorsLinkedCard />
     </v-col>
   </v-row>
 </template>
@@ -22,7 +22,7 @@
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 
 import AccountDetailsCard from "@/components/individual/AccountDetailsCard.vue"
-import VendorLinkCard from "@/components/vendors/VendorLinkCard.vue"
+import VendorsLinkedCard from "@/components/vendors/VendorsLinkedCard.vue"
 import VendorLinkRequestAlerts from "@/components/vendor-link-requests/VendorLinkRequestAlerts.vue"
 
 useBreadcrumbs("Vendor Portal Home", [])

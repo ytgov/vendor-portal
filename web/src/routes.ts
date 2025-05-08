@@ -41,39 +41,55 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: "programs",
-        name: "administration/ProgramsPage",
-        component: () => import("@/pages/programs/ProgramsManagePage.vue"),
-      },
-      {
-        path: "programs/:programId",
-        name: "administration/ProgramManagePage",
-        component: () => import("@/pages/programs/ProgramManagePage.vue"),
-        props: true,
-      },
-      {
-        path: "programs/pslr",
-        name: "administration/PSLRRequestsPage",
-        component: () => import("@/pages/programs/pslr/ManageRequestPage.vue"),
-      },
-      {
-        path: "programs/pslr/:id",
-        name: "administration/PSLRManageRequestDetailPage",
-        component: () => import("@/pages/programs/pslr/ManageRequestDetailPage.vue"),
+        children: [
+          {
+            path: "",
+            name: "administration/ProgramsPage",
+            component: () => import("@/pages/administration/programs/ProgramsManagePage.vue"),
+          },
+          {
+            path: ":programId",
+            name: "administration/ProgramManagePage",
+            component: () => import("@/pages/administration/programs/ProgramManagePage.vue"),
+            props: true,
+          },
+          {
+            path: ":programId/vendors/:vendorId",
+            name: "administration/VendorProgramPage",
+            component: () =>
+              import("@/pages/administration/programs/vendors/VendorProgramPage.vue"),
+            props: true,
+          },
+          {
+            path: ":programId/vendors/:vendorId/request/:vendorProgramId",
+            name: "administration/VendorProgramRequestPage",
+            component: () =>
+              import("@/pages/administration/programs/vendors/VendorProgramRequestPage.vue"),
+            props: true,
+          },
+          // {
+          //   path: "pslr/:id",
+          //   name: "administration/PSLRManageRequestDetailPage",
+          //   component: () => import("@/pages/programs/pslr/ManageRequestDetailPage.vue"),
+          // },
+        ],
       },
       {
         path: "documentations",
         name: "administration/DocumentationsPage",
-        component: () => import("@/pages/documentations/DocumentationsManagePage.vue"),
+        component: () =>
+          import("@/pages/administration/documentations/DocumentationsManagePage.vue"),
       },
       {
         path: "documentations/create",
         name: "administration/DocumentationCreatePage",
-        component: () => import("@/pages/documentations/DocumentationCreatePage.vue"),
+        component: () =>
+          import("@/pages/administration/documentations/DocumentationCreatePage.vue"),
       },
       {
         path: "vendor-link-requests/:vendorLinkRequestId",
         name: "administration/VendorLinkRequest",
-        component: () => import("@/pages/vendor-link-requests/LinkPage.vue"),
+        component: () => import("@/pages/administration/vendor-link-requests/LinkPage.vue"),
         props: true,
       },
     ],
@@ -132,13 +148,13 @@ const routes: RouteRecordRaw[] = [
       {
         path: ":vendorId/programs/:programId", // _TODO_ switch to :slug
         name: "vendor-program/VendorProgramPage",
-        component: () => import("@/pages/vendor-program/VendorProgramPage.vue"),
+        component: () => import("@/pages/vendor-programs/VendorProgramPage.vue"),
         props: true,
       },
       {
         path: ":vendorId/programs/:programId/submissions/:submissionId", // _TODO_ switch to :slug
         name: "vendor-program/SubmissionViewPage",
-        component: () => import("@/pages/vendor-program/VendorProgramSubmissionViewPage.vue"),
+        component: () => import("@/pages/vendor-programs/VendorProgramSubmissionViewPage.vue"),
         props: true,
       },
     ],

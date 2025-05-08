@@ -1,7 +1,7 @@
 import { Attributes } from "@sequelize/core"
-import { isNil, isUndefined } from "lodash"
+import { isNil } from "lodash"
 
-import db, { VendorLinkRequest, VendorUser } from "@/models"
+import db, { User, VendorLinkRequest, VendorUser } from "@/models"
 import { VendorLinkRequestStatuses } from "@/models/vendor-link-request"
 
 import { VendorSearchService } from "@/services/vendors"
@@ -12,7 +12,8 @@ export type VendorLinkRequestAttributes = Partial<Attributes<VendorLinkRequest>>
 export class UpdateService extends BaseService {
   constructor(
     private vendorLinkRequest: VendorLinkRequest,
-    private attributes: VendorLinkRequestAttributes
+    private attributes: VendorLinkRequestAttributes,
+    private currentUser: User
   ) {
     super()
   }
@@ -28,7 +29,7 @@ export class UpdateService extends BaseService {
 
       const foundVendor = await VendorSearchService.perform(this.attributes.matchedVendorId)
 
-      if (isUndefined(foundVendor)) {
+      if (isNil(foundVendor)) {
         throw new Error("Failed to find vendor")
       }
 
@@ -36,6 +37,8 @@ export class UpdateService extends BaseService {
         await VendorUser.create({
           vendorId: foundVendor.id,
           userId: this.vendorLinkRequest.userId,
+          decisionAt: new Date(),
+          decisionByUserId: this.currentUser.id,
           isActive: true,
           isAdmin: false,
         })

@@ -1,4 +1,4 @@
-import { isNil } from "lodash"
+import { isEmpty, isNil } from "lodash"
 import { DateTime, DateTimeFormatOptions, LocaleOptions } from "luxon"
 
 export function formatDate(
@@ -13,6 +13,14 @@ export function formatDate(
   }
 
   return DateTime.fromISO(date).toLocaleString(formatOpts, opts)
+}
+
+export function formatDateRelative(input: Date | string | null | undefined): string {
+  if (isEmpty(input)) return ""
+  if (typeof input == "string") return DateTime.fromISO(input).toLocal().toRelative() ?? ""
+  if (input) return DateTime.fromJSDate(input).toLocal().toRelative() ?? ""
+
+  return ""
 }
 
 export default formatDate

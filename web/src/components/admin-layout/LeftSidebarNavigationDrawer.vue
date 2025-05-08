@@ -37,28 +37,30 @@
 
       <v-list-item
         :to="{ name: 'administration/DashboardPage' }"
-        title="Administration Home"
-        prepend-icon="mdi-cog"
+        title="Administration"
+        prepend-icon="mdi-home"
         exact
       />
 
+      <v-list-subheader title="Manage" />
+
       <v-list-item
         v-if="isSystemAdmin"
-        title="Manage Users"
+        title="Users"
         :to="{ name: 'administration/UsersPage' }"
         prepend-icon="mdi-account-group"
       />
       <v-list-item
         v-if="isSystemAdmin"
-        title="Manage Programs"
+        title="Programs"
         :to="{ name: 'administration/ProgramsPage' }"
         prepend-icon="mdi-handshake"
       />
       <v-list-item
         v-if="isSystemAdmin"
-        title="Manage Documentations"
+        title="Documentation"
         :to="{ name: 'administration/DocumentationsPage' }"
-        prepend-icon="mdi-handshake"
+        prepend-icon="mdi-file-sign"
       />
     </v-list>
   </v-navigation-drawer>

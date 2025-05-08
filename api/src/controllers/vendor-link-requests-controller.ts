@@ -103,7 +103,11 @@ export class VendorLinkRequestsController extends BaseController<VendorLinkReque
       }
 
       const permitAttributes = policy.permitAttributes(this.request.body)
-      const newVendorLinkRequest = await UpdateService.perform(vendorLinkRequest, permitAttributes)
+      const newVendorLinkRequest = await UpdateService.perform(
+        vendorLinkRequest,
+        permitAttributes,
+        this.currentUser
+      )
       return this.response.json({ vendorLinkRequest: newVendorLinkRequest })
     } catch (error) {
       logger.error(`VendorLinkRequest update failed: ${error}`, { error })

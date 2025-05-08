@@ -1,5 +1,8 @@
 import http from "@/api/http-client"
 
+import { User } from "@/api/users-api"
+import { Vendor } from "@/api/vendors-api"
+
 /** Keep in sync with api/src/models/vendor-user.ts */
 export type VendorUser = {
   id: number
@@ -11,6 +14,11 @@ export type VendorUser = {
   decisionAt: Date | null
   createdAt: string
   updatedAt: string
+
+  // Associations
+  vendor: Vendor | null
+  user: User | null
+  decisionByUser: User | null
 }
 
 export type VendorUserWhereOptions = {

@@ -105,6 +105,19 @@ export class User extends BaseModel<InferAttributes<User>, InferCreationAttribut
   // Scopes
   static establishScopes(): void {
     this.addSearchScope(["firstName", "lastName", "displayName", "email"])
+
+    this.addScope("inVendor", (vendorId: number) => {
+      return {
+        include: [
+          {
+            association: "vendorUsers",
+            where: {
+              vendorId,
+            },
+          },
+        ],
+      }
+    })
   }
 }
 

@@ -6,6 +6,7 @@
   <v-form
     v-else
     ref="formRef"
+    v-model="isValid"
     @submit.prevent="validateAndCreate"
   >
     <v-row>
@@ -32,7 +33,7 @@
         cols="12"
         md="6"
       >
-        <v-text-field
+        <documentation-format-select
           v-model="documentation.format"
           label="Format"
           :rules="[required]"
@@ -51,9 +52,10 @@
           text="Go back"
         />
         <v-btn
-          class="ml-3"
           type="submit"
+          class="ml-3"
           :loading="isCreating"
+          :disabled="!isValid"
           color="success"
           text="Create Documentation"
         />
@@ -71,11 +73,13 @@ import { required } from "@/utils/validators"
 import { Documentation, documentationsApi } from "@/api/documentations-api"
 
 import useSnack from "@/use/use-snack"
+import DocumentationFormatSelect from "./DocumentationFormatSelect.vue"
 
 const documentation = ref<Partial<Documentation>>({})
 
 const formRef = ref<InstanceType<typeof VForm> | null>(null)
 
+const isValid = ref(false)
 const isCreating = ref(false)
 
 const snack = useSnack()

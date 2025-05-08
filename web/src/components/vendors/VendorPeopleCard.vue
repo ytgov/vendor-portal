@@ -1,55 +1,36 @@
 <template>
   <h3 class="mb-3">Linked Accounts</h3>
-  <v-skeleton-loader
-    v-if="isNil(vendor)"
-    type="card"
-  />
-  <div v-else>
-    <v-card class="mb-5">
-      <v-card-title>Michael Johnson (Vendor Admin)</v-card-title>
-      <v-card-text>
-        <div class="d-flex mb-3">
-          <v-icon
-            class="mt-2"
-            size="40"
-            color="#7A9A01"
-            >mdi-account</v-icon
-          >
-          <div class="ml-2 text-subtitle-1">
-            <strong>Linked to {{ vendor.name }} on: </strong><br />February 10, 2024<br />
-            <strong>Approved by: </strong><br />Department of Finance
-          </div>
-        </div>
-      </v-card-text>
-    </v-card>
-    <v-card>
-      <v-card-title>Jack London</v-card-title>
-      <v-card-text>
-        <div class="d-flex mb-3">
-          <v-icon
-            class="mt-2"
-            size="40"
-            color="#7A9A01"
-            >mdi-account</v-icon
-          >
-          <div class="ml-2 text-subtitle-1">
-            <strong>Linked to {{ vendor.name }} on: </strong><br />February 25, 2024<br />
-            <strong>Approved by: </strong><br />Michael Johnson
-          </div>
-        </div>
-        <v-btn color="warning">Unlink</v-btn>
-      </v-card-text>
-    </v-card>
+
+  <div
+    v-for="(vendorUser, index) in vendorUsers"
+    :key="index"
+  >
+    <VendorUserCard :vendor-user-id="vendorUser.id" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { isNil } from "lodash"
-import { ref } from "vue"
+import { computed, toRefs } from "vue"
 
-import { useVendor } from "@/use/use-vendor"
+import useVendorUsers, { VendorUserQueryOptions } from "@/use/use-vendor-users"
 
-const props = defineProps<{ vendorId: string }>()
-const vendorId = ref(props.vendorId)
-const { vendor } = useVendor(vendorId)
+import VendorUserCard from "@/components/vendor-users/VendorUserCard.vue"
+
+const props = defineProps<{ vendorId: number }>()
+const { vendorId } = toRefs(props)
+
+const vendorUserQuery = computed<VendorUserQueryOptions>(() => {
+  if (isNil(vendorId.value)) return {} // where 1 == 0 ?
+
+  return {
+    where: {
+      vendorId: vendorId.value,
+    },
+  }
+})
+
+const { vendorUsers } = useVendorUsers(vendorUserQuery, {
+  skipWatchIf: () => isNil(vendorId.value),
+})
 </script>

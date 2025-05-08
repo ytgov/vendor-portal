@@ -17,6 +17,7 @@ import {
 
 import BaseModel from "@/models/base-model"
 import User from "@/models/user"
+import Vendor from "@/models/vendor"
 
 export class VendorUser extends BaseModel<
   InferAttributes<VendorUser>,
@@ -67,6 +68,24 @@ export class VendorUser extends BaseModel<
   // Magic Attributes
 
   // Associations
+  @BelongsTo(() => Vendor, {
+    foreignKey: { allowNull: false, name: "vendorId" },
+    inverse: {
+      as: "vendorUsers",
+      type: "hasMany",
+    },
+  })
+  declare vendor?: NonAttribute<Vendor>
+
+  @BelongsTo(() => User, {
+    foreignKey: { allowNull: false, name: "userId" },
+    inverse: {
+      as: "vendorUsers",
+      type: "hasMany",
+    },
+  })
+  declare user?: NonAttribute<User>
+
   @BelongsTo(() => User, {
     foreignKey: {
       name: "decisionByUserId",
