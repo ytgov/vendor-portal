@@ -13,11 +13,11 @@ const prodConfig = {
 }
 
 const uatConfig = {
-  domain: "https://yukon-staging.eu.auth0.com",
-  clientId: "11878vWk1pmhwyVQwsr2m2zM3w3e912U",
+  domain: "https://sign-in.service-uat.yukon.ca",
+  clientId: "Cy5v2HVLPvet9hIcWUbITr79o5hYf2b3",
   audience: "generic-uat",
   apiBaseUrl: "",
-  applicationName: "Vendor Portal - UAT",
+  applicationName: "Vendor Portal",
   publicLoginConnection: "",
   staffLoginConnection: "",
 }
