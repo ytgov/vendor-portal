@@ -48,7 +48,7 @@ if (ENVIRONMENT === "production" && window.location.host === "localhost:8080") {
   config = localProductionConfig
 } else if (window.location.host === "localhost:8080") {
   config = devConfig
-} else if (window.location.host == "yg-wrap-uat.azurewebsites.net") {
+} else if (window.location.host == "vendor-portal.service-uat.yukon.ca") {
   config = uatConfig
 }
 
