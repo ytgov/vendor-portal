@@ -42,7 +42,7 @@ import { useRouter } from "vue-router"
 import useUsers, { User } from "@/use/use-users"
 import { useRouteQuery } from "@vueuse/router"
 
-import { ADMIN_CRUMB, useBreadcrumbs } from "@/use/use-breadcrumbs"
+import { useBreadcrumbs } from "@/use/use-breadcrumbs"
 
 type UserTableRow = {
   item: User
@@ -95,7 +95,6 @@ function goToUserEdit(userId: number) {
 }
 
 useBreadcrumbs("Manage Users", [
-  ADMIN_CRUMB,
   {
     title: "Manage Users",
     to: {

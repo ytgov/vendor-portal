@@ -33,7 +33,7 @@ import { computed, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useRouteQuery } from "@vueuse/router"
 
-import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
+import useBreadcrumbs from "@/use/use-breadcrumbs"
 import usePrograms, {
   Program,
   ProgramFiltersOptions,
@@ -109,7 +109,6 @@ function goToProgramEdit(programId: number) {
 }
 
 useBreadcrumbs("Manage Programs", [
-  ADMIN_CRUMB,
   {
     title: "Manage Programs",
     to: {

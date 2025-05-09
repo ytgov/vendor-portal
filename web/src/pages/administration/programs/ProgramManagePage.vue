@@ -63,7 +63,7 @@ import {
 import programDocumentationsApi from "@/api/program-documentations-api"
 
 import useSnack from "@/use/use-snack"
-import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
+import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useProgram from "@/use/use-program"
 import { DocumentationFiltersOptions, DocumentationQueryOptions } from "@/use/use-documentations"
 
@@ -172,7 +172,6 @@ const pageTitle = computed(() => {
 const breadcrumbs = computed(() => {
   if (isNil(program.value)) {
     return [
-      ADMIN_CRUMB,
       {
         title: "Programs",
         to: {
@@ -184,7 +183,6 @@ const breadcrumbs = computed(() => {
   }
 
   return [
-    ADMIN_CRUMB,
     {
       title: "Programs",
       to: {
