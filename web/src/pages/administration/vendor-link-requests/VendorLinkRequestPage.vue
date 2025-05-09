@@ -5,7 +5,7 @@
   />
   <SimpleCard
     v-else
-    :title="`Vendor link Request to ${vendorLinkRequest.businessName}`"
+    :title="`Request ${vendorLinkRequest.user?.displayName} - ${vendorLinkRequest.businessName}`"
   >
     <v-form>
       <v-row>
@@ -169,7 +169,19 @@ async function approveVendorLinkRequest() {
   }
 }
 
-useBreadcrumbs("Vendor Link Request", [
-  { title: "Vendor Link Requests", to: { name: "administration/VendorLinkRequest" } },
+const breadcrumbs = computed(() => [
+  {
+    title: "Vendor Link Requests",
+    to: { name: "administration/VendorLinkRequestsManagePage" },
+  },
+  {
+    title: "Vendor Link Request",
+    to: {
+      name: "administration/VendorLinkRequestPage",
+      params: { vendorLinkRequestId: props.vendorLinkRequestId },
+    },
+  },
 ])
+
+useBreadcrumbs("Vendor Link Request", breadcrumbs)
 </script>
