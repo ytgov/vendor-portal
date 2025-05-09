@@ -9,6 +9,9 @@
     style="border: 1px #ccc solid; border-radius: 3px"
     @click:row="rowClicked"
   >
+    <template #item.status="{ value }">
+      <VendorLinkRequestStatusChip :status="value" />
+    </template>
     <template #item.updatedAt="{ value }">
       {{ formatDate(value) }}
     </template>
@@ -31,9 +34,7 @@
 <script lang="ts">
 export const defaultHeaders = [
   { title: "User", key: "user.displayName" },
-  { title: "Matched Vendor ID", key: "matchedVendorId" },
   { title: "Business Name", key: "businessName" },
-  { title: "Vendor ID", key: "vendorId" },
   { title: "Status", key: "status" },
   { title: "Updated At", key: "updatedAt" },
   { title: "Created At", key: "createdAt" },
@@ -52,6 +53,8 @@ import useVendorLinkRequests, {
   VendorLinkRequestQueryOptions,
   VendorLinkRequestWhereOptions,
 } from "@/use/use-vendor-link-requests"
+
+import VendorLinkRequestStatusChip from "@/components/vendor-link-requests/VendorLinkRequestStatusChip.vue"
 
 const props = withDefaults(
   defineProps<{
