@@ -54,15 +54,6 @@ const { t } = useI18n()
 const headers = ref([
   { title: "Display Name", key: "displayName" },
   { title: "Email", key: "email" },
-  { title: "Title", key: "title" },
-  {
-    title: "Department",
-    key: "department",
-    value: (item: unknown) => {
-      const { department, division, branch, unit } = item as User
-      return [department, division, branch, unit].filter(Boolean).join(" - ")
-    },
-  },
   {
     title: "Role",
     key: "roles",
