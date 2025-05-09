@@ -25,7 +25,7 @@
         class="mt-4"
         :user-id="user.id"
         :cancel-button-options="{ to: { name: 'administration/UsersPage' } }"
-        @saved="refresh"
+        @saved="userSavedCallback"
       />
     </v-card-text>
   </v-card>
@@ -37,6 +37,7 @@ import { isNil } from "lodash"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useUser from "@/use/use-user"
+import { useRouter } from "vue-router"
 
 import UserEditForm from "@/components/users/UserEditForm.vue"
 
@@ -45,7 +46,13 @@ const props = defineProps<{
 }>()
 
 const userId = computed(() => parseInt(props.userId))
-const { user, refresh } = useUser(userId)
+const { user } = useUser(userId)
+
+const router = useRouter()
+
+function userSavedCallback() {
+  router.push({ name: "administration/UsersPage" })
+}
 
 const breadcrumbs = computed(() => {
   if (isNil(user.value)) {
