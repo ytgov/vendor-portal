@@ -6,7 +6,7 @@
     -->
     <router-view v-else-if="isReady || isErrored" />
     <PageLoader
-      v-else-if="isReadyAuth0 && isLoadingCurrentUser"
+      v-else-if="isLoadingCurrentUser"
       message="Fetching and syncing user"
     />
     <PageLoader
