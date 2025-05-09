@@ -47,60 +47,10 @@
         md="6"
       >
         <v-text-field
-          v-model="user.title"
-          label="Title"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
           v-model="user.email"
           label="Email *"
           :rules="[required]"
           required
-        />
-      </v-col>
-    </v-row>
-
-    <v-divider class="mb-6"></v-divider>
-
-    <v-row>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="user.department"
-          label="Department"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="user.division"
-          label="Division"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="user.branch"
-          label="Branch"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="user.unit"
-          label="Unit"
         />
       </v-col>
     </v-row>
@@ -128,7 +78,7 @@
     <v-row>
       <v-col class="d-flex">
         <v-btn
-        prepend-icon="mdi-delete"
+          prepend-icon="mdi-delete"
           :loading="isDeleting"
           text="Delete"
           color="error"
