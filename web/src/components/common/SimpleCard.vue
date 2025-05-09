@@ -9,16 +9,20 @@
       v-if="title"
       class="d-flex"
       :class="{ 'mb-n3': subtitle }"
-      >{{ title }}
+    >
+      {{ title }}
       <v-spacer />
       <slot name="rightTitle"></slot>
     </v-card-title>
     <v-card-subtitle
       v-if="subtitle"
       :class="{ 'mt-3': !title }"
-      >{{ subtitle }}</v-card-subtitle
     >
-    <v-card-text :class="{ 'mt-n5': subtitle }"> <slot></slot> </v-card-text>
+      {{ subtitle }}
+    </v-card-subtitle>
+    <v-card-text :class="{ 'mt-n5': subtitle }">
+      <slot></slot>
+    </v-card-text>
   </v-card>
 </template>
 
