@@ -52,7 +52,7 @@ function buildSubtitle(vendorLinkRequest: VendorLinkRequest) {
 
 function goToVendorLinkRequest(vendorLinkRequest: VendorLinkRequest) {
   router.push({
-    name: "administration/VendorLinkRequest",
+    name: "administration/VendorLinkRequestPage",
     params: { vendorLinkRequestId: vendorLinkRequest.id },
   })
 }

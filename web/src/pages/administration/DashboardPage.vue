@@ -10,6 +10,12 @@
           />
           <v-divider />
           <v-list-item
+            title="Manage Vendor Link Requests"
+            :to="{ name: 'administration/VendorLinkRequestsManagePage' }"
+            prepend-icon="mdi-handshake"
+          />
+          <v-divider />
+          <v-list-item
             title="Manage Programs"
             :to="{ name: 'administration/ProgramsPage' }"
             prepend-icon="mdi-handshake"

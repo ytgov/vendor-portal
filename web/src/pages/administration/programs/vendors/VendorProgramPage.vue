@@ -143,7 +143,7 @@ const employees = ref([
 ])
 
 function openSubmission(submissionId: number) {
-  // idk
+  // _TODO_
   console.log("opening submission ", submissionId)
 }
 
