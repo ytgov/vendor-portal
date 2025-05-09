@@ -110,8 +110,8 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: "",
-        name: "programs/HomePage",
-        component: () => import("@/pages/programs/ProgramListPage.vue"),
+        name: "programs/ProgramsAvailablePage",
+        component: () => import("@/pages/programs/ProgramsAvailablePage.vue"),
       },
       {
         path: ":programId/apply",

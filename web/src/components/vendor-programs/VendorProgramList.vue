@@ -39,7 +39,7 @@
     </v-card>
   </div>
 
-  <router-link :to="{ name: `programs/HomePage` }">
+  <router-link :to="{ name: 'programs/ProgramsAvailablePage' }">
     <v-icon>mdi-magnify</v-icon> Find additional programs
   </router-link>
 </template>

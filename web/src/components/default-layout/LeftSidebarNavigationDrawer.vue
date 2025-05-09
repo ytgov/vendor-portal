@@ -43,7 +43,7 @@
       <v-list-item
         title="Available Programs"
         prepend-icon="mdi-handshake"
-        :to="{ name: 'programs/HomePage' }"
+        :to="{ name: 'programs/ProgramsAvailablePage' }"
       />
     </v-list>
   </v-navigation-drawer>
