@@ -82,7 +82,9 @@ const vendorProgramsQuery = computed<VendorProgramQueryOptions>(() => {
   }
 })
 
-const { vendorPrograms, totalCount, isLoading, refresh } = useVendorPrograms(vendorProgramsQuery)
+const { vendorPrograms, totalCount, isLoading, refresh } = useVendorPrograms(vendorProgramsQuery, {
+  skipWatchIf: () => props.waiting,
+})
 
 type VendorProgramTableRow = {
   item: VendorProgram
