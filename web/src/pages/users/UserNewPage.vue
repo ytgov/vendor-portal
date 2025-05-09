@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <SimpleCard>
     <h2 class="d-flex flex-column flex-md-row justify-space-between mb-3">
       Create User
 
@@ -16,7 +16,7 @@
     </h2>
 
     <UserCreateForm class="mt-10" />
-  </v-container>
+  </SimpleCard>
 </template>
 
 <script setup lang="ts">
@@ -24,6 +24,7 @@ import { useDisplay } from "vuetify"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 
+import SimpleCard from "@/components/common/SimpleCard.vue"
 import UserCreateForm from "@/components/users/UserCreateForm.vue"
 
 const { smAndDown } = useDisplay()
