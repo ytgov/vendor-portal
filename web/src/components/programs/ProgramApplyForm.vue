@@ -82,7 +82,7 @@ import { computed, ref } from "vue"
 import { VForm } from "vuetify/lib/components/index.mjs"
 
 import vendorDocumentationsApi, { VendorDocumentation } from "@/api/vendor-documentations-api"
-import vendorProgramsApi, { VendorProgram } from "@/api/vendor-programs-api"
+import vendorProgramsApi from "@/api/vendor-programs-api"
 import { DocumentationFormats } from "@/api/documentations-api"
 
 import useSnack from "@/use/use-snack"
@@ -129,7 +129,7 @@ async function createTextVendorDocumentation(
   const attributes: Partial<VendorDocumentation> = {
     vendorId,
     documentationId,
-    createdByUserId: currentUser.value.id,
+    createdByUserId: currentUser.value.id, // _TODO_ set this in backend
     textValue: data,
   }
 
@@ -145,12 +145,12 @@ async function createFileVendorDocumentation(
   const attributes: Partial<VendorDocumentation> = {
     vendorId,
     documentationId,
-    createdByUserId: currentUser.value.id,
+    createdByUserId: currentUser.value.id, // _TODO_ set this in backend
     expiresAt,
     fileName: data.name,
     mimeType: data.type,
     size: data.size.toString(),
-    content: data, // this just doesnt go to backend?
+    content: data,
   }
 
   await vendorDocumentationsApi.create(attributes)
@@ -177,16 +177,6 @@ async function createVendorDocumentations(vendorId: number) {
   }
 }
 
-async function createVendorProgram(vendorId: number, programId: number) {
-  const attributes: Partial<VendorProgram> = {
-    vendorId,
-    programId,
-    requestedByUserId: currentUser.value.id,
-  }
-
-  await vendorProgramsApi.create(attributes)
-}
-
 async function validateAndSave() {
   if (isNil(programIdNumber.value)) return
   if (formRef.value === null) return
@@ -199,7 +189,10 @@ async function validateAndSave() {
     isSaving.value = true
 
     await createVendorDocumentations(vendorId.value)
-    await createVendorProgram(vendorId.value, programIdNumber.value)
+    await vendorProgramsApi.create({
+      vendorId: vendorId.value,
+      programId: programIdNumber.value,
+    })
 
     snack.notify("Application Submitted", {
       color: "success",
