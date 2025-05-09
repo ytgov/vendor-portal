@@ -39,5 +39,5 @@ import useBreadcrumbs from "@/use/use-breadcrumbs"
 import VendorLinkRequestsPending from "@/components/vendor-link-requests/VendorLinkRequestsPending.vue"
 import SimpleCard from "@/components/common/SimpleCard.vue"
 
-useBreadcrumbs("Administration Dashboard", [])
+useBreadcrumbs("Administration Dashboard")
 </script>

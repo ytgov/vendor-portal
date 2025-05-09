@@ -38,7 +38,7 @@ import { isEmpty, isNil } from "lodash"
 import { computed, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 
-import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
+import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useDocumentations, {
   DocumentationFiltersOptions,
   DocumentationQueryOptions,
@@ -101,7 +101,6 @@ const documentationsQuery = computed<DocumentationQueryOptions>(() => {
 const { documentations, totalCount, isLoading, refresh } = useDocumentations(documentationsQuery)
 
 useBreadcrumbs("Manage Documentation", [
-  ADMIN_CRUMB,
   {
     title: "Manage Documentation",
     to: {

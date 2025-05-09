@@ -44,56 +44,6 @@
           required
         />
       </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="userAttributes.title"
-          label="Title"
-        />
-      </v-col>
-    </v-row>
-
-    <v-divider class="mb-6"></v-divider>
-
-    <v-row>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="userAttributes.department"
-          label="Department"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="userAttributes.division"
-          label="Division"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="userAttributes.branch"
-          label="Branch"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="userAttributes.unit"
-          label="Unit"
-        />
-      </v-col>
     </v-row>
 
     <v-divider class="my-6"></v-divider>

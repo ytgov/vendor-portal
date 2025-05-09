@@ -120,7 +120,7 @@ import SimpleCard from "@/components/common/SimpleCard.vue"
 
 import { VendorLinkRequestStatuses } from "@/api/vendor-link-requests-api"
 import useSnack from "@/use/use-snack"
-import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
+import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useVendorLinkRequest from "@/use/use-vendor-link-request"
 
 const props = defineProps<{ vendorLinkRequestId: string }>()
@@ -170,7 +170,6 @@ async function approveVendorLinkRequest() {
 }
 
 useBreadcrumbs("Vendor Link Request", [
-  ADMIN_CRUMB,
   { title: "Vendor Link Requests", to: { name: "administration/VendorLinkRequest" } },
 ])
 </script>

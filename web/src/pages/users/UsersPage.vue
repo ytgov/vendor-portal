@@ -42,7 +42,7 @@ import { useRouter } from "vue-router"
 import useUsers, { User } from "@/use/use-users"
 import { useRouteQuery } from "@vueuse/router"
 
-import { ADMIN_CRUMB, useBreadcrumbs } from "@/use/use-breadcrumbs"
+import { useBreadcrumbs } from "@/use/use-breadcrumbs"
 
 type UserTableRow = {
   item: User
@@ -54,15 +54,6 @@ const { t } = useI18n()
 const headers = ref([
   { title: "Display Name", key: "displayName" },
   { title: "Email", key: "email" },
-  { title: "Title", key: "title" },
-  {
-    title: "Department",
-    key: "department",
-    value: (item: unknown) => {
-      const { department, division, branch, unit } = item as User
-      return [department, division, branch, unit].filter(Boolean).join(" - ")
-    },
-  },
   {
     title: "Role",
     key: "roles",
@@ -95,7 +86,6 @@ function goToUserEdit(userId: number) {
 }
 
 useBreadcrumbs("Manage Users", [
-  ADMIN_CRUMB,
   {
     title: "Manage Users",
     to: {

@@ -17,11 +17,6 @@ export type User = {
   lastName: string
   displayName: string
   roles: UserRoles[]
-  title: string | null
-  department: string | null
-  division: string | null
-  branch: string | null
-  unit: string | null
   deactivatedAt: string | null
   createdAt: string
   updatedAt: string
@@ -34,11 +29,6 @@ export type User = {
 
 export type UserWhereOptions = {
   email?: string
-  title?: string
-  department?: string
-  division?: string
-  branch?: string
-  unit?: string
 }
 
 export type UserFiltersOptions = {
