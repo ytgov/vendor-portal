@@ -9,14 +9,39 @@
     style="border: 1px #ccc solid; border-radius: 3px"
     @click:row="rowClicked"
   >
+    <template #item.updatedAt="{ value }">
+      {{ formatDate(value) }}
+    </template>
     <template #item.createdAt="{ value }">
       {{ formatDate(value) }}
+    </template>
+    <template
+      v-for="(_, name) in $slots"
+      :key="name"
+      #[name]="slotProps"
+    >
+      <slot
+        :name="name"
+        v-bind="slotProps"
+      ></slot>
     </template>
   </v-data-table-server>
 </template>
 
+<script lang="ts">
+export const defaultHeaders = [
+  { title: "User", key: "user.displayName" },
+  { title: "Matched Vendor ID", key: "matchedVendorId" },
+  { title: "Business Name", key: "businessName" },
+  { title: "Vendor ID", key: "vendorId" },
+  { title: "Status", key: "status" },
+  { title: "Updated At", key: "updatedAt" },
+  { title: "Created At", key: "createdAt" },
+]
+</script>
+
 <script setup lang="ts">
-import { computed, ref } from "vue"
+import { computed } from "vue"
 
 import { formatDate } from "@/utils/formatters"
 
@@ -28,18 +53,15 @@ import useVendorLinkRequests, {
   VendorLinkRequestWhereOptions,
 } from "@/use/use-vendor-link-requests"
 
-const headers = ref([
-  { title: "ID", key: "id" },
-  { title: "Created At", key: "createdAt" },
-])
-
 const props = withDefaults(
   defineProps<{
+    headers?: { title: string; key: string }[]
     filters?: VendorLinkRequestFiltersOptions
     where?: VendorLinkRequestWhereOptions
     waiting?: boolean
   }>(),
   {
+    headers: () => defaultHeaders,
     filters: () => ({}),
     where: () => ({}),
     waiting: false,
@@ -67,11 +89,11 @@ type VendorLinkRequestTableRow = {
   item: VendorLinkRequest
 }
 
-const emit = defineEmits<{ click: [vendorLinkRequestId: number] }>()
+const emit = defineEmits<{ clicked: [vendorLinkRequestId: number] }>()
 
 function rowClicked(_event: unknown, row: VendorLinkRequestTableRow) {
   const vendorLinkRequestId = row.item.id
-  emit("click", vendorLinkRequestId)
+  emit("clicked", vendorLinkRequestId)
 }
 
 defineExpose({ refresh })
