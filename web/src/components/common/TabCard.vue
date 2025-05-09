@@ -12,6 +12,7 @@
         v-for="tab of tabs"
         :key="tab.value"
         :value="tab.value"
+        :to="tab.to"
       >
         <v-icon :icon="tab.icon" />
         {{ tab.title }}
@@ -29,9 +30,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
+import { RouteLocationRaw } from "vue-router"
 
 const props = defineProps<{
-  tabs: { value: number; title: string; icon: string }[]
+  tabs: { value: number; title: string; icon: string; to?: RouteLocationRaw }[]
   defaultTab?: number
 }>()
 
