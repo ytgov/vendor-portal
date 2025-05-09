@@ -8,6 +8,12 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: false },
   },
   {
+    path: "/callback",
+    name: "CallbackPage",
+    component: () => import("@/pages/CallbackPage.vue"),
+    meta: { requiresAuth: false },
+  },
+  {
     path: "/administration",
     component: () => import("@/layouts/AdminLayout.vue"),
     meta: { requiresAdmin: true },

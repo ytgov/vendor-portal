@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import useBreadcrumbs from "@/use/use-breadcrumbs"
+import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
 import usePrograms from "@/use/use-programs"
 
 import ProgramInfoCard from "@/components/programs/ProgramInfoCard.vue"
@@ -26,6 +26,7 @@ import ProgramInfoCard from "@/components/programs/ProgramInfoCard.vue"
 const { programs } = usePrograms()
 
 useBreadcrumbs("Available Programs", [
+  ADMIN_CRUMB,
   { title: "Programs available in this portal ", to: "/programs" },
 ])
 </script>

@@ -11,7 +11,6 @@
     <v-tabs-window-item :value="0">
       <v-card>
         <v-card-text>
-          <h3 class="mb-5">Edit Program</h3>
           <ProgramEditForm :program-id="program.id" />
         </v-card-text>
       </v-card>
@@ -66,7 +65,7 @@ import { VendorProgram, VendorProgramStatuses } from "@/api/vendor-programs-api"
 import programDocumentationsApi from "@/api/program-documentations-api"
 
 import useSnack from "@/use/use-snack"
-import useBreadcrumbs from "@/use/use-breadcrumbs"
+import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
 import useProgram from "@/use/use-program"
 
 import TabCard from "@/components/common/TabCard.vue"
@@ -135,10 +134,10 @@ async function createProgramDocumentations() {
 }
 
 const tabs = ref([
-  { value: 0, title: "Edit Program", icon: "mdi-folder-question" },
-  { value: 1, title: "Vendors In Program", icon: "mdi-folder-question" },
-  { value: 2, title: "Vendors Applying", icon: "mdi-folder-question" },
-  { value: 3, title: "Documentations", icon: "mdi-folder-question" },
+  { value: 0, title: "Program Details", icon: "mdi-office-building-cog" },
+  { value: 1, title: "Approved Vendors", icon: "mdi-storefront-check" },
+  { value: 2, title: "Pending Applications", icon: "mdi-storefront-plus" },
+  { value: 3, title: "Docs", icon: "mdi-file-sign" },
 ])
 
 const pageTitle = computed(() => {
@@ -152,6 +151,7 @@ const pageTitle = computed(() => {
 const breadcrumbs = computed(() => {
   if (isNil(program.value)) {
     return [
+      ADMIN_CRUMB,
       {
         title: "Programs",
         to: {
@@ -163,6 +163,7 @@ const breadcrumbs = computed(() => {
   }
 
   return [
+    ADMIN_CRUMB,
     {
       title: "Programs",
       to: {
@@ -176,5 +177,5 @@ const breadcrumbs = computed(() => {
   ]
 })
 
-useBreadcrumbs(pageTitle, breadcrumbs)
+useBreadcrumbs(pageTitle.value, breadcrumbs.value)
 </script>

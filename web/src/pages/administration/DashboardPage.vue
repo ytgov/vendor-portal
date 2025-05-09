@@ -1,9 +1,7 @@
 <template>
-  <h3 class="mb-3">Administration Home</h3>
-
   <v-row>
     <v-col>
-      <v-card>
+      <SimpleCard title="Administration Links">
         <v-list class="py-0">
           <v-list-item
             title="Manage Users"
@@ -16,20 +14,21 @@
             :to="{ name: 'administration/ProgramsPage' }"
             prepend-icon="mdi-handshake"
           />
+          <v-divider />
+          <v-list-item
+            title="Manage Documentation"
+            :to="{ name: 'administration/DocumentationsPage' }"
+            prepend-icon="mdi-handshake"
+          />
         </v-list>
-      </v-card>
+      </SimpleCard>
     </v-col>
     <v-col>
-      <v-card class="mb-5">
-        <v-card-title>Pending Vendor Link Requests</v-card-title>
-
+      <SimpleCard title="Pending Vendor Link Requests">
         <VendorLinkRequestsPending />
-      </v-card>
+      </SimpleCard>
 
-      <v-card>
-        <v-card-title>Pending Program Applications</v-card-title>
-        <v-list class="pt-0 mb-5"> </v-list>
-      </v-card>
+      <SimpleCard title="Pending Program Applications"> Coming... </SimpleCard>
     </v-col>
   </v-row>
 </template>
@@ -38,6 +37,7 @@
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 
 import VendorLinkRequestsPending from "@/components/vendor-link-requests/VendorLinkRequestsPending.vue"
+import SimpleCard from "@/components/common/SimpleCard.vue"
 
 useBreadcrumbs("Administration Dashboard", [])
 </script>

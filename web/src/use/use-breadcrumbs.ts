@@ -1,6 +1,6 @@
-import { reactive, toRefs, watch, MaybeRefOrGetter, toValue } from "vue"
+import { reactive, toRefs } from "vue"
 import { RouteLocationRaw } from "vue-router"
-import { cloneDeep, isUndefined } from "lodash"
+import { isUndefined } from "lodash"
 
 export type Breadcrumb = {
   title: string
@@ -35,56 +35,15 @@ const state = reactive<{
   breadcrumbs: [],
 })
 
-// TODO: Consider supporting config option for setting base crumb?
-export function useBreadcrumbs(
-  title?: MaybeRefOrGetter<string>,
-  breadcrumbs?: MaybeRefOrGetter<Breadcrumb[]>,
-  options?: MaybeRefOrGetter<{
-    baseCrumb?: Breadcrumb
-  }>
-) {
-  watch(
-    () => toValue(title),
-    (newTitle) => {
-      if (isUndefined(newTitle)) return
-
-      state.title = newTitle
-    },
-    {
-      immediate: true,
-    }
-  )
-
-  watch(
-    () => cloneDeep(toValue(breadcrumbs)),
-    (newBreadcrumbs) => {
-      if (isUndefined(newBreadcrumbs)) return
-
-      state.breadcrumbs = [state.baseCrumb, ...newBreadcrumbs]
-    },
-    {
-      immediate: true,
-      deep: true,
-    }
-  )
-
-  watch(
-    () => cloneDeep(toValue(options)),
-    (newOptions) => {
-      if (isUndefined(newOptions)) return
-
-      if (!isUndefined(newOptions.baseCrumb)) {
-        state.baseCrumb = newOptions.baseCrumb
-      }
-    },
-    {
-      immediate: true,
-      deep: true,
-    }
-  )
+export function useBreadcrumbs(title?: string, breadcrumbs?: Breadcrumb[]) {
+  if (!isUndefined(title)) state.title = title
+  if (!isUndefined(breadcrumbs)) {
+    state.breadcrumbs = [...breadcrumbs]
+  }
 
   return {
     ...toRefs(state),
+    update: useBreadcrumbs,
   }
 }
 

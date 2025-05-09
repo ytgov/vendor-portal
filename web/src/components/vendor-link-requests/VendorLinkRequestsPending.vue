@@ -1,16 +1,20 @@
 <template>
   <v-list
-    class="mb-5 white-text"
+    class="py-0 mt-0"
     title="Pending Link Request"
   >
-    <v-list-item
-      v-for="vendorLinkRequest of vendorLinkRequests"
+    <div
+      v-for="(vendorLinkRequest, idx) of vendorLinkRequests"
       :key="vendorLinkRequest.id"
-      class="pt-0"
-      :title="vendorLinkRequest.user?.displayName + ' :: ' + vendorLinkRequest.businessName"
-      :subtitle="buildSubtitle(vendorLinkRequest)"
-      @click="goToVendorLinkRequest(vendorLinkRequest)"
-    />
+    >
+      <v-list-item
+        class="py-2"
+        :title="`${vendorLinkRequest.user?.displayName} - (${vendorLinkRequest.businessName})`"
+        :subtitle="buildSubtitle(vendorLinkRequest)"
+        @click="goToVendorLinkRequest(vendorLinkRequest)"
+      />
+      <v-divider v-if="idx < vendorLinkRequests.length - 1" />
+    </div>
   </v-list>
 </template>
 

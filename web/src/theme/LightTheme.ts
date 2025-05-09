@@ -36,6 +36,8 @@ const lightTheme = {
     gray100: "#f5f5f5",
     primary200: "#a1d2ff",
     secondary200: "#eeeeee",
+
+    ygZinc: "#f5f5f5",
   },
 }
 
