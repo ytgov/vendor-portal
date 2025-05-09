@@ -5,8 +5,8 @@
   />
   <div v-else>
     <v-card
-      v-for="program of programs"
-      :key="program.id"
+      v-for="(program, index) of programs"
+      :key="index"
       class="mb-5"
       @click="openVendorProgram(program.id)"
     >

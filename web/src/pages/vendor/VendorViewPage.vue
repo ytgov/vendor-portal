@@ -13,11 +13,11 @@
         <VendorPeopleCard :vendor-id="vendor.id" />
       </v-col>
       <v-col>
-        <VendorProgramPendingList :vendor-id="vendor.id" />
+        <VendorProgramPendingListAlerts :vendor-id="vendor.id" />
 
         <h3 class="mb-3">Enrolled Programs</h3>
 
-        <VendorProgramList :vendor-id="vendor.id" />
+        <VendorProgramListCards :vendor-id="vendor.id" />
       </v-col>
     </v-row>
   </div>
@@ -31,8 +31,8 @@ import useVendor from "@/use/use-vendor"
 
 import VendorDetailsCard from "@/components/vendors/VendorDetailsCard.vue"
 import VendorPeopleCard from "@/components/vendors/VendorPeopleCard.vue"
-import VendorProgramPendingList from "@/components/vendor-programs/VendorProgramPendingList.vue"
-import VendorProgramList from "@/components/vendor-programs/VendorProgramList.vue"
+import VendorProgramPendingListAlerts from "@/components/vendor-programs/VendorProgramPendingListAlerts.vue"
+import VendorProgramListCards from "@/components/vendor-programs/VendorProgramListCards.vue"
 
 const props = defineProps<{ vendorId: string }>()
 const { vendorId } = toRefs(props)
