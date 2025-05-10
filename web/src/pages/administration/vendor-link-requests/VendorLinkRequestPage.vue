@@ -55,8 +55,7 @@
 
             <v-select label="Vendor" />
 
-            ** Put the vendor search field above. <br />
-            **Approve can only be clicked if a vendor is selected.
+            ** Put the vendor search field above.
             <v-row class="mt-5">
               <v-col>
                 <v-btn
