@@ -21,6 +21,7 @@ export class VendorProgramsController extends BaseController<VendorProgram> {
         where,
         limit: this.pagination.limit,
         offset: this.pagination.offset,
+        include: ["program", "requestedByUser", "reviewByUser"],
       })
 
       const serializedVendorPrograms = IndexSerializer.perform(vendorPrograms)
@@ -74,7 +75,7 @@ export class VendorProgramsController extends BaseController<VendorProgram> {
       }
 
       const permittedAttributes = policy.permitAttributesForCreate(this.request.body)
-      const newVendorProgram = await CreateService.perform(permittedAttributes)
+      const newVendorProgram = await CreateService.perform(permittedAttributes, this.currentUser)
       return this.response.status(201).json({ vendorProgram: newVendorProgram })
     } catch (error) {
       logger.error(`VendorProgram creation failed: ${error}`, { error })
@@ -100,7 +101,11 @@ export class VendorProgramsController extends BaseController<VendorProgram> {
       }
 
       const permitAttributes = policy.permitAttributes(this.request.body)
-      const newVendorProgram = await UpdateService.perform(vendorProgram, permitAttributes)
+      const newVendorProgram = await UpdateService.perform(
+        vendorProgram,
+        permitAttributes,
+        this.currentUser
+      )
       return this.response.json({ vendorProgram: newVendorProgram })
     } catch (error) {
       logger.error(`VendorProgram update failed: ${error}`, { error })

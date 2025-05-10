@@ -5,8 +5,8 @@
   />
   <div v-else>
     <v-card
-      v-for="program of programs"
-      :key="program.id"
+      v-for="(program, index) of programs"
+      :key="index"
       class="mb-5"
       @click="openVendorProgram(program.id)"
     >
@@ -39,7 +39,7 @@
     </v-card>
   </div>
 
-  <router-link :to="{ name: `programs/HomePage` }">
+  <router-link :to="{ name: 'programs/ProgramsAvailablePage' }">
     <v-icon>mdi-magnify</v-icon> Find additional programs
   </router-link>
 </template>
@@ -47,15 +47,12 @@
 <script setup lang="ts">
 import { isNil } from "lodash"
 import { ref, toRefs, watch } from "vue"
-import { useRouter } from "vue-router"
 
 import { formatDate } from "@/utils/formatters"
 
 import programsApi, { Program, ProgramQueryOptions } from "@/api/programs-api"
 
 import { useVendor } from "@/use/use-vendor"
-
-const router = useRouter()
 
 const props = defineProps<{ vendorId: number }>()
 const { vendorId } = toRefs(props)
@@ -80,9 +77,6 @@ watch(
 )
 
 function openVendorProgram(programId: number) {
-  router.push({
-    name: "vendor-program/VendorProgramPage",
-    params: { vendorId: props.vendorId, programId },
-  })
+  console.log("openVendorProgram ", { programId })
 }
 </script>

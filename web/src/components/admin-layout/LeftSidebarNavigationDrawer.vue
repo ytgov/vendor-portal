@@ -52,6 +52,12 @@
       />
       <v-list-item
         v-if="isSystemAdmin"
+        title="Vendor Link Requests"
+        :to="{ name: 'administration/VendorLinkRequestsManagePage' }"
+        prepend-icon="mdi-link"
+      />
+      <v-list-item
+        v-if="isSystemAdmin"
         title="Programs"
         :to="{ name: 'administration/ProgramsPage' }"
         prepend-icon="mdi-handshake"

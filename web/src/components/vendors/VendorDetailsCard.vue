@@ -35,10 +35,10 @@
         </div>
       </div>
     </v-card-text>
-
+    <!-- 
     <v-card-text>
       <v-btn block>Update this Information</v-btn>
-    </v-card-text>
+    </v-card-text> -->
   </v-card>
 </template>
 

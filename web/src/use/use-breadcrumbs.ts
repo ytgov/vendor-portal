@@ -42,6 +42,10 @@ export function useBreadcrumbs(
     baseCrumb?: Breadcrumb
   }>
 ) {
+  if (isUndefined(breadcrumbs)) {
+    state.breadcrumbs = []
+  }
+
   watch(
     () => toValue(title),
     (newTitle) => {

@@ -49,14 +49,14 @@
     </v-card-text>
     <v-card-text>
       <v-row>
-        <v-col cols="6">
+        <!-- <v-col cols="6">
           <v-btn
             :to="{ name: 'individual/ProfilePage' }"
             block
             color="secondary"
             >Edit Profile
           </v-btn>
-        </v-col>
+        </v-col> -->
         <v-col cols="6">
           <v-btn
             block

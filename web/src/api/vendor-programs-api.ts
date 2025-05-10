@@ -1,5 +1,8 @@
 import http from "@/api/http-client"
 
+import { User } from "@/api/users-api"
+import { Program } from "@/api/programs-api"
+
 /** Keep in sync with api/src/models/vendor-program.ts */
 export enum VendorProgramStatuses {
   PENDING = "Pending",
@@ -21,6 +24,11 @@ export type VendorProgram = {
   reviewNotes: string | null
   createdAt: string
   updatedAt: string
+
+  // Associations
+  program: Program | null
+  requestedByUser: User | null
+  reviewByUser: User | null
 }
 
 export type VendorProgramWhereOptions = {

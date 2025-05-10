@@ -5,8 +5,8 @@
   />
   <div v-else>
     <v-alert
-      v-for="program of programs"
-      :key="program.id"
+      v-for="(program, index) of programs"
+      :key="index"
       type="info"
       color="success"
       class="mb-5 white-text"

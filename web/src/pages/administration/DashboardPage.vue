@@ -10,6 +10,12 @@
           />
           <v-divider />
           <v-list-item
+            title="Manage Vendor Link Requests"
+            :to="{ name: 'administration/VendorLinkRequestsManagePage' }"
+            prepend-icon="mdi-handshake"
+          />
+          <v-divider />
+          <v-list-item
             title="Manage Programs"
             :to="{ name: 'administration/ProgramsPage' }"
             prepend-icon="mdi-handshake"
@@ -25,10 +31,12 @@
     </v-col>
     <v-col>
       <SimpleCard title="Pending Vendor Link Requests">
-        <VendorLinkRequestsPending />
+        <VendorLinkRequestsPendingList />
       </SimpleCard>
 
-      <SimpleCard title="Pending Program Applications"> Coming... </SimpleCard>
+      <SimpleCard title="Pending Program Applications">
+        <VendorProgramsPendingList />
+      </SimpleCard>
     </v-col>
   </v-row>
 </template>
@@ -36,8 +44,9 @@
 <script lang="ts" setup>
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 
-import VendorLinkRequestsPending from "@/components/vendor-link-requests/VendorLinkRequestsPending.vue"
 import SimpleCard from "@/components/common/SimpleCard.vue"
+import VendorLinkRequestsPendingList from "@/components/vendor-link-requests/VendorLinkRequestsPendingList.vue"
+import VendorProgramsPendingList from "@/components/vendor-programs/VendorProgramsPendingList.vue"
 
 useBreadcrumbs("Administration Dashboard")
 </script>

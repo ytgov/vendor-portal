@@ -196,5 +196,5 @@ const breadcrumbs = computed(() => {
   ]
 })
 
-useBreadcrumbs(pageTitle.value, breadcrumbs.value)
+useBreadcrumbs(pageTitle, breadcrumbs)
 </script>

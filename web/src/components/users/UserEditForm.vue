@@ -18,6 +18,7 @@
           label="First name *"
           :rules="[required]"
           required
+          hide-details
         />
       </v-col>
       <v-col
@@ -29,6 +30,7 @@
           label="Last name *"
           :rules="[required]"
           required
+          hide-details
         />
       </v-col>
       <v-col
@@ -40,6 +42,7 @@
           label="Display Name *"
           :rules="[required]"
           required
+          hide-details
         />
       </v-col>
       <v-col
@@ -51,6 +54,7 @@
           label="Email *"
           :rules="[required]"
           required
+          hide-details
         />
       </v-col>
     </v-row>
@@ -84,25 +88,22 @@
           color="error"
           variant="outlined"
           @click="confirmThenDelete(user)"
-        ></v-btn>
+        />
         <v-spacer />
-
         <v-btn
           :loading="isLoading"
           color="secondary"
           variant="outlined"
           v-bind="cancelButtonOptions"
-        >
-          Cancel
-        </v-btn>
+          text="Cancel"
+        />
         <v-btn
           class="ml-3"
           :loading="isLoading"
           type="submit"
           color="success"
-        >
-          Save
-        </v-btn>
+          text="Save"
+        />
       </v-col>
     </v-row>
   </v-form>

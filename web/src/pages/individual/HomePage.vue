@@ -25,7 +25,7 @@ import AccountDetailsCard from "@/components/individual/AccountDetailsCard.vue"
 import VendorsLinkedCard from "@/components/vendors/VendorsLinkedCard.vue"
 import VendorLinkRequestAlerts from "@/components/vendor-link-requests/VendorLinkRequestAlerts.vue"
 
-useBreadcrumbs("Vendor Portal Home", [])
+useBreadcrumbs("Vendor Portal Home")
 </script>
 
 <style>
