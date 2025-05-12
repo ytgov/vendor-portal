@@ -40,7 +40,7 @@ export class VendorsController extends BaseController<Vendor> {
 
   async show() {
     try {
-      const vendor = await VendorSearchService.perform(this.params.vendorId)
+      const vendor = await this.loadVendor()
       if (isNil(vendor)) {
         return this.response.status(404).json({
           message: "Vendor not found",
@@ -61,6 +61,18 @@ export class VendorsController extends BaseController<Vendor> {
         message: `Error fetching vendor: ${error}`,
       })
     }
+  }
+
+  private async loadVendor() {
+    const vendorSearchService = new VendorSearchService(this.params.vendorId)
+    const vendor = await vendorSearchService.perform()
+
+    // _TODO_ Hacky fix, should refactor
+    if (isNil(vendor) && this.currentUser.isSystemAdmin) {
+      return await vendorSearchService.findVendor(this.params.vendorId)
+    }
+
+    return vendor
   }
 
   private buildPolicy(vendor: Vendor) {

@@ -53,15 +53,42 @@
               auto-grow
             />
 
-            <v-select label="Vendor" />
-
-            ** Put the vendor search field above. <br />
-            **Approve can only be clicked if a vendor is selected.
+            <div class="d-flex">
+              <v-text-field
+                v-model="vendorLinkRequest.vendorId"
+                class="mb-4 mr-5"
+                label="Vendor ID"
+                hint="Assigned by Department of Finance, found on remittances"
+                persistent-hint
+              />
+              <v-btn
+                class="mb-5"
+                prepend-icon="mdi-magnify"
+                :disabled="isEmpty(vendorLinkRequest.vendorId)"
+                style="height: 48px"
+                text="Search"
+                @click="doSearch"
+              />
+            </div>
+            <div class="d-flex">
+              <div
+                v-if="vendorSearchError"
+                class="text-subtitle-1 text-error"
+                style="line-height: 36px"
+              >
+                <v-icon icon="mdi-alert-circle" />
+                {{ vendorSearchError }}
+              </div>
+            </div>
+            <div v-if="matchedVendor">
+              <VendorMatchCard :vendor="matchedVendor" />
+              <p class="mt-5">If this match is correct, please click the "Approve" button below.</p>
+            </div>
             <v-row class="mt-5">
               <v-col>
                 <v-btn
-                  :loading="isApproving"
-                  :disabled="isApproved"
+                  :disabled="!canApprove"
+                  :loading="isDeciding"
                   text="Approve"
                   block
                   @click="approveVendorLinkRequest"
@@ -69,8 +96,8 @@
               </v-col>
               <v-col>
                 <v-btn
-                  :disabled="isEmpty(vendorLinkRequest.reviewNotes)"
-                  :loading="isSending"
+                  :disabled="!canReject"
+                  :loading="isDeciding"
                   variant="outlined"
                   block
                   color="error"
@@ -138,11 +165,15 @@ import SimpleCard from "@/components/common/SimpleCard.vue"
 
 import { formatDate, formatDateRelative } from "@/utils/formatters"
 
+import vendorsApi from "@/api/vendors-api"
 import { VendorLinkRequestStatuses } from "@/api/vendor-link-requests-api"
 
 import useSnack from "@/use/use-snack"
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useVendorLinkRequest from "@/use/use-vendor-link-request"
+import { Vendor } from "@/use/use-vendor"
+
+import VendorMatchCard from "@/components/vendors/VendorMatchCard.vue"
 
 const props = defineProps<{ vendorLinkRequestId: string }>()
 const vendorLinkRequestIdNumber = computed(() => parseInt(props.vendorLinkRequestId))
@@ -153,15 +184,46 @@ const isApproved = computed(
   () => vendorLinkRequest.value?.status === VendorLinkRequestStatuses.ACCEPTED
 )
 
+const matchedVendor = ref<Vendor | null>(null)
+const vendorSearchError = ref("")
+
+const canApprove = computed(() => {
+  if (isNil(vendorLinkRequest.value)) return false
+  if (isApproved.value) return false
+  if (isNil(matchedVendor.value)) return false
+
+  return true
+})
+
+const canReject = computed(() => {
+  if (isNil(vendorLinkRequest.value)) return false
+
+  return true
+})
+
+async function doSearch() {
+  try {
+    if (isNil(vendorLinkRequest.value)) return
+    if (isNil(vendorLinkRequest.value.vendorId)) return
+
+    const { vendor } = await vendorsApi.get(vendorLinkRequest.value.vendorId)
+
+    matchedVendor.value = vendor
+    vendorSearchError.value = ""
+  } catch {
+    matchedVendor.value = null
+    vendorSearchError.value = "No match was found for that Vendor ID"
+  }
+}
+
 const snack = useSnack()
 
-const isApproving = ref(false)
-const isSending = ref(false)
+const isDeciding = ref(false)
 
 async function rejectVendorLinkRequest() {
   if (isNil(vendorLinkRequest.value)) return
 
-  isSending.value = true
+  isDeciding.value = true
 
   try {
     vendorLinkRequest.value.status = VendorLinkRequestStatuses.REJECTED
@@ -170,23 +232,25 @@ async function rejectVendorLinkRequest() {
   } catch (error) {
     snack.error(`Failed to reject Vendor Link Request: ${error}`)
   } finally {
-    isSending.value = false
+    isDeciding.value = false
   }
 }
 
 async function approveVendorLinkRequest() {
   if (isNil(vendorLinkRequest.value)) return
+  if (isNil(matchedVendor.value)) return
 
-  isApproving.value = true
+  isDeciding.value = true
 
   try {
+    vendorLinkRequest.value.vendorId = matchedVendor.value.vendorId
     vendorLinkRequest.value.status = VendorLinkRequestStatuses.ACCEPTED
     await save()
     snack.success("Accepted Vendor Link Request")
   } catch (error) {
     snack.error(`Failed to accept Vendor Link Request: ${error}`)
   } finally {
-    isApproving.value = false
+    isDeciding.value = false
   }
 }
 

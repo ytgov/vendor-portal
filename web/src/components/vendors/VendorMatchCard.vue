@@ -7,8 +7,8 @@
           class="mt-2"
           size="40"
           color="#7A9A01"
-          >mdi-store</v-icon
-        >
+          icon="mdi-store"
+        />
         <div class="ml-2 text-subtitle-1">
           <strong>Vendor Name: </strong><br />{{ vendor.name }}
         </div>
@@ -19,24 +19,30 @@
           class="mt-2"
           size="40"
           color="#7A9A01"
-          >mdi-map</v-icon
-        >
+          icon="mdi-map"
+        />
         <div class="ml-2 text-subtitle-1">
-          <strong>Address: </strong><br />2 Stope Way<br />Whitehorse YT, Y1A0B3
+          <strong>Address:</strong>
+          <div
+            v-for="(line, index) in formatVendorAddressLines(vendor)"
+            :key="index"
+          >
+            {{ line }}
+          </div>
         </div>
       </div>
-      <p class="mt-5">If this match is correct, please click the "Continue" button below.</p>
     </v-card-text>
   </v-card>
 </template>
 
 <script setup lang="ts">
-import { Vendor } from "@/use/use-vendor"
 import { computed } from "vue"
+
+import { formatVendorAddressLines } from "@/utils/format-vendor-address-lines"
+
+import { Vendor } from "@/use/use-vendor"
 
 const props = defineProps<{ vendor: Vendor }>()
 
 const vendor = computed(() => props.vendor)
-
-// _TODO_ build out address
 </script>
