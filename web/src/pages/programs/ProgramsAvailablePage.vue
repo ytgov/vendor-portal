@@ -18,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import { isEmpty } from "lodash"
 import { computed } from "vue"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
@@ -28,9 +27,12 @@ import useVendorUsers from "@/use/use-vendor-users"
 import ProgramInfoCard from "@/components/programs/ProgramInfoCard.vue"
 
 const { programs } = usePrograms()
-const { vendorUsers } = useVendorUsers()
+const { totalCount, isLoading } = useVendorUsers()
 
-const canApply = computed(() => isEmpty(vendorUsers))
+const canApply = computed(() => {
+  if (isLoading.value) return false
+  return totalCount.value !== 0
+})
 
 useBreadcrumbs("Available Programs", [
   {
