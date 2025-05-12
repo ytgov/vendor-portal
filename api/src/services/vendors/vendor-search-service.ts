@@ -1,5 +1,5 @@
 import axios from "axios"
-import { isNil } from "lodash"
+import { isEmpty, isNil } from "lodash"
 import { CreationAttributes } from "@sequelize/core"
 
 import { VENDOR_AUTH_HEADER, VENDOR_API_URL } from "@/config"
@@ -10,6 +10,9 @@ import { UpdateService, CreateService } from "@/services/vendors"
 
 export type VendorCreationAttributes = Partial<CreationAttributes<Vendor>>
 
+/**
+ * _TODO_ this class really needs a refactor
+ */
 export class VendorSearchService extends BaseService {
   constructor(private vendorId: string) {
     super()
@@ -64,9 +67,13 @@ export class VendorSearchService extends BaseService {
     }
   }
 
-  private async findVendor(term: string) {
+  async findVendor(term: string) {
+    if (typeof this.vendorId === "number" || !isNaN(Number(this.vendorId))) {
+      return await Vendor.findByPk(this.vendorId)
+    }
+
     const body = { term: term }
-    return axios
+    const vendors = await axios
       .post(`${VENDOR_API_URL}/search`, body, { headers: VENDOR_AUTH_HEADER })
       .then(async (resp) => {
         return resp.data.data
@@ -75,6 +82,16 @@ export class VendorSearchService extends BaseService {
         console.log(error)
         return []
       })
+
+    if (isEmpty(vendors)) {
+      return null
+    }
+
+    const vendor = vendors.at(0)
+
+    const localVendor = await Vendor.findBySlugOrPk(vendor.VendorId)
+
+    return this.upsertVendor(vendor, localVendor)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
