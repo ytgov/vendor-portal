@@ -24,14 +24,14 @@
               </strong>
             </p>
             <div v-if="!isNil(vendorLinkRequest.user)">
-              <p class="mb-2">
+              <p class="mb-4">
                 By:
                 <strong> {{ vendorLinkRequest.user.displayName }}</strong> ({{
                   vendorLinkRequest.user.email
                 }})
               </p>
 
-              <p class="mb-5">
+              <p class="mb-2">
                 <a :href="`mailto:${vendorLinkRequest.user.email}`">
                   <v-icon
                     class="mr-2"
