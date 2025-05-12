@@ -1,10 +1,6 @@
 <template>
-  <div v-if="isEmpty(vendorUsers)">
-    <p>No programs available</p>
-  </div>
   <div
     v-for="(program, index) in programs"
-    v-else
     :key="index"
   >
     <v-row>
@@ -14,7 +10,7 @@
       >
         <ProgramInfoCard
           :program-id="`${program.id}`"
-          :show-apply="true"
+          :show-apply="canApply"
         />
       </v-col>
     </v-row>
@@ -23,6 +19,7 @@
 
 <script setup lang="ts">
 import { isEmpty } from "lodash"
+import { computed } from "vue"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import usePrograms from "@/use/use-programs"
@@ -32,6 +29,8 @@ import ProgramInfoCard from "@/components/programs/ProgramInfoCard.vue"
 
 const { programs } = usePrograms()
 const { vendorUsers } = useVendorUsers()
+
+const canApply = computed(() => isEmpty(vendorUsers))
 
 useBreadcrumbs("Available Programs", [
   {
