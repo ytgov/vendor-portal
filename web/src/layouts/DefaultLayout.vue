@@ -46,7 +46,7 @@
 import { ref, unref, watch } from "vue"
 import { useDisplay } from "vuetify"
 
-import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
+import useBreadcrumbs, { USER_CRUMB } from "@/use/use-breadcrumbs"
 
 import KebabMenu from "@/components/default-layout/KebabMenu.vue"
 import LeftSidebarNavigationDrawer from "@/components/default-layout/LeftSidebarNavigationDrawer.vue"
@@ -58,7 +58,7 @@ const showDrawer = ref(mdAndUp.value)
 const showRail = ref(!mdAndUp.value)
 
 const { title, breadcrumbs } = useBreadcrumbs(undefined, undefined, {
-  baseCrumb: BASE_CRUMB,
+  baseCrumb: USER_CRUMB,
 })
 
 watch(

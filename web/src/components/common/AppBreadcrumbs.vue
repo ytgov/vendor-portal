@@ -3,12 +3,13 @@
     <v-container
       v-if="breadcrumbsWithExactTrueByDefault.length > 0"
       fluid
-      class="py-0 pb-2 mt-0 pt-2"
+      class="py-0 mt-0"
     >
       <v-breadcrumbs
         :items="breadcrumbsWithExactTrueByDefault"
         large
-        class="pa-0 mb-0"
+        class="pa-0"
+        style="height: 44px"
       >
         <template #divider>
           <v-icon>mdi-chevron-right</v-icon>

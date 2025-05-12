@@ -18,6 +18,7 @@
           label="First name *"
           :rules="[required]"
           required
+          hide-details
         />
       </v-col>
       <v-col
@@ -29,6 +30,7 @@
           label="Last name *"
           :rules="[required]"
           required
+          hide-details
         />
       </v-col>
       <v-col
@@ -40,15 +42,7 @@
           label="Display Name *"
           :rules="[required]"
           required
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="user.title"
-          label="Title"
+          hide-details
         />
       </v-col>
       <v-col
@@ -60,47 +54,7 @@
           label="Email *"
           :rules="[required]"
           required
-        />
-      </v-col>
-    </v-row>
-
-    <v-divider class="mb-6"></v-divider>
-
-    <v-row>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="user.department"
-          label="Department"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="user.division"
-          label="Division"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="user.branch"
-          label="Branch"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="user.unit"
-          label="Unit"
+          hide-details
         />
       </v-col>
     </v-row>
@@ -128,31 +82,28 @@
     <v-row>
       <v-col class="d-flex">
         <v-btn
-        prepend-icon="mdi-delete"
+          prepend-icon="mdi-delete"
           :loading="isDeleting"
           text="Delete"
           color="error"
           variant="outlined"
           @click="confirmThenDelete(user)"
-        ></v-btn>
+        />
         <v-spacer />
-
         <v-btn
           :loading="isLoading"
           color="secondary"
           variant="outlined"
           v-bind="cancelButtonOptions"
-        >
-          Cancel
-        </v-btn>
+          text="Cancel"
+        />
         <v-btn
           class="ml-3"
           :loading="isLoading"
           type="submit"
           color="success"
-        >
-          Save
-        </v-btn>
+          text="Save"
+        />
       </v-col>
     </v-row>
   </v-form>

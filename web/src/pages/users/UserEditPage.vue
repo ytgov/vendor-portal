@@ -1,9 +1,10 @@
 <template>
-  <v-skeleton-loader v-if="isNil(user)" />
-  <div v-else>
-    <v-card>
-      <v-card-text>
-        <!-- <h2 class="d-flex flex-column flex-md-row justify-space-between mb-3">
+  <v-skeleton-loader
+    v-if="isNil(user)"
+    type="card"
+  />
+  <SimpleCard v-else>
+    <!-- <h2 class="d-flex flex-column flex-md-row justify-space-between mb-3">
           <v-spacer />
 
           <div class="d-flex justify-space-between mt-4 mb-3 my-md-0">
@@ -19,15 +20,13 @@
           </div>
         </h2> -->
 
-        <UserEditForm
-          class="mt-4"
-          :user-id="user.id"
-          :cancel-button-options="{ to: { name: 'administration/UsersPage' } }"
-          @saved="refresh"
-        />
-      </v-card-text>
-    </v-card>
-  </div>
+    <UserEditForm
+      class="mt-4"
+      :user-id="user.id"
+      :cancel-button-options="{ to: { name: 'administration/UsersPage' } }"
+      @saved="userSavedCallback"
+    />
+  </SimpleCard>
 </template>
 
 <script setup lang="ts">
@@ -36,7 +35,9 @@ import { isNil } from "lodash"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useUser from "@/use/use-user"
+import { useRouter } from "vue-router"
 
+import SimpleCard from "@/components/common/SimpleCard.vue"
 import UserEditForm from "@/components/users/UserEditForm.vue"
 
 const props = defineProps<{
@@ -44,7 +45,13 @@ const props = defineProps<{
 }>()
 
 const userId = computed(() => parseInt(props.userId))
-const { user, refresh } = useUser(userId)
+const { user } = useUser(userId)
+
+const router = useRouter()
+
+function userSavedCallback() {
+  router.push({ name: "administration/UsersPage" })
+}
 
 const breadcrumbs = computed(() => {
   if (isNil(user.value)) {

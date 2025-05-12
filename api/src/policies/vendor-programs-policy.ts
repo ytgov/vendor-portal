@@ -42,16 +42,7 @@ export class VendorProgramsPolicy extends PolicyFactory(VendorProgram) {
   }
 
   permittedAttributes(): Path[] {
-    return [
-      "startDate",
-      "endDate",
-      "requestedByUserId",
-      "requestedAt",
-      "status",
-      "reviewByUserId",
-      "reviewAt",
-      "reviewNotes",
-    ]
+    return ["startDate", "endDate", "status", "reviewNotes"]
   }
 
   permittedAttributesForCreate(): Path[] {

@@ -125,10 +125,24 @@ table.table {
 .v-alert.elevation-0 {
   border: 1px #d7cfbe solid;
 }
+
 .v-card-title {
   margin-bottom: 10px;
-
   background-color: #c7dee688;
   border-bottom: 0px #d7cfbe solid;
   margin-bottom: 10px;
+}
+
+.simple-card .v-card-title {
+  border-bottom: 1px #d7cfbe solid;
+}
+.simple-card .v-list {
+  border-radius: 4px;
+  border: 1px #d7cfbe solid;
+  background-color: #f8f8f8;
+}
+
+.simple-card .v-list .v-divider {
+  border-top: 1px #d7cfbe solid;
+  opacity: 1;
 }

@@ -39,34 +39,40 @@ export default createVuetify({
       variant: "outlined",
       density: "comfortable",
       color: "primary",
+      bgColor: "white",
       /* hideDetails: "auto" */
     },
     VFileInput: {
       variant: "outlined",
       density: "comfortable",
       color: "primary",
+      bgColor: "white",
       prependIcon: "",
-      prependInnerIcon: "mdi-paperclip"
+      prependInnerIcon: "mdi-paperclip",
       /* hideDetails: "auto" */
     },
     VTextarea: {
       variant: "outlined",
       density: "comfortable",
+      bgColor: "white",
       color: "primary",
     },
     VSelect: {
       variant: "outlined",
       density: "comfortable",
+      bgColor: "white",
       color: "primary",
     },
     VAutocomplete: {
       variant: "outlined",
       density: "comfortable",
+      bgColor: "white",
       color: "primary",
     },
     VCombobox: {
       variant: "outlined",
       density: "comfortable",
+      bgColor: "white",
       color: "primary",
     },
     VListItem: {

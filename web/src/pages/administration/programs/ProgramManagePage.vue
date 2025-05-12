@@ -11,20 +11,19 @@
     <v-tabs-window-item :value="0">
       <v-card>
         <v-card-text>
-          <h3 class="mb-5">Edit Program</h3>
           <ProgramEditForm :program-id="program.id" />
         </v-card-text>
       </v-card>
     </v-tabs-window-item>
     <v-tabs-window-item :value="1">
       <VendorProgramsDataTableServer
-        :where="{ programId: programIdNumber, status: VendorProgramStatuses.ACCEPTED }"
+        :where="vendorProgramsAcceptedWhereOptions"
         @click="goToVendorProgramPage"
       />
     </v-tabs-window-item>
     <v-tabs-window-item :value="2">
       <VendorProgramsDataTableServer
-        :where="{ programId: programIdNumber, status: VendorProgramStatuses.PENDING }"
+        :where="vendorProgramsPendingWhereOptions"
         @click="goToVendorProgramRequestPage"
       />
     </v-tabs-window-item>
@@ -32,11 +31,7 @@
       <div class="d-flex mt-3">
         <DocumentationsSearchableAutocomplete
           v-model="documentationsIds"
-          :query="{
-            filters: {
-              notInProgram: programIdNumber,
-            },
-          }"
+          :query="documentationsNotInProgramQuery"
         />
         <v-btn
           color="primary"
@@ -49,9 +44,7 @@
       </div>
       <DocumentationsDataTableServer
         ref="documentationsDataTableServer"
-        :filters="{
-          inProgram: programIdNumber,
-        }"
+        :filters="documentationsInProgramFilter"
       />
     </v-tabs-window-item>
   </TabCard>
@@ -62,12 +55,17 @@ import { isEmpty, isNil } from "lodash"
 import { computed, ref } from "vue"
 import { useRouter } from "vue-router"
 
-import { VendorProgram, VendorProgramStatuses } from "@/api/vendor-programs-api"
+import {
+  VendorProgram,
+  VendorProgramStatuses,
+  VendorProgramWhereOptions,
+} from "@/api/vendor-programs-api"
 import programDocumentationsApi from "@/api/program-documentations-api"
 
 import useSnack from "@/use/use-snack"
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useProgram from "@/use/use-program"
+import { DocumentationFiltersOptions, DocumentationQueryOptions } from "@/use/use-documentations"
 
 import TabCard from "@/components/common/TabCard.vue"
 
@@ -81,6 +79,28 @@ const programIdNumber = computed(() => parseInt(props.programId))
 const { program, isLoading } = useProgram(programIdNumber)
 
 const documentationsIds = ref<number[]>([])
+
+const vendorProgramsAcceptedWhereOptions = computed<VendorProgramWhereOptions>(() => {
+  return { programId: programIdNumber.value, status: VendorProgramStatuses.ACCEPTED }
+})
+
+const vendorProgramsPendingWhereOptions = computed<VendorProgramWhereOptions>(() => {
+  return { programId: programIdNumber.value, status: VendorProgramStatuses.PENDING }
+})
+
+const documentationsNotInProgramQuery = computed<DocumentationQueryOptions>(() => {
+  return {
+    filters: {
+      notInProgram: programIdNumber.value,
+    },
+  }
+})
+
+const documentationsInProgramFilter = computed<DocumentationFiltersOptions>(() => {
+  return {
+    inProgram: programIdNumber.value,
+  }
+})
 
 const router = useRouter()
 
@@ -135,10 +155,10 @@ async function createProgramDocumentations() {
 }
 
 const tabs = ref([
-  { value: 0, title: "Edit Program", icon: "mdi-folder-question" },
-  { value: 1, title: "Vendors In Program", icon: "mdi-folder-question" },
-  { value: 2, title: "Vendors Applying", icon: "mdi-folder-question" },
-  { value: 3, title: "Documentations", icon: "mdi-folder-question" },
+  { value: 0, title: "Program Details", icon: "mdi-office-building-cog" },
+  { value: 1, title: "Approved Vendors", icon: "mdi-storefront-check" },
+  { value: 2, title: "Pending Applications", icon: "mdi-storefront-plus" },
+  { value: 3, title: "Docs", icon: "mdi-file-sign" },
 ])
 
 const pageTitle = computed(() => {

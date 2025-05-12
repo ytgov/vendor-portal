@@ -7,8 +7,12 @@
     v-else-if="!isNil(vendorUser.user) && !isNil(vendorUser.vendor)"
     class="mb-5"
   >
-    <v-card-title>
-      {{ vendorUser.user.displayName }} ({{ makeDisplayRole(vendorUser.user.roles) }})
+    <v-card-title class="d-flex">
+      {{ vendorUser.user.displayName }}
+      <UserRolesChip
+        class="ml-3"
+        :roles="userRoles"
+      />
     </v-card-title>
     <v-card-text>
       <div class="d-flex mb-3">
@@ -16,16 +20,18 @@
           class="mt-2"
           size="40"
           color="#7A9A01"
-        >
-          mdi-account</v-icon
-        >
+          icon="mdi-account"
+        />
         <div class="ml-2 text-subtitle-1">
           {{ vendorUser.user.email }}
           <br />
-          <strong>Linked to {{ vendorUser.vendor.name }} on: </strong><br />{{
-            formatDate(vendorUser.decisionAt)
-          }}<br />
-          <strong>Approved by: </strong><br />{{ vendorUser.decisionByUser?.displayName }}
+          <strong>Linked to {{ vendorUser.vendor.name }} on: </strong>
+          <br />
+          {{ formatDate(vendorUser.decisionAt) }}
+          <br />
+          <strong>Approved by: </strong>
+          <br />
+          {{ vendorUser.decisionByUser?.displayName }}
         </div>
       </div>
     </v-card-text>
@@ -33,8 +39,8 @@
 </template>
 
 <script setup lang="ts">
-import { isNil, includes } from "lodash"
-import { toRefs } from "vue"
+import { isNil } from "lodash"
+import { computed, toRefs } from "vue"
 
 import { formatDate } from "@/utils/formatters"
 
@@ -42,13 +48,27 @@ import { UserRoles } from "@/api/users-api"
 
 import useVendorUser from "@/use/use-vendor-user"
 
+import UserRolesChip from "@/components/users/UserRolesChip.vue"
+
 const props = defineProps<{ vendorUserId: number }>()
 const { vendorUserId } = toRefs(props)
 const { vendorUser } = useVendorUser(vendorUserId)
 
-function makeDisplayRole(roles: UserRoles[]) {
-  if (includes(roles, UserRoles.SYSTEM_ADMIN)) return UserRoles.SYSTEM_ADMIN
-  if (includes(roles, UserRoles.PROGRAM_ADMIN)) return UserRoles.SYSTEM_ADMIN
-  return UserRoles.USER
+const userRoles = computed(() => {
+  if (isNil(vendorUser.value) || isNil(vendorUser.value.user)) return []
+  return vendorUser.value.user.roles.filter((role) => shouldDisplayRole(role))
+})
+
+function shouldDisplayRole(role: UserRoles) {
+  switch (role) {
+    case UserRoles.USER:
+      return false
+    case UserRoles.SYSTEM_ADMIN:
+      return true
+    case UserRoles.PROGRAM_ADMIN:
+      return true
+    default:
+      return false
+  }
 }
 </script>

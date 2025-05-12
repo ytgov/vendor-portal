@@ -100,9 +100,9 @@ const documentationsQuery = computed<DocumentationQueryOptions>(() => {
 
 const { documentations, totalCount, isLoading, refresh } = useDocumentations(documentationsQuery)
 
-useBreadcrumbs("Manage Documentations", [
+useBreadcrumbs("Manage Documentation", [
   {
-    title: "Documentations",
+    title: "Manage Documentation",
     to: {
       name: "administration/DocumentationsPage",
     },

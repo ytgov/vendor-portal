@@ -9,7 +9,7 @@ export type Breadcrumb = {
   to: RouteLocationRaw
 }
 
-export const BASE_CRUMB: Breadcrumb = {
+export const USER_CRUMB: Breadcrumb = {
   title: "Vendor Portal Home",
   disabled: false,
   to: {
@@ -31,11 +31,10 @@ const state = reactive<{
   breadcrumbs: Breadcrumb[]
 }>({
   title: "",
-  baseCrumb: BASE_CRUMB,
+  baseCrumb: USER_CRUMB,
   breadcrumbs: [],
 })
 
-// TODO: Consider supporting config option for setting base crumb?
 export function useBreadcrumbs(
   title?: MaybeRefOrGetter<string>,
   breadcrumbs?: MaybeRefOrGetter<Breadcrumb[]>,
@@ -43,6 +42,10 @@ export function useBreadcrumbs(
     baseCrumb?: Breadcrumb
   }>
 ) {
+  if (isUndefined(breadcrumbs)) {
+    state.breadcrumbs = []
+  }
+
   watch(
     () => toValue(title),
     (newTitle) => {

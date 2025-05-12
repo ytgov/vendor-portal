@@ -110,7 +110,7 @@ function goToProgramEdit(programId: number) {
 
 useBreadcrumbs("Manage Programs", [
   {
-    title: "Programs",
+    title: "Manage Programs",
     to: {
       name: "administration/ProgramsPage",
     },

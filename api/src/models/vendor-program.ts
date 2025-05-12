@@ -18,6 +18,7 @@ import {
 
 import BaseModel from "@/models/base-model"
 import User from "@/models/user"
+import Program from "@/models/program"
 
 /** Keep in sync with web/src/api/vendor-programs-api.ts */
 export enum VendorProgramStatuses {
@@ -95,6 +96,15 @@ export class VendorProgram extends BaseModel<
   // Magic Attributes
 
   // Associations
+
+  @BelongsTo(() => Program, {
+    foreignKey: {
+      name: "programId",
+      allowNull: false,
+    },
+  })
+  declare program?: NonAttribute<Program>
+
   @BelongsTo(() => User, {
     foreignKey: "requestedByUserId",
   })
