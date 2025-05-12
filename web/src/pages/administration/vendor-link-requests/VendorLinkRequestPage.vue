@@ -51,6 +51,8 @@
               label="Review notes"
               rows="1"
               auto-grow
+              :append-inner-icon="!isPending ? 'mdi-lock' : ''"
+              :readonly="!isPending"
             />
 
             <div class="d-flex">
@@ -60,8 +62,11 @@
                 label="Vendor ID"
                 hint="Assigned by Department of Finance, found on remittances"
                 persistent-hint
+                :append-inner-icon="!isPending ? 'mdi-lock' : ''"
+                :readonly="!isPending"
               />
               <v-btn
+                v-if="isPending"
                 class="mb-5"
                 prepend-icon="mdi-magnify"
                 :disabled="isEmpty(vendorLinkRequest.vendorId)"
@@ -84,7 +89,10 @@
               <VendorMatchCard :vendor="matchedVendor" />
               <p class="mt-5">If this match is correct, please click the "Approve" button below.</p>
             </div>
-            <v-row class="mt-5">
+            <v-row
+              v-if="isPending"
+              class="mt-5"
+            >
               <v-col>
                 <v-btn
                   :disabled="!canApprove"
@@ -182,6 +190,10 @@ const { vendorLinkRequest, isLoading, save } = useVendorLinkRequest(vendorLinkRe
 
 const isApproved = computed(
   () => vendorLinkRequest.value?.status === VendorLinkRequestStatuses.ACCEPTED
+)
+
+const isPending = computed(
+  () => vendorLinkRequest.value?.status === VendorLinkRequestStatuses.PENDING
 )
 
 const matchedVendor = ref<Vendor | null>(null)
