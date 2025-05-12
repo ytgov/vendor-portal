@@ -73,6 +73,13 @@
       <v-col class="d-flex">
         <v-spacer />
         <v-btn
+          :loading="isUpdating"
+          color="error"
+          variant="outlined"
+          :to="{ name: 'administration/ProgramsPage' }"
+          text="Go back"
+        />
+        <v-btn
           type="submit"
           class="ml-3"
           :loading="isUpdating"
