@@ -12,7 +12,7 @@ export class DestroyService extends BaseService {
   }
 
   async perform() {
-    throw new Error("Not implemented")
+    await this.programDocumentation.destroy()
   }
 }
 
