@@ -42,10 +42,26 @@
           @click="createProgramDocumentations"
         />
       </div>
-      <DocumentationsDataTableServer
-        ref="documentationsDataTableServer"
-        :filters="documentationsInProgramFilter"
-      />
+      <ProgramDocumentationsDataTableServer
+        ref="programDocumentationsDataTableServer"
+        :headers="programDocumentationsDataTableServerHeaders"
+        :where="programDocumentationsWhereOptions"
+      >
+        <template #item.name="{ item }">
+          {{ item.documentation.name }}
+        </template>
+        <template #item.format="{ item }">
+          {{ item.documentation.format }}
+        </template>
+        <template #item.actions="{ item }">
+          <v-btn
+            color="warning"
+            size="small"
+            text="Remove Documentation"
+            @click="removeProgramDocumentation(item.id)"
+          />
+        </template>
+      </ProgramDocumentationsDataTableServer>
     </v-tabs-window-item>
   </TabCard>
 </template>
@@ -60,19 +76,22 @@ import {
   VendorProgramStatuses,
   VendorProgramWhereOptions,
 } from "@/api/vendor-programs-api"
-import programDocumentationsApi from "@/api/program-documentations-api"
+import programDocumentationsApi, {
+  ProgramDocumentationWhereOptions,
+} from "@/api/program-documentations-api"
 
 import useSnack from "@/use/use-snack"
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useProgram from "@/use/use-program"
-import { DocumentationFiltersOptions, DocumentationQueryOptions } from "@/use/use-documentations"
+import { DocumentationQueryOptions } from "@/use/use-documentations"
 
 import TabCard from "@/components/common/TabCard.vue"
 
 import ProgramEditForm from "@/components/programs/ProgramEditForm.vue"
-import DocumentationsDataTableServer from "@/components/documentations/DocumentationsDataTableServer.vue"
 import VendorProgramsDataTableServer from "@/components/vendor-programs/VendorProgramsDataTableServer.vue"
 import DocumentationsSearchableAutocomplete from "@/components/documentations/DocumentationsSearchableAutocomplete.vue"
+
+import ProgramDocumentationsDataTableServer from "@/components/program-documentations/ProgramDocumentationsDataTableServer.vue"
 
 const props = defineProps<{ programId: string }>()
 const programIdNumber = computed(() => parseInt(props.programId))
@@ -93,12 +112,6 @@ const documentationsNotInProgramQuery = computed<DocumentationQueryOptions>(() =
     filters: {
       notInProgram: programIdNumber.value,
     },
-  }
-})
-
-const documentationsInProgramFilter = computed<DocumentationFiltersOptions>(() => {
-  return {
-    inProgram: programIdNumber.value,
   }
 })
 
@@ -125,13 +138,36 @@ function goToVendorProgramPage(vendorProgram: VendorProgram) {
   })
 }
 
-const documentationsDataTableServer = ref<InstanceType<
-  typeof DocumentationsDataTableServer
+const programDocumentationsDataTableServer = ref<InstanceType<
+  typeof ProgramDocumentationsDataTableServer
 > | null>(null)
 
-const isCreatingProgramDocumentations = ref(false)
+const programDocumentationsDataTableServerHeaders = [
+  { title: "Name", key: "name" },
+  { title: "Format", key: "format" },
+  { title: "", key: "actions", align: "end" as const, sortable: false },
+]
+
+const programDocumentationsWhereOptions = computed<ProgramDocumentationWhereOptions>(() => {
+  return {
+    programId: programIdNumber.value,
+  }
+})
 
 const snack = useSnack()
+
+async function removeProgramDocumentation(documentationId: number) {
+  try {
+    await programDocumentationsApi.delete(documentationId)
+    await programDocumentationsDataTableServer.value?.refresh()
+    snack.success("Program Documentation removed")
+  } catch (error) {
+    console.error(error)
+    snack.error(`Failed to remove Program Documentation: ${error}`)
+  }
+}
+
+const isCreatingProgramDocumentations = ref(false)
 
 async function createProgramDocumentations() {
   if (isNil(programIdNumber.value)) return
@@ -151,7 +187,7 @@ async function createProgramDocumentations() {
   }
 
   documentationsIds.value = []
-  await documentationsDataTableServer.value?.refresh()
+  await programDocumentationsDataTableServer.value?.refresh()
 }
 
 const tabs = ref([

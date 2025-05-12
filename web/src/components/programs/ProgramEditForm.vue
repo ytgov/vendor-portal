@@ -18,6 +18,7 @@
           v-model="program.name"
           label="Name"
           :rules="[required]"
+          hide-details
         />
       </v-col>
       <v-col
@@ -28,6 +29,7 @@
           v-model="program.isActive"
           label="Is Active"
           :rules="[required]"
+          hide-details
         />
       </v-col>
     </v-row>
@@ -40,6 +42,7 @@
           v-model="program.department"
           label="Depertment"
           :rules="[required]"
+          hide-details
         />
       </v-col>
       <v-col
@@ -50,6 +53,7 @@
           v-model="program.offeredBy"
           label="Offered By"
           :rules="[required]"
+          hide-details
         />
       </v-col>
     </v-row>
@@ -61,12 +65,20 @@
         <v-textarea
           v-model="program.description"
           label="Description"
+          hide-details
         />
       </v-col>
     </v-row>
     <v-row>
       <v-col class="d-flex">
         <v-spacer />
+        <v-btn
+          :loading="isUpdating"
+          color="error"
+          variant="outlined"
+          :to="{ name: 'administration/ProgramsPage' }"
+          text="Go back"
+        />
         <v-btn
           type="submit"
           class="ml-3"

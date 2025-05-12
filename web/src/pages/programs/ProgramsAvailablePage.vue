@@ -10,7 +10,7 @@
       >
         <ProgramInfoCard
           :program-id="`${program.id}`"
-          :show-apply="true"
+          :show-apply="canApply"
         />
       </v-col>
     </v-row>
@@ -18,14 +18,26 @@
 </template>
 
 <script setup lang="ts">
+import { isEmpty } from "lodash"
+import { computed } from "vue"
+
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import usePrograms from "@/use/use-programs"
+import useVendorUsers from "@/use/use-vendor-users"
 
 import ProgramInfoCard from "@/components/programs/ProgramInfoCard.vue"
 
 const { programs } = usePrograms()
+const { vendorUsers } = useVendorUsers()
+
+const canApply = computed(() => isEmpty(vendorUsers))
 
 useBreadcrumbs("Available Programs", [
-  { title: "Programs available in this portal ", to: "/programs" },
+  {
+    title: "Programs available in this portal ",
+    to: {
+      name: "programs/ProgramsAvailablePage",
+    },
+  },
 ])
 </script>
