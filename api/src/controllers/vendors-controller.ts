@@ -64,15 +64,7 @@ export class VendorsController extends BaseController<Vendor> {
   }
 
   private async loadVendor() {
-    const vendorSearchService = new VendorSearchService(this.params.vendorId)
-    const vendor = await vendorSearchService.perform()
-
-    // _TODO_ Hacky fix, should refactor
-    if (isNil(vendor) && this.currentUser.isSystemAdmin) {
-      return await vendorSearchService.findVendor(this.params.vendorId)
-    }
-
-    return vendor
+    return VendorSearchService.perform(this.params.vendorId)
   }
 
   private buildPolicy(vendor: Vendor) {
