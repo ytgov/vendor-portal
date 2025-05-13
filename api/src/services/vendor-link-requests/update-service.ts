@@ -23,15 +23,18 @@ export class UpdateService extends BaseService {
       this.vendorLinkRequest.status === VendorLinkRequestStatuses.PENDING &&
       this.attributes.status === VendorLinkRequestStatuses.ACCEPTED
     ) {
-      if (isNil(this.attributes.matchedVendorId)) {
-        throw new Error("Missing matchedVendorId")
+      if (isNil(this.attributes.vendorId)) {
+        throw new Error("Missing vendorId")
       }
 
-      const foundVendor = await VendorSearchService.perform(this.attributes.matchedVendorId)
+      const foundVendor = await VendorSearchService.perform(this.attributes.vendorId)
 
       if (isNil(foundVendor)) {
         throw new Error("Failed to find vendor")
       }
+
+      this.attributes.decisionByUserId = this.currentUser.id
+      this.attributes.decisionAt = new Date()
 
       return db.transaction(async () => {
         await VendorUser.create({

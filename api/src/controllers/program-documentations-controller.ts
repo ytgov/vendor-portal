@@ -24,6 +24,7 @@ export class ProgramDocumentationsController extends BaseController<ProgramDocum
         where,
         limit: this.pagination.limit,
         offset: this.pagination.offset,
+        include: ["documentation"],
       })
 
       const serializedProgramDocumentations = IndexSerializer.perform(programDocumentations)

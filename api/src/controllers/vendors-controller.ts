@@ -40,7 +40,7 @@ export class VendorsController extends BaseController<Vendor> {
 
   async show() {
     try {
-      const vendor = await VendorSearchService.perform(this.params.vendorId)
+      const vendor = await this.loadVendor()
       if (isNil(vendor)) {
         return this.response.status(404).json({
           message: "Vendor not found",
@@ -61,6 +61,10 @@ export class VendorsController extends BaseController<Vendor> {
         message: `Error fetching vendor: ${error}`,
       })
     }
+  }
+
+  private async loadVendor() {
+    return VendorSearchService.perform(this.params.vendorId)
   }
 
   private buildPolicy(vendor: Vendor) {

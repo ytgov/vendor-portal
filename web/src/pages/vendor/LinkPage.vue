@@ -99,6 +99,9 @@
                 </div>
                 <div v-if="matchedVendor">
                   <VendorMatchCard :vendor="matchedVendor" />
+                  <p class="mt-5">
+                    If this match is correct, please click the "Continue" button below.
+                  </p>
                 </div>
               </v-col>
             </v-row>
