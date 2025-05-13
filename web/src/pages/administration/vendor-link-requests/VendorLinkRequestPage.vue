@@ -174,6 +174,7 @@ import SimpleCard from "@/components/common/SimpleCard.vue"
 import { formatDate, formatDateRelative } from "@/utils/formatters"
 
 import vendorsApi from "@/api/vendors-api"
+import vendorUsersApi from "@/api/vendor-users-api"
 import { VendorLinkRequestStatuses } from "@/api/vendor-link-requests-api"
 
 import useSnack from "@/use/use-snack"
@@ -219,6 +220,13 @@ async function doSearch() {
     if (isNil(vendorLinkRequest.value.vendorId)) return
 
     const { vendor } = await vendorsApi.get(vendorLinkRequest.value.vendorId)
+
+    const { totalCount } = await vendorUsersApi.list({ where: { vendorId: vendor.id } })
+
+    if (totalCount !== 0) {
+      vendorSearchError.value = "Requesting user is already linked to this Vendor ID"
+      return
+    }
 
     matchedVendor.value = vendor
     vendorSearchError.value = ""
