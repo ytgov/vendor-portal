@@ -176,9 +176,39 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: "/errors/unauthorized",
-    name: "UnauthorizedPage",
-    component: () => import("@/pages/UnauthorizedPage.vue"),
-    meta: { requiresAuth: false },
+    name: "errors/UnauthorizedPage",
+    component: () => import("@/pages/errors/UnauthorizedPage.vue"),
+    meta: {
+      title: "Unauthorized",
+      requiresAuth: false,
+    },
+  },
+  {
+    path: "/errors/forbidden",
+    name: "errors/ForbiddenPage",
+    component: () => import("@/pages/errors/ForbiddenPage.vue"),
+    meta: {
+      title: "Forbidden",
+      requiresAuth: false,
+    },
+  },
+  {
+    path: "/errors/internal-server-error",
+    name: "errors/InternalServerErrorPage",
+    component: () => import("@/pages/errors/InternalServerErrorPage.vue"),
+    meta: {
+      title: "Internal Server Error",
+      requiresAuth: false,
+    },
+  },
+  {
+    path: "/errors/not-found",
+    name: "errors/NotFoundPage",
+    component: () => import("@/pages/errors/NotFoundPage.vue"),
+    meta: {
+      title: "Not Found",
+      requiresAuth: false,
+    },
   },
   {
     path: "/:pathMatch(.*)*",
