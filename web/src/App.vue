@@ -26,11 +26,12 @@ import { computed, onErrorCaptured, ref, watch } from "vue"
 import { useAuth0 } from "@auth0/auth0-vue"
 import { useRoute, useRouter } from "vue-router"
 
+import ApiError from "@/api/api-error"
+
 import useCurrentUser from "@/use/use-current-user"
 
 import PageLoader from "@/components/common/PageLoader.vue"
 import AppSnackbar from "@/components/common/AppSnackbar.vue"
-import ApiError from "./api/api-error"
 
 const route = useRoute()
 const isUnauthenticatedRoute = computed(() => route.meta.requiresAuth === false)
@@ -88,7 +89,7 @@ function redirectToAppropriateErrorPage(httpErrorCode: number) {
   switch (httpErrorCode) {
     case 401:
       return router.replace({
-        name: "errors/UnauthorizedPage",
+        name: "SignInPage",
       })
     case 403:
       return router.replace({
