@@ -216,12 +216,24 @@ const canReject = computed(() => {
 
 async function doSearch() {
   try {
-    if (isNil(vendorLinkRequest.value)) return
-    if (isNil(vendorLinkRequest.value.vendorId)) return
+    if (isNil(vendorLinkRequest.value)) {
+      vendorSearchError.value = "No vendor link request found"
+      return
+    }
+    if (isNil(vendorLinkRequest.value.vendorId)) {
+      vendorSearchError.value = "Search failed no vendor ID found"
+      return
+    }
+    if (isNil(vendorLinkRequest.value.user)) {
+      vendorSearchError.value = "Requesting user not found"
+      return
+    }
 
     const { vendor } = await vendorsApi.get(vendorLinkRequest.value.vendorId)
 
-    const { totalCount } = await vendorUsersApi.list({ where: { vendorId: vendor.id } })
+    const { totalCount } = await vendorUsersApi.list({
+      where: { vendorId: vendor.id, userId: vendorLinkRequest.value.user.id },
+    })
 
     if (totalCount !== 0) {
       vendorSearchError.value = "Requesting user is already linked to this Vendor ID"
