@@ -177,6 +177,8 @@ async function createVendorDocumentations(vendorId: number) {
   }
 }
 
+const emit = defineEmits<{ saved: [programId: number] }>()
+
 async function validateAndSave() {
   if (isNil(programIdNumber.value)) return
   if (formRef.value === null) return
@@ -194,6 +196,7 @@ async function validateAndSave() {
       programId: programIdNumber.value,
     })
 
+    emit("saved", programIdNumber.value)
     snack.notify("Application Submitted", {
       color: "success",
     })

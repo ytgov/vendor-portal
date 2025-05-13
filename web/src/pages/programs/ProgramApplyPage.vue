@@ -28,7 +28,10 @@
             generally takes less than 2 business days.
           </p>
 
-          <ProgramApplyForm :program-id="programId" />
+          <ProgramApplyForm
+            :program-id="programId"
+            @saved="onApply"
+          />
         </v-card-text>
       </v-card>
     </v-col>
@@ -36,12 +39,20 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from "vue-router"
+
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 
 import ProgramApplyForm from "@/components/programs/ProgramApplyForm.vue"
 import ProgramInfoCard from "@/components/programs/ProgramInfoCard.vue"
 
 defineProps<{ programId: string }>()
+
+const router = useRouter()
+
+function onApply() {
+  router.push({ name: "programs/ProgramsAvailablePage" })
+}
 
 useBreadcrumbs("Apply to a Program", [
   {

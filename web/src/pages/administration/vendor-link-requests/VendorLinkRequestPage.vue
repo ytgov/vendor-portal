@@ -51,6 +51,8 @@
               label="Review notes"
               rows="1"
               auto-grow
+              :append-inner-icon="!isPending ? 'mdi-lock' : ''"
+              :readonly="!isPending"
             />
 
             <div class="d-flex">
@@ -60,8 +62,11 @@
                 label="Vendor ID"
                 hint="Assigned by Department of Finance, found on remittances"
                 persistent-hint
+                :append-inner-icon="!isPending ? 'mdi-lock' : ''"
+                :readonly="!isPending"
               />
               <v-btn
+                v-if="isPending"
                 class="mb-5"
                 prepend-icon="mdi-magnify"
                 :disabled="isEmpty(vendorLinkRequest.vendorId)"
@@ -84,7 +89,10 @@
               <VendorMatchCard :vendor="matchedVendor" />
               <p class="mt-5">If this match is correct, please click the "Approve" button below.</p>
             </div>
-            <v-row class="mt-5">
+            <v-row
+              v-if="isPending"
+              class="mt-5"
+            >
               <v-col>
                 <v-btn
                   :disabled="!canApprove"
@@ -166,6 +174,7 @@ import SimpleCard from "@/components/common/SimpleCard.vue"
 import { formatDate, formatDateRelative } from "@/utils/formatters"
 
 import vendorsApi from "@/api/vendors-api"
+import vendorUsersApi from "@/api/vendor-users-api"
 import { VendorLinkRequestStatuses } from "@/api/vendor-link-requests-api"
 
 import useSnack from "@/use/use-snack"
@@ -182,6 +191,10 @@ const { vendorLinkRequest, isLoading, save } = useVendorLinkRequest(vendorLinkRe
 
 const isApproved = computed(
   () => vendorLinkRequest.value?.status === VendorLinkRequestStatuses.ACCEPTED
+)
+
+const isPending = computed(
+  () => vendorLinkRequest.value?.status === VendorLinkRequestStatuses.PENDING
 )
 
 const matchedVendor = ref<Vendor | null>(null)
@@ -203,10 +216,29 @@ const canReject = computed(() => {
 
 async function doSearch() {
   try {
-    if (isNil(vendorLinkRequest.value)) return
-    if (isNil(vendorLinkRequest.value.vendorId)) return
+    if (isNil(vendorLinkRequest.value)) {
+      vendorSearchError.value = "No vendor link request found"
+      return
+    }
+    if (isNil(vendorLinkRequest.value.vendorId)) {
+      vendorSearchError.value = "Search failed no vendor ID found"
+      return
+    }
+    if (isNil(vendorLinkRequest.value.user)) {
+      vendorSearchError.value = "Requesting user not found"
+      return
+    }
 
     const { vendor } = await vendorsApi.get(vendorLinkRequest.value.vendorId)
+
+    const { totalCount } = await vendorUsersApi.list({
+      where: { vendorId: vendor.id, userId: vendorLinkRequest.value.user.id },
+    })
+
+    if (totalCount !== 0) {
+      vendorSearchError.value = "Requesting user is already linked to this Vendor ID"
+      return
+    }
 
     matchedVendor.value = vendor
     vendorSearchError.value = ""
