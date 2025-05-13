@@ -33,6 +33,9 @@ export class UpdateService extends BaseService {
         throw new Error("Failed to find vendor")
       }
 
+      this.attributes.decisionByUserId = this.currentUser.id
+      this.attributes.decisionAt = new Date()
+
       return db.transaction(async () => {
         await VendorUser.create({
           vendorId: foundVendor.id,
