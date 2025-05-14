@@ -67,7 +67,7 @@ function goBack() {
 async function signOut() {
   resetCurrentUser()
 
-  const returnTo = encodeURI(window.location.origin + "/sign-in")
+  const returnTo = encodeURI(window.location.origin)
   return logout({
     logoutParams: {
       returnTo,
