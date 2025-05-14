@@ -25,8 +25,6 @@ import ProgramsDataTableServer from "@/components/programs/ProgramsDataTableServ
 
 const search = ref("")
 
-const router = useRouter()
-
 const searchFilter = computed<Pick<ProgramFiltersOptions, "search">>(() => {
   if (isEmpty(search.value)) {
     return {}
@@ -43,9 +41,9 @@ const filters = computed<ProgramFiltersOptions>(() => {
   }
 })
 
-function goToProgramEdit(program: Program) {
-  console.log(program)
+const router = useRouter()
 
+function goToProgramEdit(program: Program) {
   router.push({
     name: "administration/ProgramManagePage",
     params: { programId: program.id },
