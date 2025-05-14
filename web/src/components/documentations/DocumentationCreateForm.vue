@@ -18,6 +18,7 @@
           v-model="documentation.name"
           label="Name"
           :rules="[required]"
+          hide-details
         />
       </v-col>
       <v-col
@@ -27,16 +28,18 @@
         <v-text-field
           v-model="documentation.description"
           label="Description"
+          hide-details
         />
       </v-col>
       <v-col
         cols="12"
         md="6"
       >
-        <documentation-format-select
+        <DocumentationFormatSelect
           v-model="documentation.format"
           label="Format"
           :rules="[required]"
+          hide-details
         />
       </v-col>
     </v-row>
@@ -73,7 +76,8 @@ import { required } from "@/utils/validators"
 import { Documentation, documentationsApi } from "@/api/documentations-api"
 
 import useSnack from "@/use/use-snack"
-import DocumentationFormatSelect from "./DocumentationFormatSelect.vue"
+
+import DocumentationFormatSelect from "@/components/documentations/DocumentationFormatSelect.vue"
 
 const documentation = ref<Partial<Documentation>>({})
 
