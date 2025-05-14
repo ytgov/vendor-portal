@@ -85,7 +85,10 @@ const vendorvendorLinkRequestsQuery = computed<VendorLinkRequestQueryOptions>(()
 })
 
 const { vendorLinkRequests, totalCount, isLoading, refresh } = useVendorLinkRequests(
-  vendorvendorLinkRequestsQuery
+  vendorvendorLinkRequestsQuery,
+  {
+    skipWatchIf: () => props.waiting,
+  }
 )
 
 type VendorLinkRequestTableRow = {
