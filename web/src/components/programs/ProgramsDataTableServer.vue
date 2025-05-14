@@ -9,14 +9,35 @@
     style="border: 1px #ccc solid; border-radius: 3px"
     @click:row="rowClicked"
   >
+    <template #item.updatedAt="{ value }">
+      {{ formatDate(value) }}
+    </template>
     <template #item.createdAt="{ value }">
       {{ formatDate(value) }}
+    </template>
+    <template
+      v-for="(_, name) in $slots"
+      :key="name"
+      #[name]="slotProps"
+    >
+      <slot
+        :name="name"
+        v-bind="slotProps"
+      ></slot>
     </template>
   </v-data-table-server>
 </template>
 
+<script lang="ts">
+export const defaultHeaders = [
+  { title: "Name", key: "name" },
+  { title: "Department", key: "department" },
+  { title: "Offered By", key: "offeredBy" },
+]
+</script>
+
 <script setup lang="ts">
-import { computed, ref } from "vue"
+import { computed } from "vue"
 
 import { formatDate } from "@/utils/formatters"
 
@@ -28,18 +49,15 @@ import usePrograms, {
   ProgramWhereOptions,
 } from "@/use/use-programs"
 
-const headers = ref([
-  { title: "ID", key: "id" },
-  { title: "Created At", key: "createdAt" },
-])
-
 const props = withDefaults(
   defineProps<{
+    headers?: { title: string; key: string }[]
     filters?: ProgramFiltersOptions
     where?: ProgramWhereOptions
     waiting?: boolean
   }>(),
   {
+    headers: () => defaultHeaders,
     filters: () => ({}),
     where: () => ({}),
     waiting: false,
@@ -59,17 +77,18 @@ const programsQuery = computed<ProgramQueryOptions>(() => {
   }
 })
 
-const { programs, totalCount, isLoading, refresh } = usePrograms(programsQuery)
+const { programs, totalCount, isLoading, refresh } = usePrograms(programsQuery, {
+  skipWatchIf: () => props.waiting,
+})
 
 type ProgramTableRow = {
   item: Program
 }
 
-const emit = defineEmits<{ click: [programId: number] }>()
+const emit = defineEmits<{ clicked: [program: Program] }>()
 
 function rowClicked(_event: unknown, row: ProgramTableRow) {
-  const programId = row.item.id
-  emit("click", programId)
+  emit("clicked", row.item)
 }
 
 defineExpose({ refresh })
