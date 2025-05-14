@@ -66,17 +66,12 @@
         cols="12"
         md="6"
       >
-        <h3 class="mb-1">Roles</h3>
+        <h3 class="ma-2">Roles</h3>
 
-        <v-chip
-          v-for="(role, index) in user.roles"
-          :key="index"
-          class="ma-2"
-          color="info"
-          size="large"
-        >
-          {{ formatRole(role) }}
-        </v-chip>
+        <UserRolesSelect
+          v-model="user.roles"
+          class="mt-5"
+        />
       </v-col>
     </v-row>
     <v-row>
@@ -112,10 +107,11 @@
 <script setup lang="ts">
 import { isNil } from "lodash"
 import { ref, toRefs } from "vue"
-import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
 import { type VBtn, type VForm } from "vuetify/lib/components/index.mjs"
+
+import UserRolesSelect from "@/components/users/UserRolesSelect.vue"
 
 import { required } from "@/utils/validators"
 import useSnack from "@/use/use-snack"
@@ -159,6 +155,8 @@ async function saveWrapper() {
 
   if (isNil(user.value)) return
 
+  console.log(user.value)
+
   await save()
   snack.success("User saved!")
   emit("saved", user.value.id)
@@ -182,11 +180,5 @@ async function confirmThenDelete(user: User) {
   } finally {
     isDeleting.value = false
   }
-}
-
-const { t } = useI18n()
-
-function formatRole(role: string) {
-  return t(`user.roles.${role}`, role)
 }
 </script>
