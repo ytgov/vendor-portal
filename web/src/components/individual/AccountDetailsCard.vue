@@ -54,16 +54,16 @@
             :to="{ name: 'individual/ProfilePage' }"
             block
             color="secondary"
-            >Edit Profile
-          </v-btn>
+            text="Edit Profile"
+          />
         </v-col> -->
         <v-col cols="6">
           <v-btn
             block
             color="warning"
             :to="{ name: 'vendor/LinkPage' }"
-            >Link to Vendor</v-btn
-          >
+            text="Link to Vendor"
+          />
         </v-col>
       </v-row>
     </v-card-text>
