@@ -13,7 +13,6 @@ import {
   Index,
   NotNull,
   PrimaryKey,
-  ValidateAttribute,
 } from "@sequelize/core/decorators-legacy"
 import { isNil } from "lodash"
 
@@ -66,16 +65,15 @@ export class User extends BaseModel<InferAttributes<User>, InferCreationAttribut
       return roles.split(",")
     },
     set(value: string[]) {
+      for (const role of value) {
+        if (!Object.values<string>(UserRoles).includes(role)) {
+          throw new Error(`Role "${role}" must be one of ${Object.values(UserRoles).join(", ")}`)
+        }
+      }
       this.setDataValue("roles", value.join(","))
     },
   })
   @NotNull
-  @ValidateAttribute({
-    isIn: {
-      args: [Object.values(UserRoles)],
-      msg: `Role must be one of ${Object.values(UserRoles).join(", ")}`,
-    },
-  })
   declare roles: string[]
 
   @Attribute(DataTypes.DATE(0))
