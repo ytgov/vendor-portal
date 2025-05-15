@@ -1,7 +1,7 @@
 <template>
   <v-form
     ref="form"
-    @submit.prevent="saveWrapper"
+    @submit.prevent="validateAndCreate"
   >
     <v-row>
       <v-col cols="12">
@@ -72,17 +72,15 @@
           color="error"
           variant="outlined"
           :to="{ name: 'administration/UsersPage' }"
-        >
-          Cancel
-        </v-btn>
+          text="Cancel"
+        />
         <v-btn
           class="ml-3"
           :loading="isLoading"
           type="submit"
           color="success"
-        >
-          Create
-        </v-btn>
+          text="Create"
+        />
       </v-col>
     </v-row>
   </v-form>
@@ -110,7 +108,7 @@ const userAttributes = ref<Partial<User>>({
 const isLoading = ref(false)
 const form = ref<InstanceType<typeof VForm> | null>(null)
 
-async function saveWrapper() {
+async function validateAndCreate() {
   if (isNil(form.value)) return
 
   const { valid } = await form.value.validate()
