@@ -79,7 +79,8 @@ export class VendorDocumentationsController extends BaseController<VendorDocumen
       const permittedAttributes = policy.permitAttributesForCreate(this.request.body)
       const newVendorDocumentation = await CreateService.perform(
         permittedAttributes,
-        this.request.body.content
+        this.request.body.content,
+        this.currentUser
       )
       return this.response.status(201).json({ vendorDocumentation: newVendorDocumentation })
     } catch (error) {
