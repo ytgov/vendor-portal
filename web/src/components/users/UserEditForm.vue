@@ -71,6 +71,7 @@
         <UserRolesSelect
           v-model="user.roles"
           class="mt-5"
+          :rules="[required]"
         />
       </v-col>
     </v-row>
