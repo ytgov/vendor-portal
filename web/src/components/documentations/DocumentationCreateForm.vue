@@ -42,6 +42,16 @@
           hide-details
         />
       </v-col>
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <v-checkbox
+          v-model="documentation.expires"
+          label="Expires"
+          hide-details
+        />
+      </v-col>
     </v-row>
     <v-row>
       <v-col class="d-flex">
