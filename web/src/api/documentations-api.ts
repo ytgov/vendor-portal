@@ -11,6 +11,7 @@ export type Documentation = {
   name: string
   description: string | null
   format: DocumentationFormats
+  expires: boolean
   createdAt: string
   updatedAt: string
 }
@@ -18,6 +19,7 @@ export type Documentation = {
 export type DocumentationWhereOptions = {
   name?: string
   format?: DocumentationFormats
+  expires?: boolean
 }
 
 /** Keep in sync with scopes in api/src/models/documentation.ts */
