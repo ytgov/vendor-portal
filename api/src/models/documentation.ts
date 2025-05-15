@@ -50,6 +50,11 @@ export class Documentation extends BaseModel<
   })
   declare format: string
 
+  @Attribute(DataTypes.BOOLEAN)
+  @NotNull
+  @Default(false)
+  declare expires: CreationOptional<boolean>
+
   @Attribute(DataTypes.DATE(0))
   @NotNull
   @Default(sql.fn("getutcdate"))
