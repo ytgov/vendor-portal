@@ -6,7 +6,7 @@
   <v-form
     v-else
     ref="form"
-    @submit.prevent="saveWrapper"
+    @submit.prevent="validateAndSave"
   >
     <v-row>
       <v-col
@@ -147,19 +147,22 @@ const router = useRouter()
 
 const form = ref<InstanceType<typeof VForm> | null>(null)
 
-async function saveWrapper() {
+async function validateAndSave() {
   if (isNil(form.value)) return
 
   const { valid } = await form.value.validate()
   if (!valid) return
 
-  if (isNil(user.value)) return
-
-  console.log(user.value)
-
-  await save()
-  snack.success("User saved!")
-  emit("saved", user.value.id)
+  try {
+    if (isNil(user.value)) return
+    console.log(user.value)
+    await save()
+    snack.success("User saved!")
+    emit("saved", user.value.id)
+  } catch (error) {
+    console.error(error)
+    snack.error(`Failed to save user: ${error}`)
+  }
 }
 
 const isDeleting = ref(false)
