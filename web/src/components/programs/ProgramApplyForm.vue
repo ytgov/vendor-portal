@@ -58,10 +58,12 @@
             cols="12"
             md="6"
           >
-            <DatePickerMenu
-              v-model="fileExpiresAtFormData[index]"
-              :field-options="{ label: 'Document expiration', hideDetails: true }"
-            />
+            <div v-if="documentation.expires">
+              <DatePickerMenu
+                v-model="fileExpiresAtFormData[index]"
+                :field-options="{ label: 'Document expiration', hideDetails: true }"
+              />
+            </div>
           </v-col>
         </v-row>
       </template>
@@ -86,7 +88,6 @@ import vendorProgramsApi from "@/api/vendor-programs-api"
 import { DocumentationFormats } from "@/api/documentations-api"
 
 import useSnack from "@/use/use-snack"
-import useCurrentUser from "@/use/use-current-user"
 import useProgram from "@/use/use-program"
 import useDocumentations, { DocumentationQueryOptions } from "@/use/use-documentations"
 
@@ -104,8 +105,6 @@ const query = ref<DocumentationQueryOptions>({
 })
 
 const { documentations, isLoading } = useDocumentations(query)
-
-const { currentUser } = useCurrentUser<true>()
 
 const vendorId = ref<number | null>(null)
 const textFormData = ref<Record<number, string | null | undefined>>({})
@@ -129,7 +128,6 @@ async function createTextVendorDocumentation(
   const attributes: Partial<VendorDocumentation> = {
     vendorId,
     documentationId,
-    createdByUserId: currentUser.value.id, // _TODO_ set this in backend
     textValue: data,
   }
 
@@ -140,12 +138,11 @@ async function createFileVendorDocumentation(
   vendorId: number,
   documentationId: number,
   data: File,
-  expiresAt: string
+  expiresAt: string | null | undefined
 ) {
   const attributes: Partial<VendorDocumentation> = {
     vendorId,
     documentationId,
-    createdByUserId: currentUser.value.id, // _TODO_ set this in backend
     expiresAt,
     fileName: data.name,
     mimeType: data.type,
@@ -171,7 +168,6 @@ async function createVendorDocumentations(vendorId: number) {
     const expiresAt = fileExpiresAtFormData.value[key]
 
     if (isNil(data)) continue
-    if (isNil(expiresAt)) continue
 
     await createFileVendorDocumentation(vendorId, parseInt(key) + 1, data, expiresAt)
   }
