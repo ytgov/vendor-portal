@@ -20,9 +20,7 @@ export class CreateService extends BaseService {
 
     const auth0SubjectOrFallback = auth0Subject || email
 
-    if (isNil(roles)) {
-      throw new Error("Roles are required")
-    }
+    const rolesOrFallback = roles || [User.Roles.USER]
 
     const [emailLocalPart] = email.split("@")
     /**
@@ -38,17 +36,17 @@ export class CreateService extends BaseService {
     const firstNameOrFallback = firstName || firstNameFallback
     const lastNameOrFallback = lastName || lastNameFallback
 
-    const workflowCategory = await User.create({
+    const user = await User.create({
       ...optionalAttributes,
       email,
       auth0Subject: auth0SubjectOrFallback,
       firstName: firstNameOrFallback,
       lastName: lastNameOrFallback,
       displayName: `${firstNameOrFallback} ${lastNameOrFallback}`,
-      roles,
+      roles: rolesOrFallback,
     })
 
-    return workflowCategory
+    return user
   }
 }
 
