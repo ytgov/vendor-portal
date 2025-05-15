@@ -38,11 +38,11 @@ export class DocumentationsPolicy extends PolicyFactory(Documentation) {
   }
 
   permittedAttributes(): Path[] {
-    return ["name", "description", "format"]
+    return ["description"]
   }
 
   permittedAttributesForCreate(): Path[] {
-    return [...this.permittedAttributes()]
+    return ["name", "format", "expires", ...this.permittedAttributes()]
   }
 
   static policyScope(_user: User): FindOptions<Attributes<Documentation>> {
