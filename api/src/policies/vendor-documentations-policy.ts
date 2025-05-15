@@ -18,10 +18,7 @@ export class VendorDocumentationsPolicy extends PolicyFactory(VendorDocumentatio
       return true
     }
 
-    if (
-      this.record.createdByUserId === this.user.id &&
-      this.record.status === VendorDocumentation.Statuses.PENDING
-    ) {
+    if (this.record.status === VendorDocumentation.Statuses.PENDING) {
       return true
     }
 
@@ -60,7 +57,7 @@ export class VendorDocumentationsPolicy extends PolicyFactory(VendorDocumentatio
   }
 
   permittedAttributesForCreate(): Path[] {
-    return ["vendorId", "documentationId", "createdByUserId", ...this.permittedAttributes()]
+    return ["vendorId", "documentationId", ...this.permittedAttributes()]
   }
 
   static policyScope(user: User): FindOptions<Attributes<VendorDocumentation>> {
