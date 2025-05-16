@@ -16,8 +16,8 @@
       >
         <VendorSelect
           v-model="vendorId"
-          hide-details
           :rules="[required]"
+          hide-details
         />
       </v-col>
       <v-col
@@ -92,7 +92,6 @@ import vendorProgramsApi from "@/api/vendor-programs-api"
 import { DocumentationFormats } from "@/api/documentations-api"
 
 import useSnack from "@/use/use-snack"
-import useProgram from "@/use/use-program"
 import useDocumentations, { DocumentationQueryOptions } from "@/use/use-documentations"
 
 import VendorSelect from "@/components/vendors/VendorSelect.vue"
@@ -100,7 +99,6 @@ import DatePickerMenu from "@/components/common/DatePickerMenu.vue"
 
 const props = defineProps<{ programId: string }>()
 const programIdNumber = computed(() => parseInt(props.programId))
-useProgram(programIdNumber)
 
 const query = ref<DocumentationQueryOptions>({
   filters: {
