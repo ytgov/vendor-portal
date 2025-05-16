@@ -1,8 +1,10 @@
 import { Attributes, FindOptions } from "@sequelize/core"
+import sanitizeHtml from "sanitize-html"
 
 import { Path } from "@/utils/deep-pick"
 import { Program, User } from "@/models"
 import { ALL_RECORDS_SCOPE, PolicyFactory } from "@/policies/base-policy"
+import { isNil } from "lodash"
 
 export class ProgramsPolicy extends PolicyFactory(Program) {
   show(): boolean {
@@ -31,6 +33,13 @@ export class ProgramsPolicy extends PolicyFactory(Program) {
     }
 
     return false
+  }
+
+  sanitizeRecord(record: Partial<Program>): Partial<Program> {
+    if (!isNil(record.description)) {
+      record.description = sanitizeHtml(record.description)
+    }
+    return record
   }
 
   permittedAttributes(): Path[] {

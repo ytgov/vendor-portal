@@ -73,7 +73,9 @@ export class ProgramsController extends BaseController<Program> {
           .json({ message: "You are not authorized to create this program." })
       }
 
-      const permittedAttributes = policy.permitAttributesForCreate(this.request.body)
+      let permittedAttributes = policy.permitAttributesForCreate(this.request.body)
+      permittedAttributes = policy.sanitizeRecord(permittedAttributes)
+
       const newProgram = await CreateService.perform(permittedAttributes)
       return this.response.status(201).json({ program: newProgram })
     } catch (error) {
@@ -99,7 +101,9 @@ export class ProgramsController extends BaseController<Program> {
           .json({ message: "You are not authorized to update this program." })
       }
 
-      const permitAttributes = policy.permitAttributes(this.request.body)
+      let permitAttributes = policy.permitAttributes(this.request.body)
+      permitAttributes = policy.sanitizeRecord(permitAttributes)
+
       const newProgram = await UpdateService.perform(program, permitAttributes)
       return this.response.json({ program: newProgram })
     } catch (error) {
