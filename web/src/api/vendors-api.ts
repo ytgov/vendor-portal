@@ -51,6 +51,7 @@ export type VendorWhereOptions = {
 export type VendorFiltersOptions = {
   search?: string | string[]
   withPendingProgram?: number
+  withoutPendingProgram?: number
 }
 
 export type VendorQueryOptions = {

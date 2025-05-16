@@ -4,6 +4,7 @@ import {
   InferAttributes,
   InferCreationAttributes,
   type NonAttribute,
+  Op,
   sql,
 } from "@sequelize/core"
 import {
@@ -176,6 +177,26 @@ export class Vendor extends BaseModel<InferAttributes<Vendor>, InferCreationAttr
             },
           },
         ],
+      }
+    })
+
+    this.addScope("withoutPendingProgram", (programId: number) => {
+      return {
+        where: {
+          id: {
+            [Op.notIn]: sql`(
+              SELECT
+                vendor_id
+              FROM
+                vendor_programs
+              WHERE
+                deleted_at IS NULL
+                AND status = :status
+                AND program_id = :programId
+            )`,
+          },
+        },
+        replacements: { programId, status: VendorProgram.Statuses.PENDING },
       }
     })
   }
