@@ -12,13 +12,15 @@ export class CreateService extends BaseService {
   }
 
   async perform(): Promise<User> {
-    const { email, auth0Subject, ...optionalAttributes } = this.attributes
+    const { email, auth0Subject, roles, ...optionalAttributes } = this.attributes
 
     if (isNil(email)) {
       throw new Error("Email is required")
     }
 
     const auth0SubjectOrFallback = auth0Subject || email
+
+    const rolesOrFallback = roles || [User.Roles.USER]
 
     const [emailLocalPart] = email.split("@")
     /**
@@ -34,17 +36,17 @@ export class CreateService extends BaseService {
     const firstNameOrFallback = firstName || firstNameFallback
     const lastNameOrFallback = lastName || lastNameFallback
 
-    const workflowCategory = await User.create({
+    const user = await User.create({
       ...optionalAttributes,
       email,
       auth0Subject: auth0SubjectOrFallback,
       firstName: firstNameOrFallback,
       lastName: lastNameOrFallback,
       displayName: `${firstNameOrFallback} ${lastNameOrFallback}`,
-      roles: [User.Roles.USER],
+      roles: rolesOrFallback,
     })
 
-    return workflowCategory
+    return user
   }
 }
 

@@ -71,9 +71,13 @@ export class User extends BaseModel<InferAttributes<User>, InferCreationAttribut
   })
   @NotNull
   @ValidateAttribute({
-    isIn: {
-      args: [Object.values(UserRoles)],
-      msg: `Role must be one of ${Object.values(UserRoles).join(", ")}`,
+    validRole(value: string) {
+      const roles = value.split(",")
+      for (const role of roles) {
+        if (!Object.values<string>(UserRoles).includes(role)) {
+          throw new Error(`Role "${role}" must be one of ${Object.values(UserRoles).join(", ")}`)
+        }
+      }
     },
   })
   declare roles: string[]
