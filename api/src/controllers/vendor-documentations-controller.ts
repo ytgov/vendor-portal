@@ -33,7 +33,7 @@ export class VendorDocumentationsController extends BaseController<VendorDocumen
         totalCount,
       })
     } catch (error) {
-      logger.error(`Error fetching vendorDocumentations: ${error}`, { error })
+      logger.error(`Error fetching vendorDocumentations: ${error}`)
       return this.response.status(400).json({
         message: `Error fetching vendorDocumentations: ${error}`,
       })
