@@ -16,6 +16,7 @@
       >
         <VendorSelect
           v-model="vendorId"
+          :filters="vendorsFilter"
           :rules="[required]"
           hide-details
         />
@@ -96,9 +97,16 @@ import useDocumentations, { DocumentationQueryOptions } from "@/use/use-document
 
 import VendorSelect from "@/components/vendors/VendorSelect.vue"
 import DatePickerMenu from "@/components/common/DatePickerMenu.vue"
+import { VendorFiltersOptions } from "@/api/vendors-api"
 
 const props = defineProps<{ programId: string }>()
 const programIdNumber = computed(() => parseInt(props.programId))
+
+const vendorsFilter = computed<VendorFiltersOptions>(() => {
+  return {
+    withoutPendingProgram: programIdNumber.value,
+  }
+})
 
 const query = ref<DocumentationQueryOptions>({
   filters: {
