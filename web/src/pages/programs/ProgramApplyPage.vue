@@ -27,7 +27,6 @@
             and you will be able to submit claims through this portal at that point. This process
             generally takes less than 2 business days.
           </p>
-
           <ProgramApplyForm
             :program-id="programId"
             @saved="onApply"

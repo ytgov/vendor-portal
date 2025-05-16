@@ -6,6 +6,7 @@
   <v-form
     v-else
     ref="formRef"
+    v-model="isValid"
     @submit.prevent="validateAndSave"
   >
     <v-row>
@@ -15,6 +16,8 @@
       >
         <VendorSelect
           v-model="vendorId"
+          :filters="vendorsFilter"
+          :rules="[required]"
           hide-details
         />
       </v-col>
@@ -36,7 +39,7 @@
             md="6"
           >
             <v-textarea
-              v-model="textFormData[index]"
+              v-model="textFormData[documentation.id]"
               :label="documentation.name"
               rows="3"
             />
@@ -50,7 +53,7 @@
             md="6"
           >
             <v-file-input
-              v-model="fileFormData[index]"
+              v-model="fileFormData[documentation.id]"
               :label="documentation.name"
             />
           </v-col>
@@ -58,10 +61,12 @@
             cols="12"
             md="6"
           >
-            <DatePickerMenu
-              v-model="fileExpiresAtFormData[index]"
-              :field-options="{ label: 'Document expiration', hideDetails: true }"
-            />
+            <div v-if="documentation.expires">
+              <DatePickerMenu
+                v-model="fileExpiresAtFormData[documentation.id]"
+                :field-options="{ label: 'Document expiration', hideDetails: true }"
+              />
+            </div>
           </v-col>
         </v-row>
       </template>
@@ -81,21 +86,27 @@ import { isNil } from "lodash"
 import { computed, ref } from "vue"
 import { VForm } from "vuetify/lib/components/index.mjs"
 
+import { required } from "@/utils/validators"
+
 import vendorDocumentationsApi, { VendorDocumentation } from "@/api/vendor-documentations-api"
 import vendorProgramsApi from "@/api/vendor-programs-api"
 import { DocumentationFormats } from "@/api/documentations-api"
 
 import useSnack from "@/use/use-snack"
-import useCurrentUser from "@/use/use-current-user"
-import useProgram from "@/use/use-program"
 import useDocumentations, { DocumentationQueryOptions } from "@/use/use-documentations"
 
 import VendorSelect from "@/components/vendors/VendorSelect.vue"
 import DatePickerMenu from "@/components/common/DatePickerMenu.vue"
+import { VendorFiltersOptions } from "@/api/vendors-api"
 
 const props = defineProps<{ programId: string }>()
 const programIdNumber = computed(() => parseInt(props.programId))
-useProgram(programIdNumber)
+
+const vendorsFilter = computed<VendorFiltersOptions>(() => {
+  return {
+    withoutPendingProgram: programIdNumber.value,
+  }
+})
 
 const query = ref<DocumentationQueryOptions>({
   filters: {
@@ -105,17 +116,12 @@ const query = ref<DocumentationQueryOptions>({
 
 const { documentations, isLoading } = useDocumentations(query)
 
-const { currentUser } = useCurrentUser<true>()
-
 const vendorId = ref<number | null>(null)
 const textFormData = ref<Record<number, string | null | undefined>>({})
 const fileFormData = ref<Record<number, File | null | undefined>>({})
 const fileExpiresAtFormData = ref<Record<number, string | null | undefined>>({})
 
-// If the save button can be pressed, currently idk how this should be implemented
-const isValid = computed(() => {
-  return true
-})
+const isValid = ref(false)
 
 const snack = useSnack()
 const formRef = ref<InstanceType<typeof VForm> | null>(null)
@@ -129,7 +135,6 @@ async function createTextVendorDocumentation(
   const attributes: Partial<VendorDocumentation> = {
     vendorId,
     documentationId,
-    createdByUserId: currentUser.value.id, // _TODO_ set this in backend
     textValue: data,
   }
 
@@ -140,12 +145,11 @@ async function createFileVendorDocumentation(
   vendorId: number,
   documentationId: number,
   data: File,
-  expiresAt: string
+  expiresAt: string | null | undefined
 ) {
   const attributes: Partial<VendorDocumentation> = {
     vendorId,
     documentationId,
-    createdByUserId: currentUser.value.id, // _TODO_ set this in backend
     expiresAt,
     fileName: data.name,
     mimeType: data.type,
@@ -162,7 +166,7 @@ async function createVendorDocumentations(vendorId: number) {
 
     if (isNil(data)) continue
 
-    await createTextVendorDocumentation(vendorId, parseInt(key) + 1, data)
+    await createTextVendorDocumentation(vendorId, parseInt(key), data)
   }
 
   for (const key in fileFormData.value) {
@@ -171,9 +175,8 @@ async function createVendorDocumentations(vendorId: number) {
     const expiresAt = fileExpiresAtFormData.value[key]
 
     if (isNil(data)) continue
-    if (isNil(expiresAt)) continue
 
-    await createFileVendorDocumentation(vendorId, parseInt(key) + 1, data, expiresAt)
+    await createFileVendorDocumentation(vendorId, parseInt(key), data, expiresAt)
   }
 }
 

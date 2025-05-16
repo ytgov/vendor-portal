@@ -50,6 +50,8 @@ export type VendorWhereOptions = {
 /** Keep in sync with scopes in api/src/models/vendor.ts */
 export type VendorFiltersOptions = {
   search?: string | string[]
+  withPendingProgram?: number
+  withoutPendingProgram?: number
 }
 
 export type VendorQueryOptions = {
