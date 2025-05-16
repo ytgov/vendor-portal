@@ -36,7 +36,7 @@
             md="6"
           >
             <v-textarea
-              v-model="textFormData[index]"
+              v-model="textFormData[documentation.id]"
               :label="documentation.name"
               rows="3"
             />
@@ -50,7 +50,7 @@
             md="6"
           >
             <v-file-input
-              v-model="fileFormData[index]"
+              v-model="fileFormData[documentation.id]"
               :label="documentation.name"
             />
           </v-col>
@@ -60,7 +60,7 @@
           >
             <div v-if="documentation.expires">
               <DatePickerMenu
-                v-model="fileExpiresAtFormData[index]"
+                v-model="fileExpiresAtFormData[documentation.id]"
                 :field-options="{ label: 'Document expiration', hideDetails: true }"
               />
             </div>
@@ -159,7 +159,7 @@ async function createVendorDocumentations(vendorId: number) {
 
     if (isNil(data)) continue
 
-    await createTextVendorDocumentation(vendorId, parseInt(key) + 1, data)
+    await createTextVendorDocumentation(vendorId, parseInt(key), data)
   }
 
   for (const key in fileFormData.value) {
@@ -169,7 +169,7 @@ async function createVendorDocumentations(vendorId: number) {
 
     if (isNil(data)) continue
 
-    await createFileVendorDocumentation(vendorId, parseInt(key) + 1, data, expiresAt)
+    await createFileVendorDocumentation(vendorId, parseInt(key), data, expiresAt)
   }
 }
 
