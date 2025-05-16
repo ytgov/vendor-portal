@@ -41,6 +41,10 @@ export class CreateService extends BaseService {
 
     const contentBuffer = await readFile(this.content.path)
 
+    if (!Buffer.isBuffer(contentBuffer) || contentBuffer.length === 0) {
+      throw new Error("content is empty or not a file")
+    }
+
     const vendorDocumentation = await VendorDocumentation.create({
       ...optionalAttributes,
       vendorId,
