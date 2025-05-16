@@ -164,6 +164,20 @@ export class Vendor extends BaseModel<InferAttributes<Vendor>, InferCreationAttr
   // Scopes
   static establishScopes(): void {
     this.addSearchScope(["org", "vendorId", "name"])
+
+    this.addScope("withPendingProgram", (programId: number) => {
+      return {
+        include: [
+          {
+            association: "vendorPrograms",
+            where: {
+              programId,
+              status: VendorProgram.Statuses.PENDING,
+            },
+          },
+        ],
+      }
+    })
   }
 }
 
