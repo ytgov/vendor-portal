@@ -6,6 +6,7 @@
   <v-form
     v-else
     ref="formRef"
+    v-model="isValid"
     @submit.prevent="validateAndSave"
   >
     <v-row>
@@ -16,6 +17,7 @@
         <VendorSelect
           v-model="vendorId"
           hide-details
+          :rules="[required]"
         />
       </v-col>
       <v-col
@@ -83,6 +85,8 @@ import { isNil } from "lodash"
 import { computed, ref } from "vue"
 import { VForm } from "vuetify/lib/components/index.mjs"
 
+import { required } from "@/utils/validators"
+
 import vendorDocumentationsApi, { VendorDocumentation } from "@/api/vendor-documentations-api"
 import vendorProgramsApi from "@/api/vendor-programs-api"
 import { DocumentationFormats } from "@/api/documentations-api"
@@ -111,10 +115,7 @@ const textFormData = ref<Record<number, string | null | undefined>>({})
 const fileFormData = ref<Record<number, File | null | undefined>>({})
 const fileExpiresAtFormData = ref<Record<number, string | null | undefined>>({})
 
-// If the save button can be pressed, currently idk how this should be implemented
-const isValid = computed(() => {
-  return true
-})
+const isValid = ref(false)
 
 const snack = useSnack()
 const formRef = ref<InstanceType<typeof VForm> | null>(null)
