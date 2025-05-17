@@ -9,12 +9,15 @@ import {
 import {
   Attribute,
   AutoIncrement,
+  BeforeSave,
   BelongsToMany,
   Default,
   Index,
   NotNull,
   PrimaryKey,
 } from "@sequelize/core/decorators-legacy"
+
+import { sanitize } from "@/utils/sanatize-html"
 
 import BaseModel from "@/models/base-model"
 import Documentation from "@/models/documentation"
@@ -101,6 +104,11 @@ export class Program extends BaseModel<InferAttributes<Program>, InferCreationAt
     },
   })
   declare documentations?: NonAttribute<Documentation[]>
+
+  @BeforeSave
+  static sanitizeDescription(program: Program) {
+    program.description = sanitize(program.description)
+  }
 
   // Scopes
   static establishScopes(): void {
