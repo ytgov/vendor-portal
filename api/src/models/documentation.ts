@@ -21,6 +21,7 @@ import BaseModel from "@/models/base-model"
 export enum DocumentationFormats {
   FILE = "File Upload",
   TEXT = "Text Input",
+  BOOLEAN = "Yes/No",
 }
 
 export class Documentation extends BaseModel<

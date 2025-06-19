@@ -16,17 +16,17 @@
       >
         <VendorSelect
           v-model="vendorId"
+          label="Vendor applying for this program"
           :filters="vendorsFilter"
           :rules="[required]"
-          hide-details
-        />
-      </v-col>
+        /> </v-col
+      ><!-- 
       <v-col
         cols="12"
         md="6"
       >
         Self employed ?
-      </v-col>
+      </v-col> -->
     </v-row>
     <div
       v-for="(documentation, index) in documentations"
@@ -54,6 +54,31 @@
           >
             <v-file-input
               v-model="fileFormData[documentation.id]"
+              :label="documentation.name"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <div v-if="documentation.expires">
+              <DatePickerMenu
+                v-model="fileExpiresAtFormData[documentation.id]"
+                :field-options="{ label: 'Document expiration', hideDetails: true }"
+              />
+            </div>
+          </v-col>
+        </v-row>
+      </template>
+      <template v-else-if="documentation.format === DocumentationFormats.BOOLEAN">
+        <v-row>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-checkbox
+              v-model="textFormData[documentation.id]"
+              density="comfortable"
               :label="documentation.name"
             />
           </v-col>
@@ -180,7 +205,7 @@ async function createVendorDocumentations(vendorId: number) {
   }
 }
 
-const emit = defineEmits<{ saved: [programId: number] }>()
+const emit = defineEmits<{ saved: [vendorId: number] }>()
 
 async function validateAndSave() {
   if (isNil(programIdNumber.value)) return
@@ -199,7 +224,7 @@ async function validateAndSave() {
       programId: programIdNumber.value,
     })
 
-    emit("saved", programIdNumber.value)
+    emit("saved", vendorId.value)
     snack.notify("Application Submitted", {
       color: "success",
     })

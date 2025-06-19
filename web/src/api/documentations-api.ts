@@ -4,6 +4,7 @@ import http from "@/api/http-client"
 export enum DocumentationFormats {
   FILE = "File Upload",
   TEXT = "Text Input",
+  BOOLEAN = "Yes/No",
 }
 
 export type Documentation = {

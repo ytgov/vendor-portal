@@ -13,7 +13,6 @@
         <div
           v-for="(vendorDocumentation, index) in vendorDocumentations"
           :key="index"
-          class="mb-5"
         >
           <p class="mb-2">
             File name: <strong>{{ vendorDocumentation.fileName }}</strong>
@@ -36,10 +35,19 @@
         <div
           v-for="(vendorDocumentation, index) in vendorDocumentations"
           :key="index"
-          class="mb-5"
         >
           <p>
             {{ vendorDocumentation.textValue }}
+          </p>
+        </div>
+      </div>
+      <div v-else-if="programDocumentation.documentation.format === DocumentationFormats.BOOLEAN">
+        <div
+          v-for="(vendorDocumentation, index) in vendorDocumentations"
+          :key="index"
+        >
+          <p>
+            {{ vendorDocumentation.textValue == "true" ? "Yes" : "No" }}
           </p>
         </div>
       </div>

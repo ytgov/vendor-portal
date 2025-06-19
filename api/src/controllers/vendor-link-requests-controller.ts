@@ -147,7 +147,7 @@ export class VendorLinkRequestsController extends BaseController<VendorLinkReque
 
   private async loadVendorLinkRequest(): Promise<VendorLinkRequest | null> {
     return VendorLinkRequest.findByPk(this.params.vendorLinkRequestId, {
-      include: ["user"],
+      include: ["user", "decisionByUser"],
     })
   }
 

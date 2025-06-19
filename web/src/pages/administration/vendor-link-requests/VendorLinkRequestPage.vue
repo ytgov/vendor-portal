@@ -44,30 +44,52 @@
           </SimpleCard>
 
           <SimpleCard color="#7a9a0133">
-            <h3 class="mb-5">Requesting User Details</h3>
+            <h3 class="mb-5">Decision: {{ vendorLinkRequest.status }}</h3>
+            <p
+              v-if="!isNil(vendorLinkRequest.decisionAt)"
+              class="mb-2"
+            >
+              Decision on:
+              <strong>
+                {{ formatDate(vendorLinkRequest.decisionAt) }} ({{
+                  formatDateRelative(vendorLinkRequest.decisionAt)
+                }})
+              </strong>
+            </p>
+            <p
+              v-if="!isNil(vendorLinkRequest.decisionByUser)"
+              class="mb-6"
+            >
+              By:
+              <strong> {{ vendorLinkRequest.decisionByUser.displayName }}</strong> ({{
+                vendorLinkRequest.decisionByUser.email
+              }})
+            </p>
 
             <v-textarea
               v-model="vendorLinkRequest.reviewNotes"
               label="Review notes"
-              rows="1"
+              rows="2"
               auto-grow
+              hide-details
               :append-inner-icon="!isPending ? 'mdi-lock' : ''"
               :readonly="!isPending"
             />
 
-            <div class="d-flex">
+            <div
+              v-if="isPending"
+              class="d-flex mt-6"
+            >
               <v-text-field
                 v-model="vendorLinkRequest.vendorId"
-                class="mb-4 mr-5"
-                label="Vendor ID"
-                hint="Assigned by Department of Finance, found on remittances"
+                class="mb-4"
+                label="Vendor ID (must be exact match)"
                 persistent-hint
                 :append-inner-icon="!isPending ? 'mdi-lock' : ''"
                 :readonly="!isPending"
               />
               <v-btn
-                v-if="isPending"
-                class="mb-5"
+                class="mb-5 ml-5"
                 prepend-icon="mdi-magnify"
                 :disabled="isEmpty(vendorLinkRequest.vendorId)"
                 style="height: 48px"
@@ -85,9 +107,17 @@
                 {{ vendorSearchError }}
               </div>
             </div>
-            <div v-if="matchedVendor">
+            <div
+              v-if="matchedVendor"
+              class="mt-6"
+            >
               <VendorMatchCard :vendor="matchedVendor" />
-              <p class="mt-5">If this match is correct, please click the "Approve" button below.</p>
+              <p
+                v-if="isPending"
+                class="mt-5"
+              >
+                If this match is correct, please click the "Approve" button below.
+              </p>
             </div>
             <v-row
               v-if="isPending"
@@ -125,26 +155,26 @@
             <h3 class="mb-5">Request Vendor Info</h3>
             <v-text-field
               v-model="vendorLinkRequest.businessName"
-              label="Business Name"
+              label="Business name"
               append-inner-icon="mdi-lock"
               readonly
             />
             <v-text-field
               v-model="vendorLinkRequest.operatingName"
-              label="Operating Name"
+              label="Operating name"
               append-inner-icon="mdi-lock"
               readonly
             />
             <v-text-field
               v-model="vendorLinkRequest.matchedVendorId"
-              label="Matched Vendor Id"
+              label="Requested Vendor ID"
               append-inner-icon="mdi-lock"
               readonly
             />
 
             <v-text-field
               :model-value="vendorLinkRequest.ycorNumber"
-              label="YCOR Number"
+              label="YCOR number"
               append-inner-icon="mdi-lock"
               readonly
             />

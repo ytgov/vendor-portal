@@ -49,11 +49,11 @@ defineProps<{ programId: string }>()
 
 const router = useRouter()
 
-function onApply() {
-  router.push({ name: "programs/ProgramsAvailablePage" })
+function onApply(vendorId: string) {
+  router.push({ name: "vendor/HomePage", params: { vendorId } })
 }
 
-useBreadcrumbs("Apply to a Program", [
+useBreadcrumbs("Apply", [
   {
     title: "Programs available in this portal",
     to: {

@@ -28,6 +28,7 @@ export type VendorLinkRequest = {
 
   // Associations
   user: User | null
+  decisionByUser: User | null
 }
 
 export type VendorLinkRequestWhereOptions = {

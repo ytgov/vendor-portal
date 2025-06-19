@@ -73,7 +73,7 @@
         cols="12"
         md="6"
       >
-        <h3 class="mb-3">Attachments</h3>
+        <h3 class="mb-3">Submitted Documentation</h3>
 
         <VendorProgramAttachments :vendor-program-id="vendorProgramIdNumber" />
       </v-col>

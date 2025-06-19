@@ -13,6 +13,7 @@
       <v-btn
         v-if="showApply"
         :loading="isLoading"
+        class="mt-3"
         color="primary"
         text="Apply"
         @click="goToProgramApply"

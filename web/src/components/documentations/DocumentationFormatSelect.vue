@@ -3,5 +3,5 @@
 </template>
 
 <script setup lang="ts">
-const items = ["File Upload", "Text Input"]
+const items = ["File Upload", "Text Input", "Yes/No"]
 </script>
