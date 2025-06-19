@@ -15,6 +15,7 @@
       />
       <v-divider v-if="idx < vendorLinkRequests.length - 1" />
     </div>
+    <v-list-item v-if="vendorLinkRequests.length == 0">No pending requests</v-list-item>
   </v-list>
 </template>
 
