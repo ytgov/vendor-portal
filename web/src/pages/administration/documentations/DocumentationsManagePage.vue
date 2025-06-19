@@ -14,7 +14,7 @@
           color="primary"
           class="ml-4"
           :to="{ name: 'administration/DocumentationCreatePage' }"
-          style="height: 40px"
+          style="height: 46px"
           text="Create Documentation"
         />
       </div>
