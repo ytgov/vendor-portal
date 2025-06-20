@@ -95,6 +95,12 @@ const routes: RouteRecordRaw[] = [
         props: true,
       },
       {
+        path: "vendor-users",
+        name: "administration/VendorUsersManagePage",
+        component: () => import("@/pages/administration/vendor-users/VendorUsersManagePage.vue"),
+        props: true,
+      },
+      {
         path: "vendor-link-requests/:vendorLinkRequestId",
         name: "administration/VendorLinkRequestPage",
         component: () =>

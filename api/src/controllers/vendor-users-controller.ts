@@ -21,6 +21,7 @@ export class VendorUsersController extends BaseController<VendorUser> {
         where,
         limit: this.pagination.limit,
         offset: this.pagination.offset,
+        include: ["vendor", "user", "decisionByUser"],
       })
 
       const serializedVendorUsers = IndexSerializer.perform(vendorUsers)

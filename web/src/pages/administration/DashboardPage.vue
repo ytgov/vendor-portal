@@ -15,6 +15,14 @@
             prepend-icon="mdi-link"
           />
           <v-divider />
+
+          <v-list-item
+            title="Manage Vendor Users"
+            :to="{ name: 'administration/VendorUsersManagePage' }"
+            prepend-icon="mdi-link"
+          />
+          <v-divider />
+
           <v-list-item
             title="Manage Programs"
             :to="{ name: 'administration/ProgramsPage' }"

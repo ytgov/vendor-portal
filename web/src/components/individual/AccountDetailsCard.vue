@@ -60,7 +60,6 @@
         <v-col cols="6">
           <v-btn
             block
-            color="warning"
             :to="{ name: 'vendor/LinkPage' }"
             text="Link to Vendor"
           />
