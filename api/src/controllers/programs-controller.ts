@@ -137,7 +137,7 @@ export class ProgramsController extends BaseController<Program> {
   }
 
   private async loadProgram(): Promise<Program | null> {
-    return Program.findByPk(this.params.programId)
+    return Program.findBySlugOrPk(this.params.programId)
   }
 
   private buildPolicy(program: Program) {

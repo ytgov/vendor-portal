@@ -48,7 +48,7 @@ export const programsApi = {
     return data
   },
 
-  async get(programId: number): Promise<{ program: Program }> {
+  async get(programId: number | string): Promise<{ program: Program }> {
     const { data } = await http.get(`/api/programs/${programId}`)
     return data
   },
