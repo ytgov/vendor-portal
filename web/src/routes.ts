@@ -161,11 +161,35 @@ const routes: RouteRecordRaw[] = [
         props: true,
       },
       {
+        path: ":vendorId/programs/",
+        name: "vendor/ProgramPage",
+        component: () => import("@/pages/vendor/ProgramPage.vue"),
+        props: true,
+
+        children: [
+          {
+            path: "paid-sick-leave-rebate",
+            name: "vendor/programs/PaidSickLeaveHome",
+            component: () =>
+              import("@/components/program-specific/paid-sick-leave-rebate/PaidSickLeaveHome.vue"),
+            props: true,
+          },
+          {
+            path: "paid-sick-leave-rebate/new",
+            name: "vendor/programs/PaidSickLeaveNew",
+            component: () =>
+              import("@/components/program-specific/paid-sick-leave-rebate/PaidSickLeaveNew.vue"),
+            props: true,
+          },
+        ],
+      },
+
+      /* {
         path: ":vendorId/programs/:programId", // _TODO_ switch to :slug
         name: "vendor-program/VendorProgramPage",
         component: () => import("@/pages/vendor-programs/VendorProgramPage.vue"),
         props: true,
-      },
+      }, */
       {
         path: ":vendorId/programs/:programId/submissions/:submissionId", // _TODO_ switch to :slug
         name: "vendor-program/SubmissionViewPage",
