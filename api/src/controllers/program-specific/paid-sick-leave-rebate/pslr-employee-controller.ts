@@ -6,6 +6,7 @@ import { Vendor } from "@/models"
 import { VendorsPolicy } from "@/policies"
 import { VendorSearchService } from "@/services/vendors"
 import logger from "@/utils/logger"
+import { PSLR_API_URL } from "@/config"
 
 export class PSLREmployeeController extends BaseController {
   async index() {
@@ -29,7 +30,7 @@ export class PSLREmployeeController extends BaseController {
 
       const proxy = axios.create({
         method: this.request.method,
-        baseURL: `http://localhost:3001/api/integration/program/106`,
+        baseURL: PSLR_API_URL,
         headers: {},
       })
       const response = await proxy.request({
