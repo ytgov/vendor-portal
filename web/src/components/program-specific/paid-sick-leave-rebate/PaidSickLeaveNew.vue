@@ -96,19 +96,6 @@
         </v-col>
         <v-col
           cols="12"
-          md="12"
-        >
-          <v-textarea
-            v-model="submission.mailing_address"
-            :rules="[required]"
-            hide-details
-            label="Mailing address"
-            rows="2"
-            auto-grow
-          />
-        </v-col>
-        <v-col
-          cols="12"
           md="4"
         >
           <DatePickerMenu
@@ -118,6 +105,19 @@
               hideDetails: true,
               rules: [required],
             }"
+          />
+        </v-col>
+        <v-col
+          cols="12"
+          md="12"
+        >
+          <v-textarea
+            v-model="submission.mailing_address"
+            :rules="[required]"
+            hide-details
+            label="Mailing address"
+            rows="2"
+            auto-grow
           />
         </v-col>
       </v-row>
@@ -148,13 +148,7 @@
           cols="12"
           md="4"
         >
-          <v-text-field
-            :model-value="submission.first_name"
-            label="Leave total days"
-            readonly
-            append-inner-icon="mdi-calculator"
-            hide-details
-          />
+       
         </v-col>
 
         <v-col
@@ -165,7 +159,7 @@
             v-model="submission.hourly_rate"
             :rules="[required]"
             label="Hourly rate"
-            :decimals="3"
+            :decimals="4"
           />
         </v-col>
         <v-col
@@ -202,7 +196,6 @@
         :loading="isLoading"
         >Save Submission</v-btn
       >
-      {{ submission }}
     </v-form>
   </SimpleCard>
 </template>
