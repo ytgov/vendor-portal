@@ -88,6 +88,14 @@
       </v-card>
     </div>
   </div>
+  <div v-if="submissions.length === 0">
+    <v-card class="mb-5">
+      <v-card-title>No Submissions Found</v-card-title>
+      <v-card-text>
+        <p>You can add a new submission using the 'Add Submission' button above.</p>
+      </v-card-text>
+    </v-card>
+  </div>
 
   <v-dialog
     v-model="showViewDialog"
