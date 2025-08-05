@@ -49,7 +49,7 @@ defineProps<{ programId: string }>()
 
 const router = useRouter()
 
-function onApply(vendorId: string) {
+function onApply(vendorId: number) {
   router.push({ name: "vendor/HomePage", params: { vendorId } })
 }
 
