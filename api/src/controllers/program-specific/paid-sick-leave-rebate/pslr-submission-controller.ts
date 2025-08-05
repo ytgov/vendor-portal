@@ -6,6 +6,7 @@ import { Vendor } from "@/models"
 import { VendorsPolicy } from "@/policies"
 import { VendorSearchService } from "@/services/vendors"
 import logger from "@/utils/logger"
+import { PSLR_API_URL } from "@/config"
 
 export class PSLRSubmissionController extends BaseController {
   async index() {
@@ -29,7 +30,7 @@ export class PSLRSubmissionController extends BaseController {
 
       const proxy = axios.create({
         method: this.request.method,
-        baseURL: `http://localhost:3001/api/integration/program/106`,
+        baseURL: PSLR_API_URL,
         headers: {},
       })
       const response = await proxy.request({
@@ -40,7 +41,6 @@ export class PSLRSubmissionController extends BaseController {
       return this.response.status(200).json(response.data)
     } catch (error) {
       console.log("ERROR", error)
-
 
       logger.error(`Error fetching submissions: ${error}`, { error })
       return this.response.status(400).json({
