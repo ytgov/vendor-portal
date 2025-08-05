@@ -15,7 +15,7 @@
       />
     </v-card-title>
     <v-card-text>
-      <div class="d-flex mb-3">
+      <div class="d-flex">
         <v-icon
           class="mt-2"
           size="40"
@@ -23,15 +23,22 @@
           icon="mdi-account"
         />
         <div class="ml-2 text-subtitle-1">
-          {{ vendorUser.user.email }}
-          <br />
-          <strong>Linked to {{ vendorUser.vendor.name }} on: </strong>
-          <br />
-          {{ formatDate(vendorUser.decisionAt) }}
-          <br />
-          <strong>Approved by: </strong>
-          <br />
-          {{ vendorUser.decisionByUser?.displayName }}
+          <div class="mb-2">
+            <strong>Email</strong>
+            <br />
+            {{ vendorUser.user.email }}
+          </div>
+
+          <div class="mb-2">
+            <strong>Linked on: </strong>
+            <br />
+            {{ formatDate(vendorUser.decisionAt) }}
+          </div>
+          <div>
+            <strong>Approved by: </strong>
+            <br />
+            {{ vendorUser.decisionByUser?.displayName }}
+          </div>
         </div>
       </div>
     </v-card-text>

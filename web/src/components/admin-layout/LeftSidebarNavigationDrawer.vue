@@ -48,7 +48,7 @@
         v-if="isSystemAdmin"
         title="Users"
         :to="{ name: 'administration/UsersPage' }"
-        prepend-icon="mdi-account-group"
+        prepend-icon="mdi-account"
       />
       <v-list-item
         v-if="isSystemAdmin"

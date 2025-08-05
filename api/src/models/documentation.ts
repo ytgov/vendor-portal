@@ -21,6 +21,7 @@ import BaseModel from "@/models/base-model"
 export enum DocumentationFormats {
   FILE = "File Upload",
   TEXT = "Text Input",
+  BOOLEAN = "Yes/No",
 }
 
 export class Documentation extends BaseModel<
@@ -49,6 +50,11 @@ export class Documentation extends BaseModel<
     },
   })
   declare format: string
+
+  @Attribute(DataTypes.BOOLEAN)
+  @NotNull
+  @Default(false)
+  declare expires: CreationOptional<boolean>
 
   @Attribute(DataTypes.DATE(0))
   @NotNull

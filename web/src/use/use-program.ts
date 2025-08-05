@@ -1,11 +1,11 @@
 import { type Ref, reactive, toRefs, unref, watch } from "vue"
-import { isNil } from "lodash"
+import { isNil, isNumber } from "lodash"
 
 import programsApi, { type Program } from "@/api/programs-api"
 
 export { type Program }
 
-export function useProgram(id: Ref<number | null | undefined>) {
+export function useProgram(id: Ref<string | number | null | undefined>) {
   const state = reactive<{
     program: Program | null
     isLoading: boolean
@@ -19,7 +19,7 @@ export function useProgram(id: Ref<number | null | undefined>) {
   async function fetch(): Promise<Program> {
     const staticId = unref(id)
     if (isNil(staticId)) {
-      throw new Error("id is required")
+      throw new Error("id/slug is required")
     }
 
     state.isLoading = true
@@ -43,7 +43,7 @@ export function useProgram(id: Ref<number | null | undefined>) {
       throw new Error("id is required")
     }
 
-    if (isNil(state.program)) {
+    if (isNil(state.program) || !isNumber(staticId)) {
       throw new Error("No user to save")
     }
 

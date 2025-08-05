@@ -1,5 +1,5 @@
 <template>
-  <h3 class="mb-3">Linked Accounts</h3>
+  <h3 class="mb-3">Linked People</h3>
 
   <div
     v-for="(vendorUser, index) in vendorUsers"

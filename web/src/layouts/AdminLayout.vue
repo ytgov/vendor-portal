@@ -3,21 +3,18 @@
     v-model="showDrawer"
     :show-rail="showRail"
   />
-
   <v-app-bar
     flat
     color="white"
     style="border-bottom: 1px #bbb solid"
   >
-    <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon @click="toggleDrawer" />
     <v-app-bar-title
       v-if="mdAndUp"
       class="ml-2 text-weight-bold"
       style="font-weight: bold"
-    >
-      <span v-if="showRail">Vendor Portal :</span>
-      {{ title }}</v-app-bar-title
-    >
+      :text="title"
+    />
     <v-app-bar-title
       v-if="!mdAndUp"
       class="ml-2 text-weight-bold"
@@ -76,8 +73,9 @@ watch(
 )
 
 function toggleDrawer() {
-  if (!mdAndUp.value) showDrawer.value = !showDrawer.value
-  else {
+  if (!mdAndUp.value) {
+    showDrawer.value = !showDrawer.value
+  } else {
     showRail.value = !showRail.value
   }
 }

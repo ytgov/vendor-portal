@@ -15,6 +15,7 @@
       />
       <v-divider v-if="index < vendorPrograms.length - 1" />
     </div>
+    <v-list-item v-if="vendorPrograms.length == 0">No pending requests</v-list-item>
   </v-list>
 </template>
 

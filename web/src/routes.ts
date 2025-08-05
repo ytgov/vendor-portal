@@ -95,6 +95,12 @@ const routes: RouteRecordRaw[] = [
         props: true,
       },
       {
+        path: "vendor-users",
+        name: "administration/VendorUsersManagePage",
+        component: () => import("@/pages/administration/vendor-users/VendorUsersManagePage.vue"),
+        props: true,
+      },
+      {
         path: "vendor-link-requests/:vendorLinkRequestId",
         name: "administration/VendorLinkRequestPage",
         component: () =>
@@ -155,11 +161,35 @@ const routes: RouteRecordRaw[] = [
         props: true,
       },
       {
+        path: ":vendorId/programs/",
+        name: "vendor/ProgramPage",
+        component: () => import("@/pages/vendor/ProgramPage.vue"),
+        props: true,
+
+        children: [
+          {
+            path: "paid-sick-leave-rebate",
+            name: "vendor/programs/PaidSickLeaveHome",
+            component: () =>
+              import("@/components/program-specific/paid-sick-leave-rebate/PaidSickLeaveHome.vue"),
+            props: true,
+          },
+          {
+            path: "paid-sick-leave-rebate/new",
+            name: "vendor/programs/PaidSickLeaveNew",
+            component: () =>
+              import("@/components/program-specific/paid-sick-leave-rebate/PaidSickLeaveNew.vue"),
+            props: true,
+          },
+        ],
+      },
+
+      /* {
         path: ":vendorId/programs/:programId", // _TODO_ switch to :slug
         name: "vendor-program/VendorProgramPage",
         component: () => import("@/pages/vendor-programs/VendorProgramPage.vue"),
         props: true,
-      },
+      }, */
       {
         path: ":vendorId/programs/:programId/submissions/:submissionId", // _TODO_ switch to :slug
         name: "vendor-program/SubmissionViewPage",
@@ -176,15 +206,43 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: "/errors/unauthorized",
-    name: "UnauthorizedPage",
-    component: () => import("@/pages/UnauthorizedPage.vue"),
-    meta: { requiresAuth: false },
+    name: "errors/UnauthorizedPage",
+    component: () => import("@/pages/errors/UnauthorizedPage.vue"),
+    meta: {
+      title: "Unauthorized",
+      requiresAuth: false,
+    },
+  },
+  {
+    path: "/errors/forbidden",
+    name: "errors/ForbiddenPage",
+    component: () => import("@/pages/errors/ForbiddenPage.vue"),
+    meta: {
+      title: "Forbidden",
+      requiresAuth: false,
+    },
+  },
+  {
+    path: "/errors/internal-server-error",
+    name: "errors/InternalServerErrorPage",
+    component: () => import("@/pages/errors/InternalServerErrorPage.vue"),
+    meta: {
+      title: "Internal Server Error",
+      requiresAuth: false,
+    },
+  },
+  {
+    path: "/errors/not-found",
+    name: "errors/NotFoundPage",
+    component: () => import("@/pages/errors/NotFoundPage.vue"),
+    meta: {
+      title: "Not Found",
+      requiresAuth: false,
+    },
   },
   {
     path: "/:pathMatch(.*)*",
-    name: "NotFoundPage",
-    component: () => import("@/pages/NotFoundPage.vue"),
-    meta: { requiresAuth: false },
+    redirect: "/errors/not-found",
   },
 ]
 

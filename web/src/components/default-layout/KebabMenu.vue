@@ -11,7 +11,6 @@
     <v-list>
       <v-list-item
         :title="username"
-        :to="{ name: 'individual/ProfilePage' }"
         prepend-icon="mdi-account"
       />
       <v-list-item
@@ -19,12 +18,6 @@
         title="Administration"
         :to="{ name: 'administration/DashboardPage' }"
         prepend-icon="mdi-cog-outline"
-      />
-      <v-list-item
-        v-if="isSystemAdmin"
-        :title="releaseTag || 'loading...'"
-        :to="{ name: 'StatusPage' }"
-        prepend-icon="mdi-clock"
       />
       <v-list-item
         title="Sign out"
@@ -39,7 +32,6 @@
 import { computed } from "vue"
 
 import { useAuth0 } from "@auth0/auth0-vue"
-import useStatus from "@/use/use-status"
 import useCurrentUser from "@/use/use-current-user"
 
 const { logout } = useAuth0()
@@ -53,12 +45,9 @@ const username = computed(() => {
   return displayName
 })
 
-const { releaseTag } = useStatus()
-
 async function logoutWrapper() {
   await logout({
     logoutParams: {
-      // I would prefer to redirect to /sign-in here, but that doesn't seem to work?
       returnTo: window.location.origin,
     },
   })

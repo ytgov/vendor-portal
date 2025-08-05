@@ -9,10 +9,11 @@
       Administered by <strong>{{ program.department }}</strong>
     </v-card-subtitle>
     <v-card-text>
-      <component :is="programDescriptionComponent" />
+      <div v-html="program.description"></div>
       <v-btn
         v-if="showApply"
         :loading="isLoading"
+        class="mt-3"
         color="primary"
         text="Apply"
         @click="goToProgramApply"
@@ -23,7 +24,7 @@
 
 <script setup lang="ts">
 import { isNil } from "lodash"
-import { computed, defineAsyncComponent } from "vue"
+import { computed } from "vue"
 
 import useProgram from "@/use/use-program"
 import { useRouter } from "vue-router"
@@ -42,23 +43,4 @@ function goToProgramApply() {
     },
   })
 }
-
-/*
- Consider putting description in the database. 
- For 5 or more programs this pattern is not good.
-*/
-const PSLRDescription = defineAsyncComponent(
-  () => import("@/components/programs/ecdev-pslr/PSLRDescription.vue")
-)
-
-const programDescriptionComponent = computed(() => {
-  if (isNil(program.value)) return
-
-  switch (program.value.slug) {
-    case "paid-sick-leave-rebate":
-      return PSLRDescription
-    default:
-      return null
-  }
-})
 </script>

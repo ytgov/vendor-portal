@@ -1,28 +1,26 @@
 <template>
-  <v-card>
-    <v-card-title class="d-flex flex-md-row">
-      Create Documentation
-      <v-spacer />
+  <SimpleCard title="Create Documentation">
+    <template #rightTitle>
       <v-btn
         :to="{ name: 'administration/DocumentationsPage' }"
         color="primary"
         variant="outlined"
         text="Back"
       />
-    </v-card-title>
-    <v-card-text>
-      <DocumentationCreateForm
-        class="mt-10"
-        @created="goToDocumenations"
-      />
-    </v-card-text>
-  </v-card>
+    </template>
+    <DocumentationCreateForm
+      class="mt-5"
+      @created="goToDocumenations"
+    />
+  </SimpleCard>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from "vue-router"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
+
+import SimpleCard from "@/components/common/SimpleCard.vue"
 
 import DocumentationCreateForm from "@/components/documentations/DocumentationCreateForm.vue"
 

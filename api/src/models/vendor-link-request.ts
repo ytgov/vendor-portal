@@ -1,6 +1,8 @@
 import {
+  Attributes,
   type CreationOptional,
   DataTypes,
+  FindOptions,
   InferAttributes,
   InferCreationAttributes,
   type NonAttribute,
@@ -18,6 +20,8 @@ import {
 
 import BaseModel from "@/models/base-model"
 import User from "@/models/user"
+import arrayWrap from "@/utils/array-wrap"
+import whereFieldsOptionallyLikeTerms from "@/utils/search/where-fields-optionally-like-terms"
 
 /** Keep in sync with web/src/api/vendor-link-requests-api.ts */
 export enum VendorLinkRequestStatuses {
@@ -112,7 +116,39 @@ export class VendorLinkRequest extends BaseModel<
   declare decisionByUser?: NonAttribute<User>
 
   // Scopes
-  static establishScopes(): void {}
+  static establishScopes(): void {
+    this.addScope(
+      "search",
+      (termOrTerms: string | string[]): FindOptions<Attributes<VendorLinkRequest>> => {
+        const terms = arrayWrap(termOrTerms)
+        if (terms.length === 0) {
+          return {}
+        }
+
+        const searchableFields = [
+          "business_name",
+          "user.display_name",
+          "user.email",
+          "user.first_name",
+          "user.last_name",
+        ]
+        const associatedSearchableFieldsOptionallyLikeTerms = whereFieldsOptionallyLikeTerms(
+          searchableFields,
+          terms
+        )
+
+        return {
+          where: associatedSearchableFieldsOptionallyLikeTerms,
+          include: [
+            {
+              association: "user",
+              required: false,
+            },
+          ],
+        }
+      }
+    )
+  }
 }
 
 export default VendorLinkRequest

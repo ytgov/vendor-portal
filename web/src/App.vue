@@ -22,9 +22,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from "vue"
+import { computed, onErrorCaptured, ref, watch } from "vue"
 import { useAuth0 } from "@auth0/auth0-vue"
 import { useRoute, useRouter } from "vue-router"
+
+import ApiError from "@/api/api-error"
 
 import useCurrentUser from "@/use/use-current-user"
 
@@ -72,4 +74,35 @@ watch(
   },
   { immediate: true }
 )
+
+onErrorCaptured((error: Error) => {
+  if (error instanceof ApiError) {
+    redirectToAppropriateErrorPage(error.status)
+  } else {
+    console.error(`Unhandled error: ${error}`, { error })
+  }
+})
+
+function redirectToAppropriateErrorPage(httpErrorCode: number) {
+  if (httpErrorCode === 400 || httpErrorCode === 422) return
+
+  switch (httpErrorCode) {
+    case 401:
+      return router.replace({
+        name: "SignInPage",
+      })
+    case 403:
+      return router.replace({
+        name: "errors/ForbiddenPage",
+      })
+    case 404:
+      return router.replace({
+        name: "errors/NotFoundPage",
+      })
+    default:
+      return router.replace({
+        name: "errors/InternalServerErrorPage",
+      })
+  }
+}
 </script>

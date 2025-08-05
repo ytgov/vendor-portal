@@ -23,10 +23,22 @@ export class VendorSearchService extends BaseService {
       return await Vendor.findByPk(this.vendorId)
     }
 
-    const vendor = await this.getVendor(this.vendorId)
     const localVendor = await Vendor.findBySlugOrPk(this.vendorId)
 
-    return this.upsertVendor(vendor, localVendor)
+    if (isNil(localVendor)) {
+      const vendor = await this.getVendor(this.vendorId)
+      return await this.upsertVendor(vendor, localVendor)
+    } else {
+      const ticksSinceUpdate = Date.now() - new Date(localVendor.updatedAt).getTime()
+      const hoursSince = ticksSinceUpdate / (1000 * 60 * 60)
+
+      // re lookup vendor if it has been more than 2 hours since last update
+      if (hoursSince > 2) {
+        const vendor = await this.getVendor(this.vendorId)
+        return await this.upsertVendor(vendor, localVendor)
+      }
+      return localVendor
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -63,6 +75,9 @@ export class VendorSearchService extends BaseService {
     if (isNil(localVendor)) {
       return CreateService.perform(attributes)
     } else {
+      // manually set updatedAt to now to avoid sequelize's default behavior and ensure it does a save
+      attributes.updatedAt = new Date()
+      localVendor.changed("updatedAt", true)
       return UpdateService.perform(localVendor, attributes)
     }
   }

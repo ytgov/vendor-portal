@@ -40,12 +40,20 @@ const { vendorId } = toRefs(props)
 const { vendor, isLoading } = useVendor(vendorId)
 
 const breadcrumbs = computed(() => {
-  if (vendor.value) {
-    return [{ title: `${vendor.value.name}`, to: "" }]
-  }
-
-  return [{ title: "Loading...", to: "" }]
+  return [
+    {
+      title: `${vendor.value?.name ?? ""}`,
+      to: { name: "vendor/HomePage", params: { vendorId: props.vendorId } },
+    },
+  ]
 })
 
-useBreadcrumbs("", breadcrumbs)
+const title = computed(() => {
+  if (vendor.value) {
+    return vendor.value.name
+  }
+  return ""
+})
+
+useBreadcrumbs(title, breadcrumbs)
 </script>

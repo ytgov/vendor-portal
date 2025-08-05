@@ -27,7 +27,6 @@
             and you will be able to submit claims through this portal at that point. This process
             generally takes less than 2 business days.
           </p>
-
           <ProgramApplyForm
             :program-id="programId"
             @saved="onApply"
@@ -50,11 +49,11 @@ defineProps<{ programId: string }>()
 
 const router = useRouter()
 
-function onApply() {
-  router.push({ name: "programs/ProgramsAvailablePage" })
+function onApply(vendorId: number) {
+  router.push({ name: "vendor/HomePage", params: { vendorId } })
 }
 
-useBreadcrumbs("Apply to a Program", [
+useBreadcrumbs("Apply", [
   {
     title: "Programs available in this portal",
     to: {

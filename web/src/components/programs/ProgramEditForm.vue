@@ -40,7 +40,7 @@
       >
         <v-text-field
           v-model="program.department"
-          label="Depertment"
+          label="Department"
           :rules="[required]"
           hide-details
         />

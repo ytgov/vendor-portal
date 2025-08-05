@@ -87,11 +87,10 @@ import { DocumentationQueryOptions } from "@/use/use-documentations"
 
 import TabCard from "@/components/common/TabCard.vue"
 
-import ProgramEditForm from "@/components/programs/ProgramEditForm.vue"
-import VendorProgramsDataTableServer from "@/components/vendor-programs/VendorProgramsDataTableServer.vue"
 import DocumentationsSearchableAutocomplete from "@/components/documentations/DocumentationsSearchableAutocomplete.vue"
-
+import ProgramEditForm from "@/components/programs/ProgramEditForm.vue"
 import ProgramDocumentationsDataTableServer from "@/components/program-documentations/ProgramDocumentationsDataTableServer.vue"
+import VendorProgramsDataTableServer from "@/components/vendor-programs/VendorProgramsDataTableServer.vue"
 
 const props = defineProps<{ programId: string }>()
 const programIdNumber = computed(() => parseInt(props.programId))
@@ -197,7 +196,7 @@ const tabs = ref([
   { value: 3, title: "Docs", icon: "mdi-file-sign" },
 ])
 
-const pageTitle = computed(() => {
+const title = computed(() => {
   if (isNil(program.value)) {
     return "Loading..."
   }
@@ -232,5 +231,5 @@ const breadcrumbs = computed(() => {
   ]
 })
 
-useBreadcrumbs(pageTitle, breadcrumbs)
+useBreadcrumbs(title, breadcrumbs)
 </script>

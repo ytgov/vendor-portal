@@ -6,15 +6,23 @@
           <v-list-item
             title="Manage Users"
             :to="{ name: 'administration/UsersPage' }"
-            prepend-icon="mdi-account-group"
+            prepend-icon="mdi-account"
           />
           <v-divider />
           <v-list-item
             title="Manage Vendor Link Requests"
             :to="{ name: 'administration/VendorLinkRequestsManagePage' }"
-            prepend-icon="mdi-handshake"
+            prepend-icon="mdi-link"
           />
           <v-divider />
+
+          <v-list-item
+            title="Manage Vendor Users"
+            :to="{ name: 'administration/VendorUsersManagePage' }"
+            prepend-icon="mdi-link"
+          />
+          <v-divider />
+
           <v-list-item
             title="Manage Programs"
             :to="{ name: 'administration/ProgramsPage' }"
@@ -24,7 +32,7 @@
           <v-list-item
             title="Manage Documentation"
             :to="{ name: 'administration/DocumentationsPage' }"
-            prepend-icon="mdi-handshake"
+            prepend-icon="mdi-file-sign"
           />
         </v-list>
       </SimpleCard>

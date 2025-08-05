@@ -31,6 +31,7 @@ import {
   VendorsController,
   VendorUsersController,
 } from "@/controllers"
+import { PSLREmployeeController, PSLRSubmissionController } from "@/controllers/program-specific"
 
 export const router = Router()
 
@@ -150,6 +151,9 @@ router
 // Vendors
 router.route("/api/vendors").get(VendorsController.index)
 router.route("/api/vendors/:vendorId").get(VendorsController.show)
+
+router.route("/api/program/pslr/:vendorId/employees").all(PSLREmployeeController.index)
+router.route("/api/program/pslr/:vendorId/submissions").all(PSLRSubmissionController.index)
 
 // if no other routes match, return a 404
 router.use("/api", (_req: Request, res: Response) => {

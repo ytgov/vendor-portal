@@ -21,6 +21,17 @@ export class UpdateService extends BaseService {
   async perform() {
     if (
       this.vendorLinkRequest.status === VendorLinkRequestStatuses.PENDING &&
+      this.attributes.status === VendorLinkRequestStatuses.REJECTED
+    ) {
+      this.attributes.decisionByUserId = this.currentUser.id
+      this.attributes.decisionAt = new Date()
+
+      const vendorLinkRequest = await this.vendorLinkRequest.update(this.attributes)
+      return vendorLinkRequest
+    }
+
+    if (
+      this.vendorLinkRequest.status === VendorLinkRequestStatuses.PENDING &&
       this.attributes.status === VendorLinkRequestStatuses.ACCEPTED
     ) {
       if (isNil(this.attributes.vendorId)) {

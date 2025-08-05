@@ -74,6 +74,7 @@ export class ProgramsController extends BaseController<Program> {
       }
 
       const permittedAttributes = policy.permitAttributesForCreate(this.request.body)
+
       const newProgram = await CreateService.perform(permittedAttributes)
       return this.response.status(201).json({ program: newProgram })
     } catch (error) {
@@ -100,6 +101,7 @@ export class ProgramsController extends BaseController<Program> {
       }
 
       const permitAttributes = policy.permitAttributes(this.request.body)
+
       const newProgram = await UpdateService.perform(program, permitAttributes)
       return this.response.json({ program: newProgram })
     } catch (error) {
@@ -135,7 +137,7 @@ export class ProgramsController extends BaseController<Program> {
   }
 
   private async loadProgram(): Promise<Program | null> {
-    return Program.findByPk(this.params.programId)
+    return Program.findBySlugOrPk(this.params.programId)
   }
 
   private buildPolicy(program: Program) {

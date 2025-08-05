@@ -8,7 +8,39 @@
 </template>
 
 <script setup lang="ts">
-import useVendors from "@/use/use-vendors"
+import { computed } from "vue"
 
-const { vendors } = useVendors()
+import useVendors, {
+  VendorFiltersOptions,
+  VendorQueryOptions,
+  VendorWhereOptions,
+} from "@/use/use-vendors"
+
+const props = withDefaults(
+  defineProps<{
+    filters?: VendorFiltersOptions
+    where?: VendorWhereOptions
+    waiting?: boolean
+    perPage?: number
+    page?: number
+  }>(),
+  {
+    filters: () => ({}),
+    where: () => ({}),
+    waiting: false,
+    perPage: 10,
+    page: 1,
+  }
+)
+
+const vendorsQuery = computed<VendorQueryOptions>(() => {
+  return {
+    where: props.where,
+    filters: props.filters,
+    perPage: props.perPage,
+    page: props.page,
+  }
+})
+
+const { vendors } = useVendors(vendorsQuery)
 </script>
