@@ -21,14 +21,6 @@ export async function seed(): Promise<void> {
       name: "Paid Sick Leave Policy",
       format: Documentation.Formats.FILE,
     },
-    {
-      name: "Mailing Address",
-      format: Documentation.Formats.TEXT,
-    },
-    {
-      name: "Physical Address",
-      format: Documentation.Formats.TEXT,
-    },
   ]
 
   for (const documentationAttributes of documentationsAttributes) {
