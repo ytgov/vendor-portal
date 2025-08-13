@@ -59,11 +59,31 @@
                   :rules="[required, length(6)]"
                 />
                 <v-textarea
-                  v-model="vendorLinkRequest.address"
-                  label="Address (required)"
+                  v-model="vendorLinkRequest.mailingAddress"
+                  label="Mailing Address (required)"
                   rows="3"
                   :rules="[required]"
                 />
+
+                <v-checkbox
+                  v-model="isMailingAndPhysicalAddressSame"
+                  label="Physical Address is the same as Mailing Address"
+                />
+                <div v-if="!isMailingAndPhysicalAddressSame">
+                  <v-textarea
+                    v-model="vendorLinkRequest.physicalAddress"
+                    label="Physical Address"
+                    rows="3"
+                  />
+                </div>
+                <div v-else>
+                  <v-textarea
+                    v-model="vendorLinkRequest.mailingAddress"
+                    label="Physical Address"
+                    rows="3"
+                    disabled
+                  />
+                </div>
               </v-col>
               <v-col>
                 <v-text-field
@@ -117,9 +137,8 @@
               <v-spacer />
               <v-btn
                 append-icon="mdi-chevron-right"
-                :disabled="!canContinue || !isValid"
                 text="Continue"
-                @click="step = 3"
+                @click="validateAndGoToLastStep"
               />
             </div>
           </v-form>
@@ -191,6 +210,7 @@ const { currentUser } = useCurrentUser<true>()
 const vendorLinkRequest = ref<Partial<VendorLinkRequest>>({ userId: currentUser.value.id })
 
 const isValid = ref(false)
+const isMailingAndPhysicalAddressSame = ref(false)
 
 const error = ref("")
 
@@ -206,17 +226,14 @@ const canSearch = computed(() => {
   return true
 })
 
-const canContinue = computed(() => {
-  if (
-    isEmpty(vendorLinkRequest.value.ycorNumber) ||
-    isEmpty(vendorLinkRequest.value.businessName) ||
-    isEmpty(vendorLinkRequest.value.address)
-  ) {
-    return false
-  }
+async function validateAndGoToLastStep() {
+  if (formRef.value === null) return
 
-  return true
-})
+  const { valid } = await formRef.value.validate()
+  if (!valid) return
+
+  step.value = 3
+}
 
 async function doSearch() {
   try {

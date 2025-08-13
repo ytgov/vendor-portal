@@ -17,7 +17,8 @@ export type VendorLinkRequest = {
   businessName: string | null
   operatingName: string | null
   ycorNumber: string | null
-  address: string | null
+  mailingAddress: string | null
+  physicalAddress: string | null
   vendorId: string | null
   status: VendorLinkRequestStatuses
   decisionByUserId: number | null
@@ -37,7 +38,8 @@ export type VendorLinkRequestWhereOptions = {
   businessName?: string
   operatingName?: string
   ycorNumber?: string
-  address?: string
+  mailingAddress?: string
+  physicalAddress?: string
   vendorId?: string
   status?: VendorLinkRequestStatuses
   decisionByUserId?: number

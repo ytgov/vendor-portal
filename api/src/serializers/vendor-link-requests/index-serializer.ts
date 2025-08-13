@@ -13,7 +13,8 @@ export type VendorLinkRequestIndexView = Pick<
   | "businessName"
   | "operatingName"
   | "ycorNumber"
-  | "address"
+  | "mailingAddress"
+  | "physicalAddress"
   | "vendorId"
   | "status"
   | "decisionByUserId"
@@ -39,7 +40,8 @@ export class IndexSerializer extends BaseSerializer<VendorLinkRequest> {
         "businessName",
         "operatingName",
         "ycorNumber",
-        "address",
+        "mailingAddress",
+        "physicalAddress",
         "vendorId",
         "status",
         "decisionByUserId",

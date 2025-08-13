@@ -179,13 +179,17 @@
               readonly
             />
 
-            <v-textarea
-              :model-value="vendorLinkRequest.address"
-              label="Address"
+            <v-text-field
+              :model-value="vendorLinkRequest.mailingAddress"
+              label="Mailing Address"
               append-inner-icon="mdi-lock"
-              rows="1"
-              auto-grow
-              hide-details
+              readonly
+            />
+
+            <v-text-field
+              :model-value="vendorLinkRequest.physicalAddress"
+              label="Physical Address"
+              append-inner-icon="mdi-lock"
               readonly
             />
           </SimpleCard>

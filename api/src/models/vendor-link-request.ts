@@ -58,7 +58,10 @@ export class VendorLinkRequest extends BaseModel<
   declare ycorNumber: CreationOptional<string>
 
   @Attribute(DataTypes.STRING(500))
-  declare address: CreationOptional<string>
+  declare mailingAddress: CreationOptional<string>
+
+  @Attribute(DataTypes.STRING(500))
+  declare physicalAddress: CreationOptional<string>
 
   @Attribute(DataTypes.STRING(50))
   declare vendorId: CreationOptional<string>

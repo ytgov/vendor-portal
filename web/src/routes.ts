@@ -165,7 +165,6 @@ const routes: RouteRecordRaw[] = [
         name: "vendor/ProgramPage",
         component: () => import("@/pages/vendor/ProgramPage.vue"),
         props: true,
-
         children: [
           {
             path: "paid-sick-leave-rebate",
