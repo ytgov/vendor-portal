@@ -6,7 +6,6 @@
   <v-form
     v-else
     ref="formRef"
-    v-model="isValid"
     @submit.prevent="validateAndSave"
   >
     <v-row>
@@ -48,6 +47,7 @@
             v-else
             v-model="fileFormData[selectCorporateDocumentId]"
             :label="selectedCorporateDocumentName"
+            :rules="[required]"
           />
         </v-col>
       </v-row>
@@ -65,8 +65,9 @@
         <v-row>
           <v-col cols="12">
             <p>
-              If your business offers paid sick leave benefits outside of the Yukon Paid Sick Leave
-              Program, please provide supporting policy documents.
+              If your business offers paid sick leave benefits
+              <strong>outside of the Yukon Paid Sick Leave Program</strong>, please provide
+              supporting policy documents.
             </p>
           </v-col>
           <v-col
@@ -159,7 +160,6 @@
 
     <v-btn
       type="submit"
-      :disabled="!isValid"
       :loading="isSaving"
       text="Save"
     />
@@ -231,8 +231,6 @@ const selectCorporateDocumentId = computed<number | null>(() => {
   return documentation?.id ?? null
 })
 
-const isValid = ref(false)
-
 const snack = useSnack()
 const formRef = ref<InstanceType<typeof VForm> | null>(null)
 const isSaving = ref(false)
@@ -292,19 +290,28 @@ async function createVendorDocumentations(vendorId: number) {
 
 const emit = defineEmits<{ saved: [vendorId: number] }>()
 
-async function validate() {
-  if (isNil(programIdNumber.value) || isNil(vendorId.value) || formRef.value === null) return false
+function hasCorprateDocument() {
+  return (
+    !isNil(selectCorporateDocumentId.value) &&
+    !isNil(fileFormData.value[selectCorporateDocumentId.value])
+  )
+}
 
-  const { valid } = await formRef.value.validate()
-  return valid
+async function validateForm() {
+  if (formRef.value === null) return false
+
+  const { valid: isFormValid } = await formRef.value.validate()
+
+  const hasCorporateDocument = hasCorprateDocument()
+
+  return isFormValid && hasCorporateDocument
 }
 
 async function validateAndSave() {
   if (isNil(programIdNumber.value)) return
-  if (formRef.value === null) return
   if (isNil(vendorId.value)) return
 
-  const { valid } = await formRef.value.validate()
+  const valid = await validateForm()
   if (!valid) return
 
   try {
@@ -330,6 +337,6 @@ async function validateAndSave() {
 }
 
 defineExpose({
-  validate,
+  validate: validateForm,
 })
 </script>
