@@ -53,6 +53,7 @@ export class VendorLinkRequestsPolicy extends PolicyFactory(VendorLinkRequest) {
       "ycorNumber",
       "mailingAddress",
       "physicalAddress",
+      "businessDescription",
       "vendorId",
       "status",
       "reviewNotes",

@@ -19,6 +19,7 @@ export type VendorLinkRequest = {
   ycorNumber: string | null
   mailingAddress: string | null
   physicalAddress: string | null
+  businessDescription: string | null
   vendorId: string | null
   status: VendorLinkRequestStatuses
   decisionByUserId: number | null

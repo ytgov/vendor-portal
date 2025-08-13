@@ -90,6 +90,11 @@
                   v-model="vendorLinkRequest.operatingName"
                   label="Operating as"
                 />
+                <v-textarea
+                  v-model="vendorLinkRequest.businessDescription"
+                  label="Business description"
+                  rows="3"
+                />
                 <div class="d-flex">
                   <v-text-field
                     v-model="vendorLinkRequest.matchedVendorId"

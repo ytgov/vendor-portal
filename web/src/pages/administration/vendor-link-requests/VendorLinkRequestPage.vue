@@ -192,6 +192,14 @@
               append-inner-icon="mdi-lock"
               readonly
             />
+
+            <v-textarea
+              :model-value="vendorLinkRequest.businessDescription"
+              label="Business description"
+              rows="3"
+              append-inner-icon="mdi-lock"
+              readonly
+            />
           </SimpleCard>
         </v-col>
       </v-row>

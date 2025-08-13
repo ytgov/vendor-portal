@@ -63,6 +63,9 @@ export class VendorLinkRequest extends BaseModel<
   @Attribute(DataTypes.STRING(500))
   declare physicalAddress: CreationOptional<string>
 
+  @Attribute(DataTypes.STRING(1000))
+  declare businessDescription: CreationOptional<string>
+
   @Attribute(DataTypes.STRING(50))
   declare vendorId: CreationOptional<string>
 

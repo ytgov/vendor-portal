@@ -17,6 +17,7 @@ export type VendorLinkRequestShowView = Pick<
   | "ycorNumber"
   | "mailingAddress"
   | "physicalAddress"
+  | "businessDescription"
   | "vendorId"
   | "status"
   | "decisionByUserId"
@@ -41,6 +42,7 @@ export class ShowSerializer extends BaseSerializer<VendorLinkRequest> {
         "ycorNumber",
         "mailingAddress",
         "physicalAddress",
+        "businessDescription",
         "vendorId",
         "status",
         "decisionByUserId",
