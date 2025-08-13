@@ -17,8 +17,8 @@
             class="mt-2"
             size="40"
             color="#7A9A01"
-            >mdi-office-building</v-icon
-          >
+            icon="mdi-office-building"
+          />
           <div class="ml-2 text-subtitle-1">
             <strong>Department: </strong><br />{{ program.department }}
           </div>
@@ -28,19 +28,27 @@
             class="mt-2"
             size="40"
             color="#7A9A01"
-            >mdi-calendar</v-icon
-          >
+            icon="mdi-calendar"
+          />
           <div class="ml-2 text-subtitle-1">
             <strong>Enrolled Since: </strong><br />
             {{ formatDate(program.createdAt) }}
           </div>
+          <v-spacer />
+          <v-btn
+            color="primary"
+            variant="outlined"
+            prepend-icon="mdi-eye"
+            text="View Program Summary"
+            @click="openVendorProgram(program)"
+          />
         </div>
       </v-card-text>
     </v-card>
   </div>
 
   <router-link :to="{ name: 'programs/ProgramsAvailablePage' }">
-    <v-icon>mdi-magnify</v-icon> Find additional programs
+    <v-icon icon="mdi-magnify" /> Find additional programs
   </router-link>
 </template>
 
