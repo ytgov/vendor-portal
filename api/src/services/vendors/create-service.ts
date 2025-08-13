@@ -23,7 +23,6 @@ export class CreateService extends BaseService {
       isPerson,
       isPayable,
       isElectronicPay,
-
       ...optionalAttributes
     } = this.attributes
 
