@@ -207,6 +207,13 @@ async function createVendorDocumentations(vendorId: number) {
 
 const emit = defineEmits<{ saved: [vendorId: number] }>()
 
+async function validate() {
+  if (isNil(programIdNumber.value) || isNil(vendorId.value) || formRef.value === null) return false
+
+  const { valid } = await formRef.value.validate()
+  return valid
+}
+
 async function validateAndSave() {
   if (isNil(programIdNumber.value)) return
   if (formRef.value === null) return
@@ -236,4 +243,8 @@ async function validateAndSave() {
     isSaving.value = false
   }
 }
+
+defineExpose({
+  validate,
+})
 </script>
