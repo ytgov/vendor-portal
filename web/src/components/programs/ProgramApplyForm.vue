@@ -19,8 +19,9 @@
           label="Vendor applying for this program"
           :filters="vendorsFilter"
           :rules="[required]"
-        /> </v-col
-      ><!-- 
+        />
+      </v-col>
+      <!-- 
       <v-col
         cols="12"
         md="6"
@@ -28,11 +29,70 @@
         Self employed ?
       </v-col> -->
     </v-row>
+    <div v-if="showCorporateDocumentsDropdown">
+      <v-row>
+        <v-col cols="6">
+          <v-select
+            v-model="selectedCorporateDocumentName"
+            :items="CORPORATE_DOCUMENTS"
+            label="Select document to upload"
+            :rules="[required]"
+          />
+        </v-col>
+        <v-col cols="6">
+          <v-skeleton-loader
+            v-if="isNil(selectCorporateDocumentId) || isNil(selectedCorporateDocumentName)"
+            type="paragraph"
+          />
+          <v-file-input
+            v-else
+            v-model="fileFormData[selectCorporateDocumentId]"
+            :label="selectedCorporateDocumentName"
+          />
+        </v-col>
+      </v-row>
+    </div>
+
     <div
       v-for="(documentation, index) in documentations"
       :key="index"
     >
-      <template v-if="documentation.format === DocumentationFormats.TEXT">
+      <!-- BEGIN HANDLING SPECIAL DOCUMENTATION CASES -->
+      <template v-if="documentation.name === 'YCOR Certificate'"></template>
+      <template v-else-if="documentation.name === 'Business License'"></template>
+      <template v-else-if="documentation.name === 'CRA Remittance'"></template>
+      <template v-else-if="documentation.name === 'Paid Sick Leave Policy'">
+        <v-row>
+          <v-col cols="12">
+            <p>
+              If your business offers paid sick leave benefits outside of the Yukon Paid Sick Leave
+              Program, please provide supporting policy documents.
+            </p>
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-file-input
+              v-model="fileFormData[documentation.id]"
+              :label="documentation.name"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <div v-if="documentation.expires">
+              <DatePickerMenu
+                v-model="fileExpiresAtFormData[documentation.id]"
+                :field-options="{ label: 'Document expiration', hideDetails: true }"
+              />
+            </div>
+          </v-col>
+        </v-row>
+      </template>
+      <!-- END HANDLING SPECIAL DOCUMENTATION CASES -->
+      <template v-else-if="documentation.format === DocumentationFormats.TEXT">
         <v-row>
           <v-col
             cols="12"
@@ -145,6 +205,31 @@ const vendorId = ref<number | null>(null)
 const textFormData = ref<Record<number, string | null | undefined>>({})
 const fileFormData = ref<Record<number, File | null | undefined>>({})
 const fileExpiresAtFormData = ref<Record<number, string | null | undefined>>({})
+
+/* 
+For handling special documentation cases
+
+This is a bit of a hack to handle the special case of Business License and CRA Remittance documents.
+
+If a program requires both documents, we show a dropdown to select which one to upload since both are not required.
+*/
+const CORPORATE_DOCUMENTS = ["Business License", "CRA Remittance"]
+
+const showCorporateDocumentsDropdown = computed<boolean>(() => {
+  const documentationNames = documentations.value.map((documentation) => documentation.name)
+
+  return CORPORATE_DOCUMENTS.every((document) => documentationNames.includes(document))
+})
+
+const selectedCorporateDocumentName = ref<string | null>(CORPORATE_DOCUMENTS[0])
+
+const selectCorporateDocumentId = computed<number | null>(() => {
+  const documentation = documentations.value.find(
+    (documentation) => documentation.name === selectedCorporateDocumentName.value
+  )
+
+  return documentation?.id ?? null
+})
 
 const isValid = ref(false)
 
