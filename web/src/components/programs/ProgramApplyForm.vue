@@ -158,11 +158,14 @@
       </template>
     </div>
 
-    <v-btn
-      type="submit"
-      :loading="isSaving"
-      text="Save"
-    />
+    <div class="d-flex">
+      <v-spacer />
+      <v-btn
+        type="submit"
+        :loading="isSaving"
+        text="Apply Now"
+      />
+    </div>
   </v-form>
 </template>
 
@@ -302,9 +305,9 @@ async function validateForm() {
 
   const { valid: isFormValid } = await formRef.value.validate()
 
-  const hasCorporateDocument = hasCorprateDocument()
+  const corporateDocumentSatisfied = hasCorprateDocument() || !showCorporateDocumentsDropdown.value
 
-  return isFormValid && hasCorporateDocument
+  return isFormValid && corporateDocumentSatisfied
 }
 
 async function validateAndSave() {
