@@ -318,23 +318,31 @@ async function validateAndSave() {
 
   const { valid } = await formRef.value.validate()
   if (!valid) return
-  isLoading.value = true
-  submission.value.submission_date = new Date().toISOString()
 
-  const { data } = await httpClient.post(
-    `/api/program/pslr/${props.vendorId}/submissions`,
-    submission.value
-  )
+  try {
+    isLoading.value = true
+    submission.value.submission_date = new Date().toISOString()
 
-  console.log("Submission created:", data)
-  snack.success("Submission added")
+    const { data } = await httpClient.post(
+      `/api/program/pslr/${props.vendorId}/submissions`,
+      submission.value
+    )
 
-  router.push({
-    name: "vendor/programs/PaidSickLeaveHome",
-    params: { vendorId: props.vendorId },
-  })
+    console.log("Submission created:", data)
+    snack.success("Submission added")
 
-  isLoading.value = false
+    router.push({
+      name: "vendor/programs/PaidSickLeaveHome",
+      params: { vendorId: props.vendorId },
+    })
+  } catch (error) {
+    console.error(error)
+    snack.notify(`Failed to create submission: ${error}`, {
+      color: "error",
+    })
+  } finally {
+    isLoading.value = false
+  }
 }
 
 const breadcrumbs = computed(() => {
