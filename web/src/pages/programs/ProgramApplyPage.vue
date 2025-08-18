@@ -95,6 +95,12 @@
             text="Previous"
             @click="step = 2"
           />
+          <v-spacer />
+          <v-btn
+            text="Finish and Submit"
+            color="primary"
+            @click="programApplyFormRef?.save()"
+          />
         </div>
       </template>
     </v-stepper>
