@@ -38,7 +38,7 @@
             md="12"
           >
             <ProgramInfoCard
-              :program-id="programId"
+              :program-slug="program.slug"
               :show-apply="false"
             />
           </v-col>
@@ -79,7 +79,7 @@
                 </p>
                 <ProgramApplyForm
                   ref="programApplyFormRef"
-                  :program-id="programId"
+                  :program-id="program.id"
                   @saved="onApply"
                 />
               </v-card-text>
@@ -103,7 +103,7 @@
 
 <script setup lang="ts">
 import { isNil } from "lodash"
-import { computed, ref } from "vue"
+import { ref, toRefs } from "vue"
 import { useRouter } from "vue-router"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
@@ -112,9 +112,9 @@ import useProgram from "@/use/use-program"
 import ProgramApplyForm from "@/components/programs/ProgramApplyForm.vue"
 import ProgramInfoCard from "@/components/programs/ProgramInfoCard.vue"
 
-const props = defineProps<{ programId: string }>()
-const programIdNumber = computed(() => parseInt(props.programId))
-const { program } = useProgram(programIdNumber)
+const props = defineProps<{ programSlug: string }>()
+const { programSlug } = toRefs(props)
+const { program } = useProgram(programSlug)
 
 const step = ref(1)
 

@@ -34,7 +34,7 @@
           <v-select
             v-model="selectedCorporateDocumentName"
             :items="CORPORATE_DOCUMENTS"
-            label="Select document to upload"
+            label="Select corporate document to upload"
             :rules="[required]"
           />
         </v-col>
@@ -157,21 +157,12 @@
         </v-row>
       </template>
     </div>
-
-    <div class="d-flex">
-      <v-spacer />
-      <v-btn
-        type="submit"
-        :loading="isSaving"
-        text="Apply Now"
-      />
-    </div>
   </v-form>
 </template>
 
 <script setup lang="ts">
 import { isNil } from "lodash"
-import { computed, ref } from "vue"
+import { computed, ref, toRefs } from "vue"
 import { VForm } from "vuetify/lib/components/index.mjs"
 
 import { required } from "@/utils/validators"
@@ -187,18 +178,18 @@ import VendorSelect from "@/components/vendors/VendorSelect.vue"
 import DatePickerMenu from "@/components/common/DatePickerMenu.vue"
 import { VendorFiltersOptions } from "@/api/vendors-api"
 
-const props = defineProps<{ programId: string }>()
-const programIdNumber = computed(() => parseInt(props.programId))
+const props = defineProps<{ programId: number }>()
+const { programId } = toRefs(props)
 
 const vendorsFilter = computed<VendorFiltersOptions>(() => {
   return {
-    withoutPendingProgram: programIdNumber.value,
+    withoutPendingProgram: programId.value,
   }
 })
 
 const query = ref<DocumentationQueryOptions>({
   filters: {
-    inProgram: programIdNumber.value,
+    inProgram: programId.value,
   },
 })
 
@@ -311,7 +302,7 @@ async function validateForm() {
 }
 
 async function validateAndSave() {
-  if (isNil(programIdNumber.value)) return
+  if (isNil(programId.value)) return
   if (isNil(vendorId.value)) return
 
   const valid = await validateForm()
@@ -323,7 +314,7 @@ async function validateAndSave() {
     await createVendorDocumentations(vendorId.value)
     await vendorProgramsApi.create({
       vendorId: vendorId.value,
-      programId: programIdNumber.value,
+      programId: programId.value,
     })
 
     emit("saved", vendorId.value)
@@ -341,5 +332,6 @@ async function validateAndSave() {
 
 defineExpose({
   validate: validateForm,
+  save: validateAndSave,
 })
 </script>

@@ -120,7 +120,13 @@ const routes: RouteRecordRaw[] = [
         component: () => import("@/pages/programs/ProgramsAvailablePage.vue"),
       },
       {
-        path: ":programId/apply",
+        path: "paid-sick-leave-rebate/apply",
+        name: "programs/PaidSickLeaveRebateApplyPage",
+        component: () =>
+          import("@/pages/programs/paid-sick-leave-rebate/PaidSickLeaveRebateApplyPage.vue"),
+      },
+      {
+        path: ":programSlug/apply",
         name: "programs/ApplyPage",
         component: () => import("@/pages/programs/ProgramApplyPage.vue"),
         props: true,
