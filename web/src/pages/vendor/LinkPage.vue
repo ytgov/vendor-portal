@@ -64,7 +64,6 @@
                   rows="3"
                   :rules="[required]"
                 />
-
                 <v-checkbox
                   v-model="isMailingAndPhysicalAddressSame"
                   label="Physical Address is the same as Mailing Address"
