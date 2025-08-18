@@ -219,7 +219,6 @@
         class="mt-3"
         type="submit"
         color="primary"
-        :disabled="!isValid || isLoading"
         :loading="isLoading"
         text="Save Submission"
       />
