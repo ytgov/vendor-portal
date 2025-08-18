@@ -195,6 +195,7 @@ export type PSLRSubmission = {
   request_amount: number
   first_name: string
   last_name: string
+  position_title: string
   employee_name: string
   birth_date: string
   hire_date: string
