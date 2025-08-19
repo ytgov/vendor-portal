@@ -58,32 +58,8 @@
                   persistent-hint
                   :rules="[required, length(6)]"
                 />
-                <v-textarea
-                  v-model="vendorLinkRequest.mailingAddress"
-                  label="Mailing Address (required)"
-                  rows="3"
-                  :rules="[required]"
-                />
-                <v-checkbox
-                  v-model="isMailingAndPhysicalAddressSame"
-                  label="Physical Address is the same as Mailing Address"
-                />
-                <div v-if="!isMailingAndPhysicalAddressSame">
-                  <v-textarea
-                    v-model="vendorLinkRequest.physicalAddress"
-                    label="Physical Address"
-                    rows="3"
-                  />
-                </div>
-                <div v-else>
-                  <v-textarea
-                    v-model="vendorLinkRequest.mailingAddress"
-                    label="Physical Address"
-                    rows="3"
-                    disabled
-                  />
-                </div>
               </v-col>
+
               <v-col>
                 <v-text-field
                   v-model="vendorLinkRequest.operatingName"
@@ -94,57 +70,82 @@
                   label="Business description"
                   rows="3"
                 />
-                <div class="d-flex">
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                <v-text-field
+                  v-model="vendorLinkRequest.mailingAddress"
+                  label="Mailing Address (required)"
+                  :rules="[required]"
+                />
+                <v-checkbox
+                  v-model="isMailingAndPhysicalAddressSame"
+                  label="Physical Address is the same as Mailing Address"
+                  hide-details
+                />
+              </v-col>
+              <v-col>
+                <div v-if="!isMailingAndPhysicalAddressSame">
                   <v-text-field
-                    v-model="vendorLinkRequest.matchedVendorId"
-                    class="mb-4 mr-5"
-                    label="Existing vendor ID"
-                    hint="Assigned by Department of Finance, found on remittances"
-                    persistent-hint
-                  />
-                  <v-btn
-                    class="mb-5"
-                    prepend-icon="mdi-magnify"
-                    :disabled="!canSearch"
-                    style="height: 48px"
-                    text="Search"
-                    @click="doSearch"
+                    v-model="vendorLinkRequest.physicalAddress"
+                    label="Physical Address"
                   />
                 </div>
-                <div class="d-flex">
-                  <div
-                    v-if="error"
-                    class="text-subtitle-1 text-error"
-                    style="line-height: 36px"
-                  >
-                    <v-icon icon="mdi-alert-circle" />
-                    {{ error }}
-                  </div>
-                </div>
-                <div v-if="matchedVendor">
-                  <VendorMatchCard :vendor="matchedVendor" />
-                  <p class="mt-5">
-                    If this match is correct, please click the "Continue" button below.
-                  </p>
+                <div v-else>
+                  <v-text-field
+                    v-model="vendorLinkRequest.mailingAddress"
+                    label="Physical Address"
+                    disabled
+                  />
                 </div>
               </v-col>
             </v-row>
 
-            <div class="d-flex">
-              <v-btn
-                color="warning"
-                variant="outlined"
-                prepend-icon="mdi-chevron-left"
-                text="Previous"
-                @click="step = 1"
-              />
-              <v-spacer />
-              <v-btn
-                append-icon="mdi-chevron-right"
-                text="Continue"
-                @click="validateAndGoToLastStep"
-              />
-            </div>
+            <v-row>
+              <v-col>
+                <v-file-input
+                  v-model="vendorLinkRequest.ycorRegistrationDocument"
+                  label="YCOR registration document"
+                  :multiple="false"
+                  required
+                />
+                <p>
+                  The business name in the uploaded YCOR registration document must display the same
+                  business name as claimed in this form.
+                </p>
+              </v-col>
+              <v-col>
+                <v-file-input
+                  v-model="vendorLinkRequest.mostRecentUtilityBill"
+                  label="Most recent utility bill"
+                  :multiple="false"
+                  required
+                />
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col
+                class="d-flex"
+                cols="12"
+              >
+                <v-btn
+                  color="warning"
+                  variant="outlined"
+                  prepend-icon="mdi-chevron-left"
+                  text="Previous"
+                  @click="step = 1"
+                />
+                <v-spacer />
+                <v-btn
+                  append-icon="mdi-chevron-right"
+                  text="Continue"
+                  @click="validateAndGoToLastStep"
+                />
+              </v-col>
+            </v-row>
           </v-form>
         </SimpleCard>
       </template>
@@ -191,8 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import { isEmpty } from "lodash"
-import { computed, ref } from "vue"
+import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { VForm } from "vuetify/lib/components/index.mjs"
 
@@ -203,7 +203,7 @@ import { VendorLinkRequest, vendorLinkRequestsApi } from "@/api/vendor-link-requ
 import useSnack from "@/use/use-snack"
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useCurrentUser from "@/use/use-current-user"
-import { useVendor, Vendor } from "@/use/use-vendor"
+import { Vendor } from "@/use/use-vendor"
 
 import VendorMatchCard from "@/components/vendors/VendorMatchCard.vue"
 import SimpleCard from "@/components/common/SimpleCard.vue"
@@ -216,19 +216,9 @@ const vendorLinkRequest = ref<Partial<VendorLinkRequest>>({ userId: currentUser.
 const isValid = ref(false)
 const isMailingAndPhysicalAddressSame = ref(false)
 
-const error = ref("")
-
 const matchedVendor = ref<Vendor | null>(null)
 
 const formRef = ref<InstanceType<typeof VForm> | null>(null)
-
-const canSearch = computed(() => {
-  if (isEmpty(vendorLinkRequest.value.matchedVendorId)) {
-    return false
-  }
-
-  return true
-})
 
 async function validateAndGoToLastStep() {
   if (formRef.value === null) return
@@ -237,21 +227,6 @@ async function validateAndGoToLastStep() {
   if (!valid) return
 
   step.value = 3
-}
-
-async function doSearch() {
-  try {
-    const vendorIdRef = vendorLinkRequest.value.matchedVendorId
-    const { fetch } = useVendor(ref(vendorIdRef))
-
-    const vendor = await fetch()
-
-    error.value = ""
-    matchedVendor.value = vendor || null
-  } catch {
-    matchedVendor.value = null
-    error.value = "No match was found for that Vendor ID"
-  }
 }
 
 const snack = useSnack()

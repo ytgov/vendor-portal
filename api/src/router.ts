@@ -26,6 +26,7 @@ import {
   ProgramUsersController,
   UsersController,
   VendorDocumentationsController,
+  VendorLinkRequests,
   VendorLinkRequestsController,
   VendorProgramsController,
   VendorsController,
@@ -125,6 +126,12 @@ router
   .get(VendorLinkRequestsController.show)
   .patch(VendorLinkRequestsController.update)
   .delete(VendorLinkRequestsController.destroy)
+router
+  .route("/api/vendor-link-requests/:vendorLinkRequestId/download/ycor-registration-document")
+  .get(VendorLinkRequests.DownloadYcorRegistrationDocumentController.show)
+router
+  .route("/api/vendor-link-requests/:vendorLinkRequestId/download/most-recent-utility-bill")
+  .get(VendorLinkRequests.DownloadMostRecentUtilityBillController.show)
 
 // Vendor Program
 router

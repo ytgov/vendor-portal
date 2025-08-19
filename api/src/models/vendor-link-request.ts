@@ -79,6 +79,30 @@ export class VendorLinkRequest extends BaseModel<
   @Default(VendorLinkRequestStatuses.PENDING)
   declare status: CreationOptional<string>
 
+  @Attribute(DataTypes.STRING(255))
+  declare ycorRegistrationDocumentFileName: CreationOptional<string>
+
+  @Attribute(DataTypes.STRING(255))
+  declare ycorRegistrationDocumentMimeType: CreationOptional<string>
+
+  @Attribute(DataTypes.INTEGER)
+  declare ycorRegistrationDocumentSize: CreationOptional<number>
+
+  @Attribute(DataTypes.BLOB)
+  declare ycorRegistrationDocumentContent: CreationOptional<Buffer>
+
+  @Attribute(DataTypes.STRING(255))
+  declare mostRecentUtilityBillFileName: CreationOptional<string>
+
+  @Attribute(DataTypes.STRING(255))
+  declare mostRecentUtilityBillMimeType: CreationOptional<string>
+
+  @Attribute(DataTypes.INTEGER)
+  declare mostRecentUtilityBillSize: CreationOptional<number>
+
+  @Attribute(DataTypes.BLOB)
+  declare mostRecentUtilityBillContent: CreationOptional<Buffer>
+
   @Attribute(DataTypes.INTEGER)
   declare decisionByUserId: CreationOptional<number>
 

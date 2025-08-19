@@ -153,53 +153,78 @@
         >
           <SimpleCard>
             <h3 class="mb-5">Request Vendor Info</h3>
-            <v-text-field
-              v-model="vendorLinkRequest.businessName"
-              label="Business name"
-              append-inner-icon="mdi-lock"
-              readonly
-            />
-            <v-text-field
-              v-model="vendorLinkRequest.operatingName"
-              label="Operating name"
-              append-inner-icon="mdi-lock"
-              readonly
-            />
-            <v-text-field
-              v-model="vendorLinkRequest.matchedVendorId"
-              label="Requested Vendor ID"
-              append-inner-icon="mdi-lock"
-              readonly
-            />
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="vendorLinkRequest.businessName"
+                  label="Business name"
+                  append-inner-icon="mdi-lock"
+                  readonly
+                />
 
-            <v-text-field
-              :model-value="vendorLinkRequest.ycorNumber"
-              label="YCOR number"
-              append-inner-icon="mdi-lock"
-              readonly
-            />
+                <v-text-field
+                  v-model="vendorLinkRequest.operatingName"
+                  label="Operating name"
+                  append-inner-icon="mdi-lock"
+                  readonly
+                />
 
-            <v-text-field
-              :model-value="vendorLinkRequest.mailingAddress"
-              label="Mailing Address"
-              append-inner-icon="mdi-lock"
-              readonly
-            />
+                <v-text-field
+                  :model-value="vendorLinkRequest.ycorNumber"
+                  label="YCOR number"
+                  append-inner-icon="mdi-lock"
+                  readonly
+                />
 
-            <v-text-field
-              :model-value="vendorLinkRequest.physicalAddress"
-              label="Physical Address"
-              append-inner-icon="mdi-lock"
-              readonly
-            />
+                <v-text-field
+                  :model-value="vendorLinkRequest.mailingAddress"
+                  label="Mailing Address"
+                  append-inner-icon="mdi-lock"
+                  readonly
+                />
 
-            <v-textarea
-              :model-value="vendorLinkRequest.businessDescription"
-              label="Business description"
-              rows="3"
-              append-inner-icon="mdi-lock"
-              readonly
-            />
+                <v-text-field
+                  :model-value="vendorLinkRequest.physicalAddress"
+                  label="Physical Address"
+                  append-inner-icon="mdi-lock"
+                  readonly
+                />
+              </v-col>
+
+              <v-col cols="12">
+                <v-textarea
+                  :model-value="vendorLinkRequest.businessDescription"
+                  label="Business description"
+                  rows="3"
+                  append-inner-icon="mdi-lock"
+                  readonly
+                />
+              </v-col>
+              <v-col
+                class="d-flex"
+                cols="12"
+              >
+                <v-btn
+                  color="primary"
+                  prepend-icon="mdi-download"
+                  :loading="isDownloading"
+                  text="Download YCOR Registration Document"
+                  hide-details
+                  @click="downloadYcorRegistrationDocument"
+                />
+
+                <v-btn
+                  class="ml-4"
+                  color="primary"
+                  variant="outlined"
+                  prepend-icon="mdi-download"
+                  :loading="isDownloading"
+                  text="Download Most Recent Utility Bill"
+                  hide-details
+                  @click="downloadMostRecentUtilityBill"
+                />
+              </v-col>
+            </v-row>
           </SimpleCard>
         </v-col>
       </v-row>
@@ -217,7 +242,7 @@ import { formatDate, formatDateRelative } from "@/utils/formatters"
 
 import vendorsApi from "@/api/vendors-api"
 import vendorUsersApi from "@/api/vendor-users-api"
-import { VendorLinkRequestStatuses } from "@/api/vendor-link-requests-api"
+import vendorLinkRequestsApi, { VendorLinkRequestStatuses } from "@/api/vendor-link-requests-api"
 
 import useSnack from "@/use/use-snack"
 import useBreadcrumbs from "@/use/use-breadcrumbs"
@@ -325,6 +350,60 @@ async function approveVendorLinkRequest() {
     snack.error(`Failed to accept Vendor Link Request: ${error}`)
   } finally {
     isDeciding.value = false
+  }
+}
+
+const isDownloading = ref(false)
+
+async function downloadYcorRegistrationDocument() {
+  if (isNil(vendorLinkRequest.value)) return
+
+  try {
+    isDownloading.value = true
+
+    const blob = await vendorLinkRequestsApi.downloadYcorRegistrationDocument(
+      vendorLinkRequestIdNumber.value
+    )
+
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = vendorLinkRequest.value.ycorRegistrationDocumentFileName || "download"
+    link.click()
+    window.URL.revokeObjectURL(url)
+
+    snack.success("YCOR Registration Document downloaded")
+  } catch (error) {
+    console.error(error)
+    snack.error("Failed to download YCOR Registration Document")
+  } finally {
+    isDownloading.value = false
+  }
+}
+
+async function downloadMostRecentUtilityBill() {
+  if (isNil(vendorLinkRequest.value)) return
+
+  try {
+    isDownloading.value = true
+
+    const blob = await vendorLinkRequestsApi.downloadMostRecentUtilityBill(
+      vendorLinkRequestIdNumber.value
+    )
+
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = vendorLinkRequest.value.mostRecentUtilityBillFileName || "download"
+    link.click()
+    window.URL.revokeObjectURL(url)
+
+    snack.success("Most Recent Utility Bill downloaded")
+  } catch (error) {
+    console.error(error)
+    snack.error("Failed to download Most Recent Utility Bill")
+  } finally {
+    isDownloading.value = false
   }
 }
 
