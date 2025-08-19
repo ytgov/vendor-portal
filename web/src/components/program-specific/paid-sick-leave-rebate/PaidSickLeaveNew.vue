@@ -401,7 +401,10 @@ async function validateAndSave() {
   if (!valid) return
 
   const { valid: qualifyValid } = await qualifyFormRef.value.validate()
-  if (!qualifyValid) return
+  if (!qualifyValid) {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+    return
+  }
 
   try {
     isLoading.value = true
