@@ -9,7 +9,7 @@
         md="6"
       >
         <ProgramInfoCard
-          :program-id="`${program.id}`"
+          :program-slug="program.slug"
           :show-apply="canApply"
         />
       </v-col>

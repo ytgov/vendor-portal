@@ -8,6 +8,7 @@
       v-for="(programDocumentation, index) in programDocumentations"
       :key="index"
       class="mb-5"
+      :vendor-id="vendorProgram.vendorId"
       :program-documentation-id="programDocumentation.id"
     />
   </div>

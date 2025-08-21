@@ -67,9 +67,9 @@ import useVendorDocumentations, {
 } from "@/use/use-vendor-documentations"
 import { DocumentationFormats } from "@/api/documentations-api"
 
-const props = defineProps<{ programDocumentationId: number }>()
+const props = defineProps<{ vendorId: number; programDocumentationId: number }>()
 
-const { programDocumentationId } = toRefs(props)
+const { vendorId, programDocumentationId } = toRefs(props)
 
 const { programDocumentation } = useProgramDocumentation(programDocumentationId)
 
@@ -79,6 +79,7 @@ const vendorDocumentationsQuery = computed<VendorDocumentationQueryOptions>(() =
   return {
     where: {
       documentationId: programDocumentation.value.documentationId,
+      vendorId: vendorId.value,
     },
     filters: {},
     perPage: 10,

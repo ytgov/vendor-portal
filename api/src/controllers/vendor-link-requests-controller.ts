@@ -74,8 +74,22 @@ export class VendorLinkRequestsController extends BaseController<VendorLinkReque
           .json({ message: "You are not authorized to create this vendorLinkRequest." })
       }
 
+      const ycorRegistrationDocument = this.request.body.ycorRegistrationDocument
+      this.request.body.ycorRegistrationDocumentFileName = ycorRegistrationDocument.name
+      this.request.body.ycorRegistrationDocumentMimeType = ycorRegistrationDocument.type
+      this.request.body.ycorRegistrationDocumentSize = ycorRegistrationDocument.size
+
+      const mostRecentUtilityBill = this.request.body.mostRecentUtilityBill
+      this.request.body.mostRecentUtilityBillFileName = mostRecentUtilityBill.name
+      this.request.body.mostRecentUtilityBillMimeType = mostRecentUtilityBill.type
+      this.request.body.mostRecentUtilityBillSize = mostRecentUtilityBill.size
+
       const permittedAttributes = policy.permitAttributesForCreate(this.request.body)
-      const newVendorLinkRequest = await CreateService.perform(permittedAttributes)
+      const newVendorLinkRequest = await CreateService.perform(
+        permittedAttributes,
+        ycorRegistrationDocument.path,
+        mostRecentUtilityBill.path
+      )
       return this.response.status(201).json({ vendorLinkRequest: newVendorLinkRequest })
     } catch (error) {
       logger.error(`VendorLinkRequest creation failed: ${error}`, { error })

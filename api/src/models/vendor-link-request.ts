@@ -58,7 +58,13 @@ export class VendorLinkRequest extends BaseModel<
   declare ycorNumber: CreationOptional<string>
 
   @Attribute(DataTypes.STRING(500))
-  declare address: CreationOptional<string>
+  declare mailingAddress: CreationOptional<string>
+
+  @Attribute(DataTypes.STRING(500))
+  declare physicalAddress: CreationOptional<string>
+
+  @Attribute(DataTypes.STRING(1000))
+  declare businessDescription: CreationOptional<string>
 
   @Attribute(DataTypes.STRING(50))
   declare vendorId: CreationOptional<string>
@@ -72,6 +78,30 @@ export class VendorLinkRequest extends BaseModel<
   })
   @Default(VendorLinkRequestStatuses.PENDING)
   declare status: CreationOptional<string>
+
+  @Attribute(DataTypes.STRING(255))
+  declare ycorRegistrationDocumentFileName: CreationOptional<string>
+
+  @Attribute(DataTypes.STRING(255))
+  declare ycorRegistrationDocumentMimeType: CreationOptional<string>
+
+  @Attribute(DataTypes.INTEGER)
+  declare ycorRegistrationDocumentSize: CreationOptional<number>
+
+  @Attribute(DataTypes.BLOB)
+  declare ycorRegistrationDocumentContent: CreationOptional<Buffer>
+
+  @Attribute(DataTypes.STRING(255))
+  declare mostRecentUtilityBillFileName: CreationOptional<string>
+
+  @Attribute(DataTypes.STRING(255))
+  declare mostRecentUtilityBillMimeType: CreationOptional<string>
+
+  @Attribute(DataTypes.INTEGER)
+  declare mostRecentUtilityBillSize: CreationOptional<number>
+
+  @Attribute(DataTypes.BLOB)
+  declare mostRecentUtilityBillContent: CreationOptional<Buffer>
 
   @Attribute(DataTypes.INTEGER)
   declare decisionByUserId: CreationOptional<number>

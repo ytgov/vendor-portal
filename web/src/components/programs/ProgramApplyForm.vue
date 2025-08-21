@@ -6,7 +6,6 @@
   <v-form
     v-else
     ref="formRef"
-    v-model="isValid"
     @submit.prevent="validateAndSave"
   >
     <v-row>
@@ -19,8 +18,9 @@
           label="Vendor applying for this program"
           :filters="vendorsFilter"
           :rules="[required]"
-        /> </v-col
-      ><!-- 
+        />
+      </v-col>
+      <!-- 
       <v-col
         cols="12"
         md="6"
@@ -28,11 +28,72 @@
         Self employed ?
       </v-col> -->
     </v-row>
+    <div v-if="showCorporateDocumentsDropdown">
+      <v-row>
+        <v-col cols="6">
+          <v-select
+            v-model="selectedCorporateDocumentName"
+            :items="CORPORATE_DOCUMENTS"
+            label="Select corporate document to upload"
+            :rules="[required]"
+          />
+        </v-col>
+        <v-col cols="6">
+          <v-skeleton-loader
+            v-if="isNil(selectCorporateDocumentId) || isNil(selectedCorporateDocumentName)"
+            type="paragraph"
+          />
+          <v-file-input
+            v-else
+            v-model="fileFormData[selectCorporateDocumentId]"
+            :label="selectedCorporateDocumentName"
+            :rules="[required]"
+          />
+        </v-col>
+      </v-row>
+    </div>
+
     <div
       v-for="(documentation, index) in documentations"
       :key="index"
     >
-      <template v-if="documentation.format === DocumentationFormats.TEXT">
+      <!-- BEGIN HANDLING SPECIAL DOCUMENTATION CASES -->
+      <template v-if="documentation.name === 'YCOR Certificate'"></template>
+      <template v-else-if="documentation.name === 'Business License'"></template>
+      <template v-else-if="documentation.name === 'CRA Remittance'"></template>
+      <template v-else-if="documentation.name === 'Paid Sick Leave Policy'">
+        <v-row>
+          <v-col cols="12">
+            <p>
+              If your business offers paid sick leave benefits
+              <strong>outside of the Yukon Paid Sick Leave Program</strong>, please provide
+              supporting policy documents.
+            </p>
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-file-input
+              v-model="fileFormData[documentation.id]"
+              :label="documentation.name"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <div v-if="documentation.expires">
+              <DatePickerMenu
+                v-model="fileExpiresAtFormData[documentation.id]"
+                :field-options="{ label: 'Document expiration', hideDetails: true }"
+              />
+            </div>
+          </v-col>
+        </v-row>
+      </template>
+      <!-- END HANDLING SPECIAL DOCUMENTATION CASES -->
+      <template v-else-if="documentation.format === DocumentationFormats.TEXT">
         <v-row>
           <v-col
             cols="12"
@@ -96,19 +157,12 @@
         </v-row>
       </template>
     </div>
-
-    <v-btn
-      type="submit"
-      :disabled="!isValid"
-      :loading="isSaving"
-      text="Save"
-    />
   </v-form>
 </template>
 
 <script setup lang="ts">
 import { isNil } from "lodash"
-import { computed, ref } from "vue"
+import { computed, ref, toRefs } from "vue"
 import { VForm } from "vuetify/lib/components/index.mjs"
 
 import { required } from "@/utils/validators"
@@ -124,18 +178,18 @@ import VendorSelect from "@/components/vendors/VendorSelect.vue"
 import DatePickerMenu from "@/components/common/DatePickerMenu.vue"
 import { VendorFiltersOptions } from "@/api/vendors-api"
 
-const props = defineProps<{ programId: string }>()
-const programIdNumber = computed(() => parseInt(props.programId))
+const props = defineProps<{ programId: number }>()
+const { programId } = toRefs(props)
 
 const vendorsFilter = computed<VendorFiltersOptions>(() => {
   return {
-    withoutPendingProgram: programIdNumber.value,
+    withoutPendingProgram: programId.value,
   }
 })
 
 const query = ref<DocumentationQueryOptions>({
   filters: {
-    inProgram: programIdNumber.value,
+    inProgram: programId.value,
   },
 })
 
@@ -146,7 +200,30 @@ const textFormData = ref<Record<number, string | null | undefined>>({})
 const fileFormData = ref<Record<number, File | null | undefined>>({})
 const fileExpiresAtFormData = ref<Record<number, string | null | undefined>>({})
 
-const isValid = ref(false)
+/* 
+For handling special documentation cases
+
+This is a bit of a hack to handle the special case of Business License and CRA Remittance documents.
+
+If a program requires both documents, we show a dropdown to select which one to upload since both are not required.
+*/
+const CORPORATE_DOCUMENTS = ["Business License", "CRA Remittance"]
+
+const showCorporateDocumentsDropdown = computed<boolean>(() => {
+  const documentationNames = documentations.value.map((documentation) => documentation.name)
+
+  return CORPORATE_DOCUMENTS.every((document) => documentationNames.includes(document))
+})
+
+const selectedCorporateDocumentName = ref<string | null>(CORPORATE_DOCUMENTS[0])
+
+const selectCorporateDocumentId = computed<number | null>(() => {
+  const documentation = documentations.value.find(
+    (documentation) => documentation.name === selectedCorporateDocumentName.value
+  )
+
+  return documentation?.id ?? null
+})
 
 const snack = useSnack()
 const formRef = ref<InstanceType<typeof VForm> | null>(null)
@@ -207,12 +284,28 @@ async function createVendorDocumentations(vendorId: number) {
 
 const emit = defineEmits<{ saved: [vendorId: number] }>()
 
+function hasCorprateDocument() {
+  return (
+    !isNil(selectCorporateDocumentId.value) &&
+    !isNil(fileFormData.value[selectCorporateDocumentId.value])
+  )
+}
+
+async function validateForm() {
+  if (formRef.value === null) return false
+
+  const { valid: isFormValid } = await formRef.value.validate()
+
+  const corporateDocumentSatisfied = hasCorprateDocument() || !showCorporateDocumentsDropdown.value
+
+  return isFormValid && corporateDocumentSatisfied
+}
+
 async function validateAndSave() {
-  if (isNil(programIdNumber.value)) return
-  if (formRef.value === null) return
+  if (isNil(programId.value)) return
   if (isNil(vendorId.value)) return
 
-  const { valid } = await formRef.value.validate()
+  const valid = await validateForm()
   if (!valid) return
 
   try {
@@ -221,7 +314,7 @@ async function validateAndSave() {
     await createVendorDocumentations(vendorId.value)
     await vendorProgramsApi.create({
       vendorId: vendorId.value,
-      programId: programIdNumber.value,
+      programId: programId.value,
     })
 
     emit("saved", vendorId.value)
@@ -236,4 +329,9 @@ async function validateAndSave() {
     isSaving.value = false
   }
 }
+
+defineExpose({
+  validate: validateForm,
+  save: validateAndSave,
+})
 </script>
