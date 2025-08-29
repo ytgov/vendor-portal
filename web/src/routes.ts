@@ -110,96 +110,107 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
-    path: "/programs",
+    path: "/",
     component: () => import("@/layouts/DefaultLayout.vue"),
     meta: { requiresUser: true },
     children: [
       {
-        path: "",
-        name: "programs/ProgramsAvailablePage",
-        component: () => import("@/pages/programs/ProgramsAvailablePage.vue"),
-      },
-      {
-        path: "paid-sick-leave-rebate/apply",
-        name: "programs/PaidSickLeaveRebateApplyPage",
-        component: () =>
-          import("@/pages/programs/paid-sick-leave-rebate/PaidSickLeaveRebateApplyPage.vue"),
-      },
-      {
-        path: ":programSlug/apply",
-        name: "programs/ApplyPage",
-        component: () => import("@/pages/programs/ProgramApplyPage.vue"),
-        props: true,
-      },
-    ],
-  },
-  {
-    path: "/individual",
-    component: () => import("@/layouts/DefaultLayout.vue"),
-    meta: { requiresUser: true },
-    children: [
-      {
-        path: "",
-        name: "individual/HomePage",
-        component: () => import("@/pages/individual/HomePage.vue"),
-      },
-      {
-        path: "profile",
-        name: "individual/ProfilePage",
-        component: () => import("@/pages/ProfilePage.vue"),
-      },
-    ],
-  },
-  {
-    path: "/vendor",
-    component: () => import("@/layouts/DefaultLayout.vue"),
-    children: [
-      {
-        path: "link",
-        name: "vendor/LinkPage",
-        component: () => import("@/pages/vendor/LinkPage.vue"),
-        props: true,
-      },
-      {
-        path: ":vendorId",
-        name: "vendor/HomePage",
-        component: () => import("@/pages/vendor/VendorViewPage.vue"),
-        props: true,
-      },
-      {
-        path: ":vendorId/programs/",
-        name: "vendor/ProgramPage",
-        component: () => import("@/pages/vendor/ProgramPage.vue"),
-        props: true,
+        path: "individual",
         children: [
           {
-            path: "paid-sick-leave-rebate",
-            name: "vendor/programs/PaidSickLeaveHome",
-            component: () =>
-              import("@/components/program-specific/paid-sick-leave-rebate/PaidSickLeaveHome.vue"),
-            props: true,
+            path: "",
+            name: "individual/HomePage",
+            component: () => import("@/pages/individual/HomePage.vue"),
           },
           {
-            path: "paid-sick-leave-rebate/new",
-            name: "vendor/programs/PaidSickLeaveNew",
+            path: "profile",
+            name: "individual/ProfilePage",
+            component: () => import("@/pages/ProfilePage.vue"),
+          },
+        ],
+      },
+      {
+        path: "programs",
+        children: [
+          {
+            path: "",
+            name: "programs/ProgramsAvailablePage",
+            component: () => import("@/pages/programs/ProgramsAvailablePage.vue"),
+          },
+          {
+            path: "paid-sick-leave-rebate/apply",
+            name: "programs/PaidSickLeaveRebateApplyPage",
             component: () =>
-              import("@/components/program-specific/paid-sick-leave-rebate/PaidSickLeaveNew.vue"),
+              import("@/pages/programs/paid-sick-leave-rebate/PaidSickLeaveRebateApplyPage.vue"),
+          },
+          {
+            path: ":programSlug/apply",
+            name: "programs/ApplyPage",
+            component: () => import("@/pages/programs/ProgramApplyPage.vue"),
             props: true,
           },
         ],
       },
+      {
+        path: "vendor-link-requests",
+        name: "VendorLinkRequestsPage",
+        component: () => import("@/pages/vendor-link-requests/VendorLinkRequestsPage.vue"),
+      },
+      {
+        path: "vendor",
+        children: [
+          {
+            path: "link",
+            name: "vendor/LinkPage",
+            component: () => import("@/pages/vendor/LinkPage.vue"),
+            props: true,
+          },
+          {
+            path: ":vendorId",
+            name: "vendor/HomePage",
+            component: () => import("@/pages/vendor/VendorViewPage.vue"),
+            props: true,
+          },
+          {
+            path: ":vendorId/programs/",
+            name: "vendor/ProgramPage",
+            component: () => import("@/pages/vendor/ProgramPage.vue"),
+            props: true,
+            children: [
+              {
+                path: "paid-sick-leave-rebate",
+                name: "vendor/programs/PaidSickLeaveHome",
+                component: () =>
+                  import(
+                    "@/components/program-specific/paid-sick-leave-rebate/PaidSickLeaveHome.vue"
+                  ),
+                props: true,
+              },
+              {
+                path: "paid-sick-leave-rebate/new",
+                name: "vendor/programs/PaidSickLeaveNew",
+                component: () =>
+                  import(
+                    "@/components/program-specific/paid-sick-leave-rebate/PaidSickLeaveNew.vue"
+                  ),
+                props: true,
+              },
+            ],
+          },
 
-      /* {
+          /* {
         path: ":vendorId/programs/:programId", // _TODO_ switch to :slug
         name: "vendor-program/VendorProgramPage",
         component: () => import("@/pages/vendor-programs/VendorProgramPage.vue"),
         props: true,
       }, */
-      {
-        path: ":vendorId/programs/:programId/submissions/:submissionId", // _TODO_ switch to :slug
-        name: "vendor-program/SubmissionViewPage",
-        component: () => import("@/pages/vendor-programs/VendorProgramSubmissionViewPage.vue"),
-        props: true,
+          {
+            path: ":vendorId/programs/:programId/submissions/:submissionId", // _TODO_ switch to :slug
+            name: "vendor-program/SubmissionViewPage",
+            component: () => import("@/pages/vendor-programs/VendorProgramSubmissionViewPage.vue"),
+            props: true,
+          },
+        ],
       },
     ],
   },
