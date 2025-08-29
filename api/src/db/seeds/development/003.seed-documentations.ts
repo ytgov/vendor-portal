@@ -6,10 +6,6 @@ import Documentation from "@/models/documentation"
 export async function seed(): Promise<void> {
   const documentationsAttributes: CreationAttributes<Documentation>[] = [
     {
-      name: "YCOR Certificate",
-      format: Documentation.Formats.FILE,
-    },
-    {
       name: "Business License",
       format: Documentation.Formats.FILE,
     },
