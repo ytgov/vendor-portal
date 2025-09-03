@@ -141,6 +141,13 @@ table.table {
   border: 1px #d7cfbe solid;
   background-color: #f8f8f8;
 }
+.simple-card .v-list .v-list-item-title {
+  font-weight: 600;
+}
+.simple-card .v-list .v-list-item-subtitle {
+  opacity: 90%;
+  font-weight: 500;
+}
 
 .simple-card .v-list .v-divider {
   border-top: 1px #d7cfbe solid;
