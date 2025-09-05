@@ -64,6 +64,13 @@
       />
       <v-list-item
         v-if="isSystemAdmin"
+        title="Program Applications"
+        :to="{ name: 'administration/VendorProgramsManagePage' }"
+        prepend-icon="mdi-handshake"
+      />
+      <v-divider />
+      <v-list-item
+        v-if="isSystemAdmin"
         title="Documentation"
         :to="{ name: 'administration/DocumentationsPage' }"
         prepend-icon="mdi-file-sign"

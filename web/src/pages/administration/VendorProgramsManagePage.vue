@@ -11,7 +11,7 @@
 
       <VendorProgramsDataTableServer
         :filters="filters"
-        @clicked="goToVendorProgramPage"
+        @click="goToVendorProgramPage"
       />
     </v-card-text>
   </v-card>
@@ -22,6 +22,7 @@ import { computed, ref } from "vue"
 import { useRouter } from "vue-router"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
+import { VendorProgram } from "@/api/vendor-programs-api"
 
 import VendorProgramsDataTableServer from "@/components/vendor-programs/VendorProgramsDataTableServer.vue"
 
@@ -33,8 +34,15 @@ const filters = computed(() => ({
   search: search.value,
 }))
 
-function goToVendorProgramPage(vendorProgramId: number) {
-  router.push({ name: "administration/VendorProgramPage", params: { vendorProgramId } })
+function goToVendorProgramPage(vendorProgram: VendorProgram) {
+  router.push({
+    name: "administration/VendorProgramRequestPage",
+    params: {
+      programId: vendorProgram.programId,
+      vendorId: vendorProgram.vendorId,
+      vendorProgramId: vendorProgram.id,
+    },
+  })
 }
 
 useBreadcrumbs("Manage Vendor Programs", [
