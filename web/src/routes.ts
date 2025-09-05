@@ -76,6 +76,11 @@ const routes: RouteRecordRaw[] = [
         ],
       },
       {
+        path: "vendor-programs",
+        name: "administration/VendorProgramsManagePage",
+        component: () => import("@/pages/administration/VendorProgramsManagePage.vue"),
+      },
+      {
         path: "documentations",
         name: "administration/DocumentationsPage",
         component: () =>
