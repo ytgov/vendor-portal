@@ -200,10 +200,7 @@
                   readonly
                 />
               </v-col>
-              <v-col
-                class="d-flex"
-                cols="12"
-              >
+              <v-col cols="12">
                 <v-btn
                   color="primary"
                   prepend-icon="mdi-download"
@@ -212,9 +209,9 @@
                   hide-details
                   @click="downloadYcorRegistrationDocument"
                 />
-
+              </v-col>
+              <v-col cols="12">
                 <v-btn
-                  class="ml-4"
                   color="primary"
                   variant="outlined"
                   prepend-icon="mdi-download"

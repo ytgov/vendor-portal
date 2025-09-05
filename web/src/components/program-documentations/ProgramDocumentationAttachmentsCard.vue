@@ -17,18 +17,23 @@
           <p class="mb-2">
             File name: <strong>{{ vendorDocumentation.fileName }}</strong>
           </p>
-          <p class="mb-5">
+          <!-- <p class="mb-5">
             Expires on: <strong> {{ formatDate(vendorDocumentation.expiresAt) }}</strong>
-          </p>
-          <v-btn
-            class="mr-5"
-            size="small"
-            text="View"
-          />
-          <v-btn
-            size="small"
-            text="Download"
-          />
+          </p> -->
+          <div class="d-flex">
+            <v-btn
+              class="mr-4"
+              size="small"
+              text="View"
+              :disabled="!canPreview(vendorDocumentation.mimeType)"
+              @click="previewPdf(vendorDocumentation, true)"
+            />
+            <DownloadFileForm
+              :download-url="getDownloadUrl(vendorDocumentation)"
+              text="Download"
+              size="small"
+            />
+          </div>
         </div>
       </div>
       <div v-else-if="programDocumentation.documentation.format === DocumentationFormats.TEXT">
@@ -52,6 +57,7 @@
         </div>
       </div>
     </v-card-text>
+    <PdfPreviewDialog />
   </v-card>
 </template>
 
@@ -59,13 +65,18 @@
 import { isNil } from "lodash"
 import { computed, toRefs } from "vue"
 
-import { formatDate } from "@/utils/formatters"
+import { API_BASE_URL } from "@/config"
+import { DocumentationFormats } from "@/api/documentations-api"
 
+import usePdfPreview from "@/use/vendor-documentations/use-preview"
 import useProgramDocumentation from "@/use/use-program-documentation"
 import useVendorDocumentations, {
+  VendorDocumentation,
   VendorDocumentationQueryOptions,
 } from "@/use/use-vendor-documentations"
-import { DocumentationFormats } from "@/api/documentations-api"
+
+import DownloadFileForm from "@/components/common/DownloadFileForm.vue"
+import PdfPreviewDialog from "@/components/vendor-documentations/PdfPreviewDialog.vue"
 
 const props = defineProps<{ vendorId: number; programDocumentationId: number }>()
 
@@ -90,4 +101,14 @@ const vendorDocumentationsQuery = computed<VendorDocumentationQueryOptions>(() =
 const { vendorDocumentations } = useVendorDocumentations(vendorDocumentationsQuery, {
   skipWatchIf: () => isNil(programDocumentation.value),
 })
+
+function getDownloadUrl(vendorDocumentation: VendorDocumentation) {
+  return `${API_BASE_URL}/api/vendor-documentations/${vendorDocumentation.id}/download`
+}
+
+const { canPreview, showPreview } = usePdfPreview()
+
+async function previewPdf(vendorDocumentation: VendorDocumentation, usePdf: boolean = false) {
+  await showPreview(vendorDocumentation, usePdf)
+}
 </script>

@@ -1,6 +1,8 @@
 import {
+  Attributes,
   type CreationOptional,
   DataTypes,
+  FindOptions,
   InferAttributes,
   InferCreationAttributes,
   type NonAttribute,
@@ -19,6 +21,8 @@ import {
 import BaseModel from "@/models/base-model"
 import User from "@/models/user"
 import Program from "@/models/program"
+import arrayWrap from "@/utils/array-wrap"
+import whereFieldsOptionallyLikeTerms from "@/utils/search/where-fields-optionally-like-terms"
 
 /** Keep in sync with web/src/api/vendor-programs-api.ts */
 export enum VendorProgramStatuses {
@@ -119,7 +123,38 @@ export class VendorProgram extends BaseModel<
   declare reviewByUser?: NonAttribute<User>
 
   // Scopes
-  static establishScopes(): void {}
+  static establishScopes(): void {
+    this.addScope(
+      "search",
+      (termOrTerms: string | string[]): FindOptions<Attributes<VendorProgram>> => {
+        const terms = arrayWrap(termOrTerms)
+        if (terms.length === 0) {
+          return {}
+        }
+
+        const searchableFields = [
+          "requestedByUser.display_name",
+          "requestedByUser.email",
+          "requestedByUser.first_name",
+          "requestedByUser.last_name",
+        ]
+        const associatedSearchableFieldsOptionallyLikeTerms = whereFieldsOptionallyLikeTerms(
+          searchableFields,
+          terms
+        )
+
+        return {
+          where: associatedSearchableFieldsOptionallyLikeTerms,
+          include: [
+            {
+              association: "requestedByUser",
+              required: false,
+            },
+          ],
+        }
+      }
+    )
+  }
 }
 
 export default VendorProgram
