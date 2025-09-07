@@ -15,6 +15,9 @@
     <template #item.vendorId="{ value }">
       <VendorChip :vendor-id="value" />
     </template>
+    <template #item.programId="{ value }">
+      <ProgramChip :program-id="value" />
+    </template>
     <template #item.startDate="{ value }">
       {{ formatDate(value) }}
     </template>
@@ -46,13 +49,15 @@ import useVendorPrograms, {
 import UserChip from "@/components/users/UserChip.vue"
 import VendorChip from "@/components/vendors/VendorChip.vue"
 import VendorProgramStatusChip from "@/components/vendor-programs/VendorProgramStatusChip.vue"
+import ProgramChip from "@/components/programs/ProgramChip.vue"
 
 const headers = ref([
   // { title: "Status", key: "status" },
   { title: "Vendor", key: "vendorId" },
+  { title: "Program", key: "programId" },
   { title: "Start Date", key: "startDate" },
   { title: "End Date", key: "endDate" },
-  { title: "Requested By User ID", key: "requestedByUserId" },
+  { title: "Requested By User", key: "requestedByUserId" },
   { title: "Requested At", key: "requestedAt" },
 ])
 

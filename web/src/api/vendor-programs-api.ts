@@ -45,7 +45,9 @@ export type VendorProgramWhereOptions = {
 
 /** Keep in sync with scopes in api/src/models/vendor-program.ts */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type VendorProgramFiltersOptions = {}
+export type VendorProgramFiltersOptions = {
+  search?: string | string[]
+}
 
 export type VendorProgramQueryOptions = {
   where?: VendorProgramWhereOptions

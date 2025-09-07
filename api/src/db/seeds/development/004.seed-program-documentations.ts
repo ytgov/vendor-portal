@@ -20,21 +20,6 @@ export async function seed(): Promise<void> {
       documentationId: 3,
       purpose: "pslr3",
     },
-    {
-      programId: 1,
-      documentationId: 4,
-      purpose: "pslr4",
-    },
-    {
-      programId: 1,
-      documentationId: 5,
-      purpose: "pslr5",
-    },
-    {
-      programId: 1,
-      documentationId: 6,
-      purpose: "pslr6",
-    },
   ]
 
   for (const programDocumentationAttributes of programDocumentationsAttributes) {

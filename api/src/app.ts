@@ -12,10 +12,9 @@ import enhancedQsDecoder from "@/utils/enhanced-qs-decoder"
 export const app = express()
 app.set("query parser", enhancedQsDecoder)
 app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(formData.parse({ autoClean: true }))
 app.use(formData.union())
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-
 app.use(
   helmet.contentSecurityPolicy({
     directives: {

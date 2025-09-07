@@ -15,7 +15,11 @@ import { APPLICATION_NAME, GIT_COMMIT_HASH, NODE_ENV, RELEASE_TAG } from "@/conf
 import { logger } from "@/utils/logger"
 import migrator from "@/db/migrator"
 
-import { jwtMiddleware, ensureAndAuthorizeCurrentUser } from "@/middlewares"
+import {
+  bodyAuthorizationHoistMiddleware,
+  jwtMiddleware,
+  ensureAndAuthorizeCurrentUser,
+} from "@/middlewares"
 
 import {
   CurrentUserController,
@@ -25,7 +29,9 @@ import {
   ProgramsController,
   ProgramUsersController,
   UsersController,
+  VendorDocumentations,
   VendorDocumentationsController,
+  VendorLinkRequests,
   VendorLinkRequestsController,
   VendorProgramsController,
   VendorsController,
@@ -44,7 +50,7 @@ router.route("/_status").get((_req: Request, res: Response) => {
 })
 
 router.use("/migrate", migrator.migrationRouter)
-router.use("/api", jwtMiddleware, ensureAndAuthorizeCurrentUser)
+router.use("/api", bodyAuthorizationHoistMiddleware, jwtMiddleware, ensureAndAuthorizeCurrentUser)
 
 // Users
 router.route("/api/current-user").get(CurrentUserController.show)
@@ -114,6 +120,10 @@ router
   .get(VendorDocumentationsController.show)
   .patch(VendorDocumentationsController.update)
   .delete(VendorDocumentationsController.destroy)
+router
+  .route("/api/vendor-documentations/:vendorDocumentationId/download")
+  .post(VendorDocumentations.DownloadController.create)
+  .get(VendorDocumentations.DownloadController.show)
 
 // Vendor Link Requests
 router
@@ -125,6 +135,12 @@ router
   .get(VendorLinkRequestsController.show)
   .patch(VendorLinkRequestsController.update)
   .delete(VendorLinkRequestsController.destroy)
+router
+  .route("/api/vendor-link-requests/:vendorLinkRequestId/download/ycor-registration-document")
+  .get(VendorLinkRequests.DownloadYcorRegistrationDocumentController.show)
+router
+  .route("/api/vendor-link-requests/:vendorLinkRequestId/download/most-recent-utility-bill")
+  .get(VendorLinkRequests.DownloadMostRecentUtilityBillController.show)
 
 // Vendor Program
 router
@@ -156,7 +172,8 @@ router.route("/api/program/pslr/:vendorId/employees").all(PSLREmployeeController
 router.route("/api/program/pslr/:vendorId/submissions").all(PSLRSubmissionController.index)
 
 // if no other routes match, return a 404
-router.use("/api", (_req: Request, res: Response) => {
+router.use("/api", (req: Request, res: Response) => {
+  console.log(req.url)
   return res.status(404).json({ message: "Not Found" })
 })
 

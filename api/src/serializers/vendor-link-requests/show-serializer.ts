@@ -15,8 +15,16 @@ export type VendorLinkRequestShowView = Pick<
   | "businessName"
   | "operatingName"
   | "ycorNumber"
-  | "address"
+  | "mailingAddress"
+  | "physicalAddress"
+  | "businessDescription"
   | "vendorId"
+  | "ycorRegistrationDocumentFileName"
+  | "ycorRegistrationDocumentMimeType"
+  | "ycorRegistrationDocumentSize"
+  | "mostRecentUtilityBillFileName"
+  | "mostRecentUtilityBillMimeType"
+  | "mostRecentUtilityBillSize"
   | "status"
   | "decisionByUserId"
   | "decisionAt"
@@ -38,8 +46,16 @@ export class ShowSerializer extends BaseSerializer<VendorLinkRequest> {
         "businessName",
         "operatingName",
         "ycorNumber",
-        "address",
+        "mailingAddress",
+        "physicalAddress",
+        "businessDescription",
         "vendorId",
+        "ycorRegistrationDocumentFileName",
+        "ycorRegistrationDocumentMimeType",
+        "ycorRegistrationDocumentSize",
+        "mostRecentUtilityBillFileName",
+        "mostRecentUtilityBillMimeType",
+        "mostRecentUtilityBillSize",
         "status",
         "decisionByUserId",
         "decisionAt",

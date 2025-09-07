@@ -81,7 +81,7 @@ export class VendorDocumentation extends BaseModel<
   declare mimeType: CreationOptional<string>
 
   @Attribute(DataTypes.INTEGER)
-  declare size: CreationOptional<string>
+  declare size: CreationOptional<number>
 
   @Attribute(DataTypes.BLOB)
   declare content: CreationOptional<Buffer>

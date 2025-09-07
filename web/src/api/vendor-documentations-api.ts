@@ -57,12 +57,10 @@ export const vendorDocumentationsApi = {
     const { data } = await http.get("/api/vendor-documentations", { params })
     return data
   },
-
   async get(vendorDocumentationId: number): Promise<{ vendorDocumentation: VendorDocumentation }> {
     const { data } = await http.get(`/api/vendor-documentations/${vendorDocumentationId}`)
     return data
   },
-
   async create(
     attributes: Partial<VendorDocumentation>
   ): Promise<{ vendorDocumentation: VendorDocumentation }> {
@@ -71,7 +69,6 @@ export const vendorDocumentationsApi = {
     })
     return data
   },
-
   async update(
     vendorDocumentationId: number,
     attributes: Partial<VendorDocumentation>
@@ -82,9 +79,17 @@ export const vendorDocumentationsApi = {
     )
     return data
   },
-
   async delete(vendorDocumentationId: number): Promise<void> {
     const { data } = await http.delete(`/api/vendor-documentations/${vendorDocumentationId}`)
+    return data
+  },
+  async download(vendorDocumentationId: number): Promise<Blob> {
+    const { data } = await http.get(
+      `/api/vendor-documentations/${vendorDocumentationId}/download`,
+      {
+        responseType: "blob",
+      }
+    )
     return data
   },
 }

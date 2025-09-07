@@ -1,6 +1,7 @@
 <template>
   <v-navigation-drawer
     v-model="showDrawer"
+    width="280"
     :disable-resize-watcher="false"
     :rail="showRail"
     :permanent="mdAndUp"
@@ -39,6 +40,11 @@
         title="Home"
         prepend-icon="mdi-home"
         :to="{ name: 'individual/HomePage' }"
+      />
+      <v-list-item
+        title="My Link Requests"
+        prepend-icon="mdi-link"
+        :to="{ name: 'VendorLinkRequestsPage' }"
       />
       <v-list-item
         title="Available Programs"

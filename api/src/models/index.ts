@@ -33,6 +33,7 @@ Program.establishScopes()
 User.establishScopes()
 Vendor.establishScopes()
 VendorLinkRequest.establishScopes()
+VendorProgram.establishScopes()
 VendorUser.establishScopes()
 
 export {

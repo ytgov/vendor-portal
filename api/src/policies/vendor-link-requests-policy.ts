@@ -51,7 +51,9 @@ export class VendorLinkRequestsPolicy extends PolicyFactory(VendorLinkRequest) {
       "businessName",
       "operatingName",
       "ycorNumber",
-      "address",
+      "mailingAddress",
+      "physicalAddress",
+      "businessDescription",
       "vendorId",
       "status",
       "reviewNotes",
@@ -59,7 +61,18 @@ export class VendorLinkRequestsPolicy extends PolicyFactory(VendorLinkRequest) {
   }
 
   permittedAttributesForCreate(): Path[] {
-    return ["userId", ...this.permittedAttributes()]
+    return [
+      "userId",
+      "ycorRegistrationDocumentFileName",
+      "ycorRegistrationDocumentMimeType",
+      "ycorRegistrationDocumentSize",
+      "ycorRegistrationDocumentContent",
+      "mostRecentUtilityBillFileName",
+      "mostRecentUtilityBillMimeType",
+      "mostRecentUtilityBillSize",
+      "mostRecentUtilityBillContent",
+      ...this.permittedAttributes(),
+    ]
   }
 
   static policyScope(user: User): FindOptions<Attributes<VendorLinkRequest>> {

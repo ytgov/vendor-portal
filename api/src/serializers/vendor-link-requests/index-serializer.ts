@@ -13,8 +13,16 @@ export type VendorLinkRequestIndexView = Pick<
   | "businessName"
   | "operatingName"
   | "ycorNumber"
-  | "address"
+  | "mailingAddress"
+  | "physicalAddress"
+  | "businessDescription"
   | "vendorId"
+  | "ycorRegistrationDocumentFileName"
+  | "ycorRegistrationDocumentMimeType"
+  | "ycorRegistrationDocumentSize"
+  | "mostRecentUtilityBillFileName"
+  | "mostRecentUtilityBillMimeType"
+  | "mostRecentUtilityBillSize"
   | "status"
   | "decisionByUserId"
   | "decisionAt"
@@ -39,8 +47,16 @@ export class IndexSerializer extends BaseSerializer<VendorLinkRequest> {
         "businessName",
         "operatingName",
         "ycorNumber",
-        "address",
+        "mailingAddress",
+        "physicalAddress",
+        "businessDescription",
         "vendorId",
+        "ycorRegistrationDocumentFileName",
+        "ycorRegistrationDocumentMimeType",
+        "ycorRegistrationDocumentSize",
+        "mostRecentUtilityBillFileName",
+        "mostRecentUtilityBillMimeType",
+        "mostRecentUtilityBillSize",
         "status",
         "decisionByUserId",
         "decisionAt",

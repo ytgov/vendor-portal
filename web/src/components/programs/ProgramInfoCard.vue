@@ -5,7 +5,7 @@
   />
   <v-card v-else>
     <v-card-title>{{ program.name }}</v-card-title>
-    <v-card-subtitle>
+    <v-card-subtitle style="font-size: 1rem; opacity: 1">
       Administered by <strong>{{ program.department }}</strong>
     </v-card-subtitle>
     <v-card-text>
@@ -24,23 +24,20 @@
 
 <script setup lang="ts">
 import { isNil } from "lodash"
-import { computed } from "vue"
+import { toRefs } from "vue"
 
 import useProgram from "@/use/use-program"
 import { useRouter } from "vue-router"
 
-const props = defineProps<{ programId: string; showApply: boolean }>()
-const programIdNumber = computed(() => parseInt(props.programId))
-const { program, isLoading } = useProgram(programIdNumber)
+const props = defineProps<{ programSlug: string; showApply: boolean }>()
+const { programSlug } = toRefs(props)
+const { program, isLoading } = useProgram(programSlug)
 
 const router = useRouter()
 
 function goToProgramApply() {
   router.push({
-    name: "programs/ApplyPage",
-    params: {
-      programId: programIdNumber.value,
-    },
+    path: `/programs/${programSlug.value}/apply`,
   })
 }
 </script>

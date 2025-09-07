@@ -11,3 +11,6 @@ export { VendorLinkRequestsController } from "./vendor-link-requests-controller"
 export { VendorProgramsController } from "./vendor-programs-controller"
 export { VendorsController } from "./vendors-controller"
 export { VendorUsersController } from "./vendor-users-controller"
+
+export * as VendorLinkRequests from "./vendor-link-requests"
+export * as VendorDocumentations from "./vendor-documentations"

@@ -98,6 +98,12 @@ ul.v-breadcrumbs {
   cursor: pointer;
 }
 
+
+.v-data-table.not-clickable tbody td {
+  cursor: default !important;
+}
+
+
 .v-toolbar.bg-primary .v-toolbar-title__placeholder,
 .v-toolbar.bg-warning .v-toolbar-title__placeholder {
   color: white !important;
@@ -140,6 +146,13 @@ table.table {
   border-radius: 4px;
   border: 1px #d7cfbe solid;
   background-color: #f8f8f8;
+}
+.simple-card .v-list .v-list-item-title {
+  font-weight: 600;
+}
+.simple-card .v-list .v-list-item-subtitle {
+  opacity: 90%;
+  font-weight: 500;
 }
 
 .simple-card .v-list .v-divider {

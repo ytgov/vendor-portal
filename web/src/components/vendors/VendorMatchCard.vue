@@ -23,11 +23,20 @@
         />
         <div class="ml-2 text-subtitle-1">
           <strong>Address:</strong>
-          <div
-            v-for="(line, index) in formatVendorAddressLines(vendor)"
-            :key="index"
-          >
-            {{ line }}
+          <div>
+            <span>{{ vendor.addressLine1 }} {{ vendor.addressLine2 }}</span>
+          </div>
+          <strong>City:</strong>
+          <div>
+            {{ vendor.addressCity }}
+          </div>
+          <strong>Province:</strong>
+          <div>
+            {{ vendor.addressProvince }}
+          </div>
+          <strong>Postal Code:</strong>
+          <div>
+            {{ vendor.addressPostal }}
           </div>
         </div>
       </div>
@@ -37,8 +46,6 @@
 
 <script setup lang="ts">
 import { computed } from "vue"
-
-import { formatVendorAddressLines } from "@/utils/format-vendor-address-lines"
 
 import { Vendor } from "@/use/use-vendor"
 
