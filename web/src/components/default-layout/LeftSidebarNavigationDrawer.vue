@@ -42,7 +42,7 @@
         :to="{ name: 'individual/HomePage' }"
       />
       <v-list-item
-        title="My Vendor Link Requests"
+        title="My Link Requests"
         prepend-icon="mdi-link"
         :to="{ name: 'VendorLinkRequestsPage' }"
       />

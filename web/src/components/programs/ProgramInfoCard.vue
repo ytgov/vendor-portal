@@ -5,7 +5,7 @@
   />
   <v-card v-else>
     <v-card-title>{{ program.name }}</v-card-title>
-    <v-card-subtitle>
+    <v-card-subtitle style="font-size: 1rem; opacity: 1">
       Administered by <strong>{{ program.department }}</strong>
     </v-card-subtitle>
     <v-card-text>

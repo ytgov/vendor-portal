@@ -21,7 +21,7 @@
         <v-row>
           <v-col cols="12">
             <SimpleCard title="Welcome">
-              <p class="mb-4 text-h6">
+              <p class="mb-4 text-subtitle-1">
                 This wizard will guide you through the process of applying for the
                 <strong>{{ program.name }}</strong> program.
               </p>
@@ -84,7 +84,7 @@
           <v-col cols="12">
             <SimpleCard>
               <h2>Before you can continue</h2>
-              <p class="mt-4">
+              <p class="mt-4 mb-2">
                 You must agree to the following declarations as a legal representative of this
                 business.
               </p>
@@ -95,7 +95,7 @@
                   hide-details
                 >
                   <template #label>
-                    <p>
+                    <p class="text-black">
                       I understand that I must submit all documentation within 30 days of the end of
                       the employee's sick leave period
                     </p>
@@ -107,7 +107,7 @@
                   hide-details
                 >
                   <template #label>
-                    <p>
+                    <p class="text-black">
                       I have a declaration from the employee that they are sick due to illness (or
                       injury not covered by any other Act, benefit or program)
                     </p>
@@ -119,7 +119,7 @@
                   hide-details
                 >
                   <template #label>
-                    <p>
+                    <p class="text-black">
                       I am submitting this application for the purpose of obtaining financial
                       assistance from the Government of Yukon in the form of a rebate on wages
                       already paid. The statements herein are to the best of my knowledge, true and
@@ -134,7 +134,7 @@
                   hide-details
                 >
                   <template #label>
-                    <p>
+                    <p class="text-black">
                       I understand that all or part of this application may be made available to the
                       public in accordance with the
                       <em>Access to Information and Protection of Privacy Act</em>
@@ -147,7 +147,7 @@
                   hide-details
                 >
                   <template #label>
-                    <p>
+                    <p class="text-black">
                       I understand the Government of Yukon or its agents may audit any or all of the
                       records, including financial records of the recipient or its agents as is
                       necessary to satisfy the Government of Yukon that the objectives and
@@ -296,7 +296,8 @@
                           <v-textarea
                             v-model="textFormData[documentation.id]"
                             :label="documentation.name"
-                            rows="3"
+                            rows="2"
+                            auto-grow
                           />
                         </v-col>
                       </v-row>

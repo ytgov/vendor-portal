@@ -68,7 +68,7 @@
                 <v-textarea
                   v-model="vendorLinkRequest.businessDescription"
                   label="Business description"
-                  rows="3"
+                  rows="2"
                 />
               </v-col>
             </v-row>

@@ -98,6 +98,12 @@ ul.v-breadcrumbs {
   cursor: pointer;
 }
 
+
+.v-data-table.not-clickable tbody td {
+  cursor: default !important;
+}
+
+
 .v-toolbar.bg-primary .v-toolbar-title__placeholder,
 .v-toolbar.bg-warning .v-toolbar-title__placeholder {
   color: white !important;

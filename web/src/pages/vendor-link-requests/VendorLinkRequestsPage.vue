@@ -9,7 +9,7 @@
         />
       </div>
 
-      <VendorLinkRequestsDataTableServer :filters="filters" />
+      <VendorLinkRequestsDataTableServer :filters="filters" class="not-clickable" />
     </v-card-text>
   </v-card>
 </template>

@@ -58,12 +58,19 @@
             </p>
             <p
               v-if="!isNil(vendorLinkRequest.decisionByUser)"
-              class="mb-6"
+              class="mb-2"
             >
               By:
               <strong> {{ vendorLinkRequest.decisionByUser.displayName }}</strong> ({{
                 vendorLinkRequest.decisionByUser.email
               }})
+            </p>
+            <p
+              v-if="!isNil(vendorLinkRequest.decisionByUser)"
+              class="mb-6"
+            >
+              Vendor Id:
+              <strong> {{ vendorLinkRequest.vendorId }}</strong>
             </p>
 
             <v-textarea
@@ -203,7 +210,9 @@
               <v-col cols="12">
                 <v-btn
                   color="primary"
+                  variant="outlined"
                   prepend-icon="mdi-download"
+                  size="small"
                   :loading="isDownloading"
                   text="Download YCOR Registration Document"
                   hide-details
@@ -215,6 +224,7 @@
                   color="primary"
                   variant="outlined"
                   prepend-icon="mdi-download"
+                  size="small"
                   :loading="isDownloading"
                   text="Download Most Recent Utility Bill"
                   hide-details
