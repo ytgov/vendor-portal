@@ -31,7 +31,7 @@
                   <strong> {{ requestedByUser.displayName }}</strong> ({{ requestedByUser.email }})
                 </p>
 
-                <p class="mb-5">
+                <p class="">
                   <a :href="`mailto:${requestedByUser.email}`">
                     <v-icon
                       class="mr-2"
@@ -43,7 +43,8 @@
               </div>
 
               <div
-                class="d-flex"
+                v-if="vendorProgram.status === VendorProgramStatuses.PENDING"
+                class="d-flex mt-4"
                 style="width: 100%"
               >
                 <v-btn
@@ -129,8 +130,7 @@ async function approveProgramApplication() {
     await save()
     snack.success("Accepted Vendor Program Request")
     router.push({
-      name: "administration/ProgramManagePage",
-      params: { programId: programIdNumber.value.toString() },
+      name: "administration/DashboardPage",
     })
   } catch (error) {
     snack.error(`Failed to accept Vendor Program Request: ${error}`)
@@ -150,8 +150,7 @@ async function rejectProgramApplication() {
     await save()
     snack.success("Rejected Vendor Program Request")
     router.push({
-      name: "administration/ProgramManagePage",
-      params: { programId: programIdNumber.value.toString() },
+      name: "administration/DashboardPage",
     })
   } catch (error) {
     snack.error(`Failed to reject Vendor Program Request: ${error}`)

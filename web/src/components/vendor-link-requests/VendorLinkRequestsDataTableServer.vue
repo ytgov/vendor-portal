@@ -36,8 +36,8 @@ export const defaultHeaders = [
   { title: "User", key: "user.displayName" },
   { title: "Business Name", key: "businessName" },
   { title: "Status", key: "status" },
-  { title: "Updated At", key: "updatedAt" },
-  { title: "Created At", key: "createdAt" },
+  { title: "Created", key: "createdAt" },
+  { title: "Last Updated", key: "updatedAt" },
 ]
 </script>
 

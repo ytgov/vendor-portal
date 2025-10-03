@@ -33,7 +33,7 @@ export class Migrator {
       return res.json({ data: await this.listMigrations() })
     })
 
-    this.migrationRouter.get("/seed/:environment?", async (req: Request, res: Response) => {
+    this.migrationRouter.get("/seed/:environment", async (req: Request, res: Response) => {
       try {
         await this.seedUp(req.params.environment)
       } catch (err) {

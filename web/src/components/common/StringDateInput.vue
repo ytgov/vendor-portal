@@ -2,6 +2,11 @@
   <v-date-input
     v-model="date"
     v-bind="$attrs"
+    variant="outlined"
+    density="comfortable"
+    input-format="yyyy-MM-dd"
+    prepend-icon=""
+    prepend-inner-icon="mdi-calendar"
     @update:model-value="emitStringResult"
   />
 </template>

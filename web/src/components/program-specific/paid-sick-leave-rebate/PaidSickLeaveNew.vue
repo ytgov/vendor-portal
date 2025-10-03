@@ -127,12 +127,11 @@
               >
                 <StringDateInput
                   v-model="submission.birth_date"
-                  label="Birth date (mm/dd/yyyy)"
+                  label="Birth date (yyyy-mm-dd)"
                   hide-details
                   :readonly="!isNil(employee?.id)"
                   :append-inner-icon="!isNil(employee?.id) ? 'mdi-lock' : undefined"
                   :rules="[required]"
-                  :disabled="!isNil(employee?.id)"
                 />
               </v-col>
               <v-col
@@ -167,7 +166,7 @@
               >
                 <StringDateInput
                   v-model="submission.hire_date"
-                  label="Hire date (mm/dd/yyyy)"
+                  label="Hire date (yyyy-mm-dd)"
                   hide-details
                   :rules="[required]"
                 />
@@ -211,7 +210,7 @@
               >
                 <StringDateInput
                   v-model="submission.request_date"
-                  label="Leave start date (mm/dd/yyyy)"
+                  label="Leave start date (yyyy-mm-dd)"
                   hide-details
                   :rules="[required]"
                 />
@@ -224,7 +223,7 @@
                 <StringDateInput
                   v-model="submission.request_end_date"
                   :min="submission.request_date"
-                  label="Leave end date (mm/dd/yyyy)"
+                  label="Leave end date (yyyy-mm-dd)"
                   :rules="[required]"
                   hide-details
                 />
@@ -233,6 +232,15 @@
                 cols="12"
                 md="4"
               >
+                <v-file-input
+                  v-model="submission.pay_stub"
+                  label="Pay stub (PDF)"
+                  accept=".pdf"
+                  :rules="[required]"
+                  hide-details
+                  show-size
+                  truncate-length="25"
+                />
               </v-col>
 
               <v-col
@@ -283,6 +291,7 @@
         </SimpleCard>
       </v-col>
     </v-row>
+    {{ submission }}
   </SimpleCard>
 </template>
 
@@ -290,7 +299,7 @@
 import { isNil } from "lodash"
 import { computed, ref, toRefs, watch } from "vue"
 import { useRouter } from "vue-router"
-import { VForm } from "vuetify/lib/components/index.mjs"
+import { VForm } from "vuetify/components"
 
 import { required } from "@/utils/validators"
 import { formatCurrency } from "@/utils/formatters"

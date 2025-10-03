@@ -84,4 +84,20 @@ export const MAIL_SERVICE = process.env.MAIL_SERVICE || "Outlook365"
 export const MAIL_USER = process.env.MAIL_USER || ""
 export const MAIL_PASS = process.env.MAIL_PASS || ""
 
+export const MAIL_CONFIG_DEV = {
+  host: MAIL_HOST,
+  port: MAIL_PORT,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: MAIL_USER,
+    pass: MAIL_PASS,
+  },
+}
+
+export const MAIL_CONFIG = {
+  host: MAIL_HOST,
+  port: MAIL_PORT,
+  secure: false, // true for 465, false for other ports
+}
+
 export const PSLR_API_URL = process.env.PSLR_API_URL || ""

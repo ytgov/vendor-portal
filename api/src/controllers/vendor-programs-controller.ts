@@ -4,10 +4,11 @@ import logger from "@/utils/logger"
 
 import BaseController from "@/controllers/base-controller"
 
-import { VendorProgram } from "@/models"
+import { User, Vendor, VendorProgram } from "@/models"
 import { VendorProgramsPolicy } from "@/policies/vendor-programs-policy"
 import { CreateService, DestroyService, UpdateService } from "@/services/vendor-programs"
 import { IndexSerializer } from "@/serializers/vendor-programs"
+import { VendorProgramRejectedMailer } from "@/mailers/vendor-program-rejected"
 
 export class VendorProgramsController extends BaseController<VendorProgram> {
   async index() {
@@ -100,12 +101,28 @@ export class VendorProgramsController extends BaseController<VendorProgram> {
           .json({ message: "You are not authorized to update this vendorProgram." })
       }
 
+      const preUpdateStatus = vendorProgram.status
+
       const permitAttributes = policy.permitAttributes(this.request.body)
       const newVendorProgram = await UpdateService.perform(
         vendorProgram,
         permitAttributes,
         this.currentUser
       )
+
+      const statusChanged = preUpdateStatus !== newVendorProgram.status
+
+      if (statusChanged) {
+        if (newVendorProgram.status === VendorProgram.Statuses.REJECTED) {
+          const vendor = await Vendor.findByPk(newVendorProgram.vendorId)
+          const user = await User.findByPk(newVendorProgram.requestedByUserId)
+
+          if (isNil(vendor) || isNil(user)) throw new Error("Associated Vendor or User not found")
+
+          await VendorProgramRejectedMailer.sendEmail(newVendorProgram, vendor, user)
+        }
+      }
+
       return this.response.json({ vendorProgram: newVendorProgram })
     } catch (error) {
       logger.error(`VendorProgram update failed: ${error}`, { error })
@@ -140,7 +157,7 @@ export class VendorProgramsController extends BaseController<VendorProgram> {
   }
 
   private async loadVendorProgram(): Promise<VendorProgram | null> {
-    return VendorProgram.findByPk(this.params.vendorProgramId)
+    return VendorProgram.findByPk(this.params.vendorProgramId, { include: ["program"] })
   }
 
   private buildPolicy(vendorProgram: VendorProgram) {

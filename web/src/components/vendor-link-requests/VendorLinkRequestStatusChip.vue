@@ -1,6 +1,10 @@
 <template>
-  <v-chip :color="computeStatusIconColor(status)">
-    {{ status }}
+  <v-chip
+    variant="flat"
+    :color="computeStatusIconColor(status)"
+    theme="dark"
+  >
+    <span class="text-white">{{ status }}</span>
   </v-chip>
 </template>
 
@@ -14,11 +18,9 @@ defineProps<{
 function computeStatusIconColor(status: VendorLinkRequestStatuses) {
   switch (status) {
     case VendorLinkRequestStatuses.PENDING:
-      return "grey"
+      return "warning"
     case VendorLinkRequestStatuses.ACCEPTED:
-      return "green"
-    case VendorLinkRequestStatuses.REJECTED:
-      return "red"
+      return "success"
     default:
       return "grey"
   }

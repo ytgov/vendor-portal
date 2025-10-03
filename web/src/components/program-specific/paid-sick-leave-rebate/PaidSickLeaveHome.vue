@@ -209,6 +209,8 @@ export type PSLRSubmission = {
   paid_rate: number
   paid_hours: number
   paid_amount: number
+
+  pay_stub: File
 }
 
 const showViewDialog = ref(false)

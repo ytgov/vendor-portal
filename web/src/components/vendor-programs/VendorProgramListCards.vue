@@ -34,14 +34,6 @@
             <strong>Enrolled Since: </strong><br />
             {{ formatDate(program.createdAt) }}
           </div>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            variant="outlined"
-            prepend-icon="mdi-eye"
-            text="View Program Summary"
-            @click="openVendorProgram(program)"
-          />
         </div>
       </v-card-text>
     </v-card>
