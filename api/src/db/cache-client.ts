@@ -1,7 +1,7 @@
 import { REDIS_CONNECTION_URL } from "@/config"
 import { logger } from "@/utils/logger"
 import { RedisClientType, createClient } from "@redis/client"
-import { ScanCommandOptions } from "@redis/client/dist/lib/commands/SCAN"
+import { ScanOptions } from "@redis/client/dist/lib/commands/SCAN"
 
 class CacheClient {
   protected client: RedisClientType
@@ -50,18 +50,17 @@ class CacheClient {
   }
 
   async deleteValuesByPattern(pattern: string) {
-    const scanCommand = { MATCH: `${pattern}*` } as ScanCommandOptions
-    let cursor = 0
+    const scanCommand = { MATCH: `${pattern}*` } as ScanOptions
+    let cursor = "0"
 
     do {
-      const reply = await this.client.scan(cursor, scanCommand)
-      cursor = reply.cursor
-      const keys = reply.keys
+      const { cursor: nextCursor, keys } = await this.client.scan(cursor, scanCommand)
+      cursor = nextCursor
 
       if (keys.length > 0) {
         await this.client.del(keys)
       }
-    } while (cursor !== 0)
+    } while (cursor !== "0")
   }
 }
 
