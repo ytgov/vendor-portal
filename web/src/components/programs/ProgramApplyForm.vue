@@ -163,7 +163,7 @@
 <script setup lang="ts">
 import { isNil } from "lodash"
 import { computed, ref, toRefs } from "vue"
-import { VForm } from "vuetify/lib/components/index.mjs"
+import { VForm } from "vuetify/components"
 
 import { required } from "@/utils/validators"
 

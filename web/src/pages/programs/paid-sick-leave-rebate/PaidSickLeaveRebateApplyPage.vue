@@ -624,7 +624,7 @@
 import { clamp, isNil } from "lodash"
 import { computed, ref, watch } from "vue"
 import { useRouter } from "vue-router"
-import { VForm } from "vuetify/lib/components/index.mjs"
+import { VForm } from "vuetify/components"
 
 import { required } from "@/utils/validators"
 
