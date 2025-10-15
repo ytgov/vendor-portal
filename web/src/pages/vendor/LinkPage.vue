@@ -211,7 +211,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
 import { useRouter } from "vue-router"
-import { VForm } from "vuetify/lib/components/index.mjs"
+import { VForm } from "vuetify/components"
 
 import { required, length } from "@/utils/validators"
 
@@ -243,7 +243,7 @@ async function validateAndGoToLastStep() {
   const { valid } = await formRef.value.validate()
   if (!valid) return
 
-  step.value = 3 
+  step.value = 3
 }
 
 const snack = useSnack()
