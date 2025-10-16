@@ -101,7 +101,6 @@
               <v-btn
                 class="ml-5"
                 prepend-icon="mdi-magnify"
-                :disabled="isEmpty(vendorLinkRequest.vendorId)"
                 style="height: 48px"
                 text="Search"
                 @click="doSearch"
