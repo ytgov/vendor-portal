@@ -176,7 +176,8 @@
 import { computed, onMounted, ref, watch } from "vue"
 import { groupBy } from "lodash"
 
-import http from "@/api/http-client"
+import pslrSubmissionsApi, { PSLRSubmission } from "@/api/program-specific/pslr-submissions-api"
+
 import useVendor from "@/use/use-vendor"
 import useProgram from "@/use/use-program"
 import useBreadcrumbs from "@/use/use-breadcrumbs"
@@ -185,33 +186,6 @@ const props = defineProps<{ vendorId: string }>()
 const { program } = useProgram(ref("paid-sick-leave-rebate"))
 
 const search = ref("")
-
-export type PSLRSubmission = {
-  id: string
-  program_pslr4_id: string
-  vendor_id: string
-  status: string
-  payment_status: string
-  request_amount: number
-  first_name: string
-  last_name: string
-  position_title: string
-  employee_name: string
-  birth_date: string
-  hire_date: string
-  email: string
-  mailing_address: string
-  submission_date: string
-  request_date: string
-  request_end_date: string
-  hourly_rate: number
-  request_hours: number
-  paid_rate: number
-  paid_hours: number
-  paid_amount: number
-
-  pay_stub: File
-}
 
 const showViewDialog = ref(false)
 
@@ -242,7 +216,7 @@ const submissionsByEmployee = computed(() => {
 })
 
 async function loadSubmissions() {
-  const { data } = await http.get(`/api/program/pslr/${props.vendorId}/submissions`)
+  const { data } = await pslrSubmissionsApi.list(props.vendorId)
   submissions.value = data.data
 }
 

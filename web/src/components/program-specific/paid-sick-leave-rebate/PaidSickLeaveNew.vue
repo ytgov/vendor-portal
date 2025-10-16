@@ -303,7 +303,7 @@ import { VForm } from "vuetify/components"
 
 import { required } from "@/utils/validators"
 import { formatCurrency } from "@/utils/formatters"
-import httpClient from "@/api/http-client"
+import pslrSubmissionsApi, { PSLRSubmission } from "@/api/program-specific/pslr-submissions-api"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useSnack from "@/use/use-snack"
@@ -317,7 +317,6 @@ import StringDateInput from "@/components/common/StringDateInput.vue"
 import EmployeeSelect, {
   PSLREmployee,
 } from "@/components/program-specific/paid-sick-leave-rebate/EmployeeSelect.vue"
-import { PSLRSubmission } from "@/components/program-specific/paid-sick-leave-rebate/PaidSickLeaveHome.vue"
 
 const props = defineProps<{ vendorId: string }>()
 const { vendorId } = toRefs(props)
@@ -423,12 +422,12 @@ async function validateAndSave() {
     isLoading.value = true
     submission.value.submission_date = new Date().toISOString()
 
-    const { data } = await httpClient.post(
-      `/api/program/pslr/${props.vendorId}/submissions`,
+    const { submission: createdSubmission } = await pslrSubmissionsApi.create(
+      props.vendorId,
       submission.value
     )
 
-    console.log("Submission created:", data)
+    console.log("Submission created:", createdSubmission)
     snack.success("Submission added")
 
     router.push({
