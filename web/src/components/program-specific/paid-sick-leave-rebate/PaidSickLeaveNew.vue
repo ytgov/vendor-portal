@@ -407,10 +407,14 @@ async function validateAndSave() {
   if (qualifyFormRef.value === null) return
 
   const { valid } = await formRef.value.validate()
-  if (!valid) return
+  if (!valid) {
+    snack.error("Please fill out all required fields")
+    return
+  }
 
   const { valid: qualifyValid } = await qualifyFormRef.value.validate()
   if (!qualifyValid) {
+    snack.error("Please fill out all required fields")
     window.scrollTo({ top: 0, behavior: "smooth" })
     return
   }
@@ -433,9 +437,7 @@ async function validateAndSave() {
     })
   } catch (error) {
     console.error(error)
-    snack.notify(`Failed to create submission: ${error}`, {
-      color: "error",
-    })
+    snack.error(`Failed to create submission: ${error}`)
   } finally {
     isLoading.value = false
   }
