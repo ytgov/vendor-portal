@@ -140,7 +140,6 @@
               >
                 <v-text-field
                   v-model="submission.email"
-                  :rules="[required]"
                   label="Personal Email Address"
                   hide-details
                   :readonly="!isNil(employee?.id)"
@@ -177,7 +176,6 @@
               >
                 <v-textarea
                   v-model="submission.mailing_address"
-                  :rules="[required]"
                   hide-details
                   label="Mailing address"
                   rows="2"
@@ -240,6 +238,7 @@
                   hide-details
                   show-size
                   truncate-length="25"
+                  required
                 />
               </v-col>
 
@@ -280,13 +279,33 @@
               </v-col>
             </v-row>
 
-            <v-btn
-              class="mt-3"
-              type="submit"
-              color="primary"
-              :loading="isLoading"
-              text="Save Submission"
-            />
+            <v-row>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="submission.notes"
+                  label="Notes"
+                  hide-details
+                  rows="2"
+                  auto-grow
+                />
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col
+                cols="12"
+                class="d-flex"
+              >
+                <v-spacer />
+                <v-btn
+                  class="mt-3"
+                  type="submit"
+                  color="primary"
+                  :loading="isLoading"
+                  text="Submit Submission"
+                />
+              </v-col>
+            </v-row>
           </v-form>
         </SimpleCard>
       </v-col>
@@ -296,14 +315,15 @@
 </template>
 
 <script setup lang="ts">
-import { isNil } from "lodash"
+import { isEmpty, isNil } from "lodash"
 import { computed, ref, toRefs, watch } from "vue"
 import { useRouter } from "vue-router"
 import { VForm } from "vuetify/components"
 
 import { required } from "@/utils/validators"
 import { formatCurrency } from "@/utils/formatters"
-import httpClient from "@/api/http-client"
+import { PSLR } from "@/api/program-specific"
+import { PSLRSubmission } from "@/api/program-specific/paid-sick-leave-rebate/submissions-api"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useSnack from "@/use/use-snack"
@@ -317,7 +337,6 @@ import StringDateInput from "@/components/common/StringDateInput.vue"
 import EmployeeSelect, {
   PSLREmployee,
 } from "@/components/program-specific/paid-sick-leave-rebate/EmployeeSelect.vue"
-import { PSLRSubmission } from "@/components/program-specific/paid-sick-leave-rebate/PaidSickLeaveHome.vue"
 
 const props = defineProps<{ vendorId: string }>()
 const { vendorId } = toRefs(props)
@@ -399,6 +418,18 @@ watch(employeeNotFound, (newValue) => {
   }
 })
 
+function validateEitherMailingOrPhysicalAddressRequired() {
+  const isSubmissionMailingAddressEmpty =
+    isNil(submission.value.mailing_address) || isEmpty(submission.value.mailing_address)
+  const isSubmissionEmailEmpty = isNil(submission.value.email) || isEmpty(submission.value.email)
+
+  if (isSubmissionMailingAddressEmpty && isSubmissionEmailEmpty) {
+    return false
+  }
+
+  return true
+}
+
 const snack = useSnack()
 const router = useRouter()
 
@@ -407,11 +438,20 @@ async function validateAndSave() {
   if (qualifyFormRef.value === null) return
 
   const { valid } = await formRef.value.validate()
-  if (!valid) return
+  if (!valid) {
+    snack.error("Please fill out all required fields")
+    return
+  }
 
   const { valid: qualifyValid } = await qualifyFormRef.value.validate()
   if (!qualifyValid) {
+    snack.error("Please fill out all required fields")
     window.scrollTo({ top: 0, behavior: "smooth" })
+    return
+  }
+
+  if (!validateEitherMailingOrPhysicalAddressRequired()) {
+    snack.error("Please fill out either mailing or physical address")
     return
   }
 
@@ -419,12 +459,12 @@ async function validateAndSave() {
     isLoading.value = true
     submission.value.submission_date = new Date().toISOString()
 
-    const { data } = await httpClient.post(
-      `/api/program/pslr/${props.vendorId}/submissions`,
+    const { submission: createdSubmission } = await PSLR.submissionsApi.create(
+      props.vendorId,
       submission.value
     )
 
-    console.log("Submission created:", data)
+    console.log("Submission created:", createdSubmission)
     snack.success("Submission added")
 
     router.push({
@@ -433,9 +473,7 @@ async function validateAndSave() {
     })
   } catch (error) {
     console.error(error)
-    snack.notify(`Failed to create submission: ${error}`, {
-      color: "error",
-    })
+    snack.error(`Failed to create submission: ${error}`)
   } finally {
     isLoading.value = false
   }

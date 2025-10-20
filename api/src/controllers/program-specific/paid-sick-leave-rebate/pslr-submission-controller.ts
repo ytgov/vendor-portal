@@ -1,12 +1,12 @@
 import { isNil } from "lodash"
-import axios from "axios"
+
+import logger from "@/utils/logger"
 
 import BaseController from "@/controllers/base-controller"
 import { Vendor } from "@/models"
 import { VendorsPolicy } from "@/policies"
 import { VendorSearchService } from "@/services/vendors"
-import logger from "@/utils/logger"
-import { PSLR_API_URL } from "@/config"
+import { pslrIntegration } from "@/integrations/program-specific-integrations"
 
 export class PSLRSubmissionController extends BaseController {
   async index() {
@@ -22,30 +22,82 @@ export class PSLRSubmissionController extends BaseController {
       if (!policy.show()) {
         return this.response
           .status(403)
-          .json({ message: "You are not authorized to view this vendor." })
+          .json({ message: "You are not authorized to view submissions for this vendor." })
       }
 
-      console.log("Fetching PSLR submissions for vendor:", this.params.vendorId)
-      console.log("Request method:", this.request.method)
+      const submissions = await pslrIntegration.getSubmissions(this.params.vendorId)
 
-      const proxy = axios.create({
-        method: this.request.method,
-        baseURL: PSLR_API_URL,
-        headers: {},
-      })
-      const response = await proxy.request({
-        url: `/submissions/${this.params.vendorId}`,
-        data: this.request.body,
-      })
-
-      return this.response.status(200).json(response.data)
+      return this.response.status(200).json(submissions)
     } catch (error) {
-      console.log("ERROR", error)
-
       logger.error(`Error fetching submissions: ${error}`, { error })
       return this.response.status(400).json({
         message: `Error fetching submissions: ${error}`,
       })
+    }
+  }
+
+  async create() {
+    try {
+      const vendor = await this.loadVendor()
+      if (isNil(vendor)) {
+        return this.response.status(404).json({
+          message: "Vendor not found",
+        })
+      }
+
+      // TODO: Seperate policy for vendor submissions?
+      const policy = this.buildPolicy(vendor)
+      if (!policy.create()) {
+        return this.response
+          .status(403)
+          .json({ message: "You are not authorized to create a pslr submission for this vendor" })
+      }
+
+      /* TODO: File upload may not work with the current integration. 
+        Pay stub file (File object) is in: this.request.body.pay_stub
+      */
+      const newSubmission = await pslrIntegration.createSubmission(
+        this.params.vendorId,
+        this.request.body
+      )
+
+      return this.response.status(201).json({ submission: newSubmission })
+    } catch (error) {
+      logger.error(`PSLR submission creation failed: ${error}`, { error })
+      return this.response
+        .status(422)
+        .json({ message: `PSLR submission creation failed: ${error}` })
+    }
+  }
+
+  async update() {
+    try {
+      const vendor = await this.loadVendor()
+      if (isNil(vendor)) {
+        return this.response.status(404).json({
+          message: "Vendor not found",
+        })
+      }
+
+      // TODO: Seperate policy for vendor submissions?
+      const policy = this.buildPolicy(vendor)
+      if (!policy.update()) {
+        return this.response
+          .status(403)
+          .json({ message: "You are not authorized to update a pslr submission for this vendor" })
+      }
+
+      // TODO This is a placeholder for the updateSubmission method
+      const updatedSubmission = await pslrIntegration.updateSubmission(
+        this.params.vendorId,
+        this.params.submissionId,
+        this.request.body
+      )
+
+      return this.response.status(200).json({ submission: updatedSubmission })
+    } catch (error) {
+      logger.error(`PSLR submission update failed: ${error}`, { error })
+      return this.response.status(422).json({ message: `PSLR submission update failed: ${error}` })
     }
   }
 

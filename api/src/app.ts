@@ -13,8 +13,8 @@ export const app = express()
 app.set("query parser", enhancedQsDecoder)
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-app.use(formData.parse({ autoClean: true }))
-app.use(formData.union())
+app.use(formData.parse({ autoClean: true })) // for parsing multipart/form-data with connect-multiparty.
+app.use(formData.union()) // union the body and the files when parsing multipart/form-data.
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
