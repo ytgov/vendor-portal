@@ -140,7 +140,6 @@
               >
                 <v-text-field
                   v-model="submission.email"
-                  :rules="[required]"
                   label="Personal Email Address"
                   hide-details
                   :readonly="!isNil(employee?.id)"
@@ -177,7 +176,6 @@
               >
                 <v-textarea
                   v-model="submission.mailing_address"
-                  :rules="[required]"
                   hide-details
                   label="Mailing address"
                   rows="2"
@@ -296,7 +294,7 @@
 </template>
 
 <script setup lang="ts">
-import { isNil } from "lodash"
+import { isEmpty, isNil } from "lodash"
 import { computed, ref, toRefs, watch } from "vue"
 import { useRouter } from "vue-router"
 import { VForm } from "vuetify/components"
@@ -399,6 +397,18 @@ watch(employeeNotFound, (newValue) => {
   }
 })
 
+function validateEitherMailingOrPhysicalAddressRequired() {
+  const isSubmissionMailingAddressEmpty =
+    isNil(submission.value.mailing_address) || isEmpty(submission.value.mailing_address)
+  const isSubmissionEmailEmpty = isNil(submission.value.email) || isEmpty(submission.value.email)
+
+  if (isSubmissionMailingAddressEmpty && isSubmissionEmailEmpty) {
+    return false
+  }
+
+  return true
+}
+
 const snack = useSnack()
 const router = useRouter()
 
@@ -416,6 +426,11 @@ async function validateAndSave() {
   if (!qualifyValid) {
     snack.error("Please fill out all required fields")
     window.scrollTo({ top: 0, behavior: "smooth" })
+    return
+  }
+
+  if (!validateEitherMailingOrPhysicalAddressRequired()) {
+    snack.error("Please fill out either mailing or physical address")
     return
   }
 
