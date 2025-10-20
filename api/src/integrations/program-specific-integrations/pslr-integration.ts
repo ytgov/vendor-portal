@@ -49,6 +49,15 @@ export const pslrIntegration = {
     const { data } = await pslrApi.post(`/submissions/${vendorId}`, attributes)
     return data
   },
+  async updateSubmission(
+    vendorId: string,
+    submissionId: string,
+    attributes: Partial<PSLRSubmission>
+  ) {
+    // TODO: This may not work as expected
+    const { data } = await pslrApi.put(`/submissions/${vendorId}/${submissionId}`, attributes)
+    return data
+  },
 }
 
 export default pslrIntegration

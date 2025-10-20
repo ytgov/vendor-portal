@@ -66,6 +66,36 @@ export class PSLRSubmissionController extends BaseController {
     }
   }
 
+  async update() {
+    try {
+      const vendor = await this.loadVendor()
+      if (isNil(vendor)) {
+        return this.response.status(404).json({
+          message: "Vendor not found",
+        })
+      }
+
+      const policy = this.buildPolicy(vendor)
+      if (!policy.update()) {
+        return this.response
+          .status(403)
+          .json({ message: "You are not authorized to update a pslr submission for this vendor" })
+      }
+
+      // TODO This is a placeholder for the updateSubmission method
+      const updatedSubmission = await pslrIntegration.updateSubmission(
+        this.params.vendorId,
+        this.params.submissionId,
+        this.request.body
+      )
+
+      return this.response.status(200).json({ submission: updatedSubmission })
+    } catch (error) {
+      logger.error(`PSLR submission update failed: ${error}`, { error })
+      return this.response.status(422).json({ message: `PSLR submission update failed: ${error}` })
+    }
+  }
+
   private async loadVendor() {
     return VendorSearchService.perform(this.params.vendorId)
   }
