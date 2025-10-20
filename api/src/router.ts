@@ -169,7 +169,11 @@ router.route("/api/vendors").get(VendorsController.index)
 router.route("/api/vendors/:vendorId").get(VendorsController.show)
 
 router.route("/api/program/pslr/:vendorId/employees").all(PSLREmployeeController.index)
-router.route("/api/program/pslr/:vendorId/submissions").all(PSLRSubmissionController.index)
+
+router
+  .route("/api/program/pslr/:vendorId/submissions")
+  .get(PSLRSubmissionController.index)
+  .post(PSLRSubmissionController.create)
 
 // if no other routes match, return a 404
 router.use("/api", (req: Request, res: Response) => {
