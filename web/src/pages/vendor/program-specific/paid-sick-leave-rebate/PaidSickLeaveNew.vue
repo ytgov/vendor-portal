@@ -278,6 +278,18 @@
               </v-col>
             </v-row>
 
+            <v-row>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="submission.notes"
+                  label="Notes"
+                  hide-details
+                  rows="2"
+                  auto-grow
+                />
+              </v-col>
+            </v-row>
+
             <v-btn
               class="mt-3"
               type="submit"

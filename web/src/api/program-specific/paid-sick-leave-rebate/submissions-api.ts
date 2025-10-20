@@ -24,6 +24,7 @@ export type PSLRSubmission = {
   paid_rate: number
   paid_hours: number
   paid_amount: number
+  notes: string
 
   pay_stub: File
 }
