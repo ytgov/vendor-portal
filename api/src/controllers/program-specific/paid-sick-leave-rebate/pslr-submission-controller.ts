@@ -52,6 +52,9 @@ export class PSLRSubmissionController extends BaseController {
           .json({ message: "You are not authorized to create a pslr submission for this vendor" })
       }
 
+      /* TODO: File upload may not work with the current integration. 
+        Pay stub file (File object) is in: this.request.body.pay_stub
+      */
       const newSubmission = await pslrIntegration.createSubmission(
         this.params.vendorId,
         this.request.body

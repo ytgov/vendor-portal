@@ -47,7 +47,12 @@ export const pslrIntegration = {
     return data
   },
   async createSubmission(vendorId: string, attributes: Partial<PSLRSubmission>) {
-    const { data } = await pslrApi.post(`/submissions/${vendorId}`, attributes)
+    // TODO: This may not work as expected, pay stub may not be handled as expected
+    const { data } = await pslrApi.post(`/submissions/${vendorId}`, attributes, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
     return data
   },
   async updateSubmission(
@@ -55,7 +60,7 @@ export const pslrIntegration = {
     submissionId: string,
     attributes: Partial<PSLRSubmission>
   ) {
-    // TODO: This may not work as expected
+    // TODO: This may not work as expected, this endpoint may not exist?
     const { data } = await pslrApi.put(`/submissions/${vendorId}/${submissionId}`, attributes)
     return data
   },

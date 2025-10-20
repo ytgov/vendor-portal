@@ -1,4 +1,5 @@
 import http from "@/api/http-client"
+import { isArray, isNil } from "lodash"
 
 /** Keep in sync with api/src/integrations/program-specific-integrations/pslr-integration.ts */
 export type PSLRSubmission = {
@@ -56,7 +57,14 @@ export const submissionsApi = {
     vendorId: number | string,
     attributes: Partial<PSLRSubmission>
   ): Promise<{ submission: PSLRSubmission }> {
-    const { data } = await http.post(`/api/program/pslr/${vendorId}/submissions`, attributes)
+    const payStubFile = isArray(attributes.pay_stub) ? attributes.pay_stub[0] : attributes.pay_stub
+    if (isNil(payStubFile)) return Promise.reject("Pay stub file is required")
+
+    const { data } = await http.post(`/api/program/pslr/${vendorId}/submissions`, attributes, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
     return data
   },
   async update(

@@ -238,6 +238,7 @@
                   hide-details
                   show-size
                   truncate-length="25"
+                  required
                 />
               </v-col>
 
