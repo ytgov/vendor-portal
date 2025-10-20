@@ -116,7 +116,7 @@
 <script setup lang="ts">
 import { ref, toRefs } from "vue"
 import { useRouteQuery } from "@vueuse/router"
-import { VForm } from "vuetify/lib/components"
+import { VForm } from "vuetify/components"
 
 import { PSLRSubmission } from "@/api/program-specific/paid-sick-leave-rebate/submissions-api"
 import submissionsApi from "@/api/program-specific/paid-sick-leave-rebate/submissions-api"
