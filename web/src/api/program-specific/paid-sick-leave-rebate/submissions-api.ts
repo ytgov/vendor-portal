@@ -1,5 +1,6 @@
 import http from "@/api/http-client"
 
+/** Keep in sync with api/src/integrations/program-specific-integrations/pslr-integration.ts */
 export type PSLRSubmission = {
   id: string
   program_pslr4_id: string
@@ -40,12 +41,12 @@ export type PSLRSubmissionQueryOptions = {
   perPage?: number
 }
 
-export const pslrSubmissionsApi = {
+export const submissionsApi = {
   async list(
     vendorId: number | string,
     params: PSLRSubmissionQueryOptions = {}
   ): Promise<{
-    data: { data: PSLRSubmission[] }
+    submissions: PSLRSubmission[]
   }> {
     const { data } = await http.get(`/api/program/pslr/${vendorId}/submissions`, { params })
     return data
@@ -57,6 +58,17 @@ export const pslrSubmissionsApi = {
     const { data } = await http.post(`/api/program/pslr/${vendorId}/submissions`, attributes)
     return data
   },
+  async update(
+    vendorId: number | string,
+    submissionId: number | string,
+    attributes: Partial<PSLRSubmission>
+  ): Promise<{ submission: PSLRSubmission }> {
+    const { data } = await http.patch(
+      `/api/program/pslr/${vendorId}/submissions/${submissionId}`,
+      attributes
+    )
+    return data
+  },
 }
 
-export default pslrSubmissionsApi
+export default submissionsApi

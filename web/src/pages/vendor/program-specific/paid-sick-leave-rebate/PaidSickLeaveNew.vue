@@ -303,7 +303,8 @@ import { VForm } from "vuetify/components"
 
 import { required } from "@/utils/validators"
 import { formatCurrency } from "@/utils/formatters"
-import pslrSubmissionsApi, { PSLRSubmission } from "@/api/program-specific/pslr-submissions-api"
+import { PSLR } from "@/api/program-specific"
+import { PSLRSubmission } from "@/api/program-specific/paid-sick-leave-rebate/submissions-api"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useSnack from "@/use/use-snack"
@@ -422,7 +423,7 @@ async function validateAndSave() {
     isLoading.value = true
     submission.value.submission_date = new Date().toISOString()
 
-    const { submission: createdSubmission } = await pslrSubmissionsApi.create(
+    const { submission: createdSubmission } = await PSLR.submissionsApi.create(
       props.vendorId,
       submission.value
     )
