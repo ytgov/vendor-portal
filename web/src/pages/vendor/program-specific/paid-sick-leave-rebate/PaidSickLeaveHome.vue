@@ -97,12 +97,8 @@
     </v-card>
   </div>
 
-  <v-skeleton-loader
-    v-if="isNil(selectedSubmission)"
-    type="card"
-  />
   <SubmissionAttributesDialog
-    v-else
+    v-if="!isNil(selectedSubmission)"
     ref="submissionAttributesDialogRef"
     :submission="selectedSubmission"
     width="600"

@@ -45,6 +45,7 @@ export class PSLRSubmissionController extends BaseController {
         })
       }
 
+      // TODO: Seperate policy for vendor submissions?
       const policy = this.buildPolicy(vendor)
       if (!policy.create()) {
         return this.response
@@ -78,6 +79,7 @@ export class PSLRSubmissionController extends BaseController {
         })
       }
 
+      // TODO: Seperate policy for vendor submissions?
       const policy = this.buildPolicy(vendor)
       if (!policy.update()) {
         return this.response
