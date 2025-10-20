@@ -290,13 +290,21 @@
               </v-col>
             </v-row>
 
-            <v-btn
-              class="mt-3"
-              type="submit"
-              color="primary"
-              :loading="isLoading"
-              text="Save Submission"
-            />
+            <v-row>
+              <v-col
+                cols="12"
+                class="d-flex"
+              >
+                <v-spacer />
+                <v-btn
+                  class="mt-3"
+                  type="submit"
+                  color="primary"
+                  :loading="isLoading"
+                  text="Submit Submission"
+                />
+              </v-col>
+            </v-row>
           </v-form>
         </SimpleCard>
       </v-col>
