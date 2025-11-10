@@ -310,7 +310,6 @@
         </SimpleCard>
       </v-col>
     </v-row>
-    {{ submission }}
   </SimpleCard>
 </template>
 
@@ -402,7 +401,9 @@ watch(employee, (newEmployee: PSLREmployee | null) => {
     submission.value.email = newEmployee.email
     submission.value.birth_date = newEmployee.birth_date
     submission.value.program_pslr4_id = newEmployee.id
-    submission.value.hire_date = undefined
+    submission.value.hire_date = newEmployee.hire_date
+    submission.value.position_title = newEmployee.position_title
+    submission.value.mailing_address = newEmployee.mailing_address
     employeeNotFound.value = false
   } else {
     submission.value.first_name = undefined

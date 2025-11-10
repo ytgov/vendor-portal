@@ -44,16 +44,28 @@ export class PslrPayloadError extends Error {
 export const pslrIntegration = {
   async getSubmissions(vendorId: string): Promise<PSLRSubmission[]> {
     const { data } = await pslrApi.get(`/submissions/${vendorId}`)
-    return data
+    return data.data
   },
   async createSubmission(vendorId: string, attributes: Partial<PSLRSubmission>) {
     // TODO: This may not work as expected, pay stub may not be handled as expected
-    const { data } = await pslrApi.post(`/submissions/${vendorId}`, attributes, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-    return data
+
+    try {
+      const { data } = await pslrApi
+        .post(`/submissions/${vendorId}`, attributes, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .catch((error) => {
+          if (error.response) console.log("Error creating PSLR submission:", error.response.data)
+          throw error
+        })
+      return data
+    } catch (error) {
+      console.log("Error creating PSLR submission:", error)
+
+      return null
+    }
   },
   async updateSubmission(
     vendorId: string,

@@ -4,7 +4,7 @@ import logger from "@/utils/logger"
 
 import BaseController from "@/controllers/base-controller"
 import { Vendor } from "@/models"
-import { VendorsPolicy } from "@/policies"
+import { VendorsActionsPolicy } from "@/policies"
 import { VendorSearchService } from "@/services/vendors"
 import { pslrIntegration } from "@/integrations/program-specific-integrations"
 
@@ -27,7 +27,9 @@ export class PSLRSubmissionController extends BaseController {
 
       const submissions = await pslrIntegration.getSubmissions(this.params.vendorId)
 
-      return this.response.status(200).json(submissions)
+      console.log("----------- SUBMISSIONS:", submissions)
+
+      return this.response.status(200).json({ submissions: submissions })
     } catch (error) {
       logger.error(`Error fetching submissions: ${error}`, { error })
       return this.response.status(400).json({
@@ -45,7 +47,8 @@ export class PSLRSubmissionController extends BaseController {
         })
       }
 
-      // TODO: Seperate policy for vendor submissions?
+      await this.currentUser.reload({ include: ["vendors"] })
+
       const policy = this.buildPolicy(vendor)
       if (!policy.create()) {
         return this.response
@@ -106,7 +109,7 @@ export class PSLRSubmissionController extends BaseController {
   }
 
   private buildPolicy(vendor: Vendor) {
-    return new VendorsPolicy(this.currentUser, vendor)
+    return new VendorsActionsPolicy(this.currentUser, vendor)
   }
 }
 

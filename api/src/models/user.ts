@@ -9,7 +9,9 @@ import {
 import {
   Attribute,
   AutoIncrement,
+  BelongsToMany,
   Default,
+  HasMany,
   Index,
   NotNull,
   PrimaryKey,
@@ -18,6 +20,8 @@ import {
 import { isNil } from "lodash"
 
 import BaseModel from "@/models/base-model"
+import VendorUser from "@/models/vendor-user"
+import Vendor from "@/models/vendor"
 
 /** Keep in sync with web/src/api/users-api.ts */
 export enum UserRoles {
@@ -104,7 +108,19 @@ export class User extends BaseModel<InferAttributes<User>, InferCreationAttribut
   }
 
   // Associations
-  // Add as needed
+  @BelongsToMany(() => Vendor, {
+    through: () => VendorUser,
+    foreignKey: "userId",
+    otherKey: "vendorId",
+    inverse: "users",
+    throughAssociations: {
+      fromSource: "vendorUsers",
+      toSource: "user",
+      fromTarget: "vendorUsers",
+      toTarget: "vendor",
+    },
+  })
+  declare vendors?: NonAttribute<Vendor[]>
 
   // Scopes
   static establishScopes(): void {

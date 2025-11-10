@@ -146,12 +146,12 @@ const submissionsByEmployee = computed(() => {
       "employee_name"
     )
   }
-  return groupBy(submissions.value, "program_id")
+  return groupBy(submissions.value, "employee_name")
 })
 
 async function loadSubmissions() {
   const data = await PSLR.submissionsApi.list(props.vendorId)
-  submissions.value = data.submissions
+  submissions.value = data.submissions ?? []
 }
 
 const vendorId = ref(props.vendorId)

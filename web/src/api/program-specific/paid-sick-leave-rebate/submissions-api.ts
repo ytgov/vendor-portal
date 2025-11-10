@@ -51,7 +51,7 @@ export const submissionsApi = {
     submissions: PSLRSubmission[]
   }> {
     const { data } = await http.get(`/api/program/pslr/${vendorId}/submissions`, { params })
-    return data
+    return { submissions: data.submissions }
   },
   async create(
     vendorId: number | string,
