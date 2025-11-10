@@ -16,10 +16,7 @@
       </v-card>
     </v-tabs-window-item>
     <v-tabs-window-item :value="1">
-      <VendorProgramsDataTableServer
-        :where="vendorProgramsAcceptedWhereOptions"
-        @click="goToVendorProgramPage"
-      />
+      <VendorProgramsDataTableServer :where="vendorProgramsAcceptedWhereOptions" />
     </v-tabs-window-item>
     <v-tabs-window-item :value="2">
       <VendorProgramsDataTableServer
@@ -123,16 +120,6 @@ function goToVendorProgramRequestPage(vendorProgram: VendorProgram) {
       programId: programIdNumber.value,
       vendorId: vendorProgram.vendorId,
       vendorProgramId: vendorProgram.id,
-    },
-  })
-}
-
-function goToVendorProgramPage(vendorProgram: VendorProgram) {
-  router.push({
-    name: "administration/VendorProgramPage",
-    params: {
-      programId: programIdNumber.value,
-      vendorId: vendorProgram.vendorId,
     },
   })
 }

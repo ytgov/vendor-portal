@@ -38,18 +38,36 @@
             Please enter as much information as you know about the vendor you are trying to link. If
             you know the existing Vendor ID, please enter it below and hit search.
           </p>
-          <p class="mb-4">YCOR number or Existing Vendor ID is required.</p>
+          <p class="mb-4">Business name, YCOR number and Mailing address are required.</p>
           <v-form
             ref="formRef"
             v-model="isValid"
           >
             <v-row class="mt-2">
-              <v-col>
+              <v-col
+                cols="12"
+                md="6"
+              >
                 <v-text-field
                   v-model="vendorLinkRequest.businessName"
                   label="Business name (required)"
                   :rules="[required]"
                 />
+              </v-col>
+
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <v-text-field
+                  v-model="vendorLinkRequest.operatingName"
+                  label="Operating as"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                md="6"
+              >
                 <v-text-field
                   v-model="vendorLinkRequest.ycorNumber"
                   class="mb-4"
@@ -59,13 +77,11 @@
                   :rules="[required, length(6)]"
                 />
               </v-col>
-
-              <v-col>
+              <v-col
+                cols="12"
+                md="6"
+              >
                 <v-text-field
-                  v-model="vendorLinkRequest.operatingName"
-                  label="Operating as"
-                />
-                <v-textarea
                   v-model="vendorLinkRequest.businessDescription"
                   label="Business description"
                   rows="2"
@@ -75,31 +91,28 @@
 
             <v-row>
               <v-col>
-                <v-text-field
+                <v-textarea
                   v-model="vendorLinkRequest.mailingAddress"
-                  label="Mailing Address (required)"
+                  label="Mailing address (required)"
+                  rows="2"
+                  auto-grow
+                  hide-details
                   :rules="[required]"
                 />
                 <v-checkbox
                   v-model="isMailingAndPhysicalAddressSame"
-                  label="Physical Address is the same as Mailing Address"
+                  label="Physical address is the same as Mailing address"
                   hide-details
                 />
               </v-col>
               <v-col>
-                <div v-if="!isMailingAndPhysicalAddressSame">
-                  <v-text-field
-                    v-model="vendorLinkRequest.physicalAddress"
-                    label="Physical Address"
-                  />
-                </div>
-                <div v-else>
-                  <v-text-field
-                    v-model="vendorLinkRequest.mailingAddress"
-                    label="Physical Address"
-                    disabled
-                  />
-                </div>
+                <v-textarea
+                  v-model="vendorLinkRequest.physicalAddress"
+                  label="Physical address"
+                  rows="2"
+                  auto-grow
+                  :readonly="isMailingAndPhysicalAddressSame"
+                />
               </v-col>
             </v-row>
 
@@ -107,9 +120,9 @@
               <v-col>
                 <v-file-input
                   v-model="vendorLinkRequest.ycorRegistrationDocument"
-                  label="YCOR registration document"
+                  label="YCOR registration document (required)"
                   :multiple="false"
-                  required
+                  :rules="[required]"
                 />
                 <p>
                   The business name in the uploaded YCOR registration document must display the same
@@ -119,10 +132,14 @@
               <v-col>
                 <v-file-input
                   v-model="vendorLinkRequest.mostRecentUtilityBill"
-                  label="Most recent utility bill"
+                  label="Most recent utility bill (optional)"
                   :multiple="false"
-                  required
                 />
+
+                <p>
+                  If the address in the YCOR registration document does not match the address above,
+                  you must submit a utility bill.
+                </p>
               </v-col>
             </v-row>
 
@@ -192,9 +209,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import { useRouter } from "vue-router"
-import { VForm } from "vuetify/lib/components/index.mjs"
+import { VForm } from "vuetify/components"
 
 import { required, length } from "@/utils/validators"
 
@@ -230,8 +247,17 @@ async function validateAndGoToLastStep() {
 }
 
 const snack = useSnack()
-
 const router = useRouter()
+
+watch(
+  () => [vendorLinkRequest.value.mailingAddress, isMailingAndPhysicalAddressSame.value],
+  () => {
+    if (isMailingAndPhysicalAddressSame.value) {
+      vendorLinkRequest.value.physicalAddress = vendorLinkRequest.value.mailingAddress
+    }
+  },
+  { immediate: true }
+)
 
 async function doLink() {
   try {

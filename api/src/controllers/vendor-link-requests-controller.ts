@@ -8,6 +8,7 @@ import { VendorLinkRequest } from "@/models"
 import { VendorLinkRequestsPolicy } from "@/policies/vendor-link-requests-policy"
 import { CreateService, DestroyService, UpdateService } from "@/services/vendor-link-requests"
 import { IndexSerializer } from "@/serializers/vendor-link-requests"
+import { VendorLinkRequestRejectedMailer } from "@/mailers"
 
 export class VendorLinkRequestsController extends BaseController<VendorLinkRequest> {
   async index() {
@@ -90,6 +91,7 @@ export class VendorLinkRequestsController extends BaseController<VendorLinkReque
         ycorRegistrationDocument.path,
         mostRecentUtilityBill.path
       )
+
       return this.response.status(201).json({ vendorLinkRequest: newVendorLinkRequest })
     } catch (error) {
       logger.error(`VendorLinkRequest creation failed: ${error}`, { error })
@@ -116,12 +118,23 @@ export class VendorLinkRequestsController extends BaseController<VendorLinkReque
           .json({ message: "You are not authorized to update this vendorLinkRequest." })
       }
 
+      const preUpdateStatus = vendorLinkRequest.status
+
       const permitAttributes = policy.permitAttributes(this.request.body)
       const newVendorLinkRequest = await UpdateService.perform(
         vendorLinkRequest,
         permitAttributes,
         this.currentUser
       )
+
+      const statusChanged = preUpdateStatus !== newVendorLinkRequest.status
+
+      if (statusChanged) {
+        if (newVendorLinkRequest.status === VendorLinkRequest.Statuses.REJECTED) {
+          await VendorLinkRequestRejectedMailer.sendEmail(newVendorLinkRequest)
+        }
+      }
+
       return this.response.json({ vendorLinkRequest: newVendorLinkRequest })
     } catch (error) {
       logger.error(`VendorLinkRequest update failed: ${error}`, { error })

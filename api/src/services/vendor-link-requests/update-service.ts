@@ -6,6 +6,7 @@ import { VendorLinkRequestStatuses } from "@/models/vendor-link-request"
 
 import { VendorSearchService } from "@/services/vendors"
 import BaseService from "@/services/base-service"
+import { VendorLinkRequestAcceptedMailer } from "@/mailers"
 
 export type VendorLinkRequestAttributes = Partial<Attributes<VendorLinkRequest>>
 
@@ -56,6 +57,8 @@ export class UpdateService extends BaseService {
           isActive: true,
           isAdmin: false,
         })
+
+        await VendorLinkRequestAcceptedMailer.sendEmail(this.vendorLinkRequest, foundVendor)
 
         const vendorLinkRequest = await this.vendorLinkRequest.update(this.attributes)
         return vendorLinkRequest

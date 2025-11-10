@@ -47,23 +47,20 @@
     </v-col>
     <v-col>
       <SimpleCard title="Pending Vendor Link Requests">
-        <template #rightTitle>
-          <v-btn
-            text="View all"
-            :to="{ name: 'administration/VendorLinkRequestsManagePage' }"
-          />
-        </template>
-        <VendorLinkRequestsPendingList />
+        <VendorLinkRequestsPendingList class="mb-4" />
+
+        <router-link
+          text="View all"
+          :to="{ name: 'administration/VendorLinkRequestsManagePage' }"
+        />
       </SimpleCard>
 
       <SimpleCard title="Pending Program Applications">
-        <template #rightTitle>
-          <v-btn
-            text="View all"
-            :to="{ name: 'administration/VendorProgramsManagePage' }"
-          />
-        </template>
-        <VendorProgramsPendingList />
+        <VendorProgramsPendingList class="mb-4" />
+        <router-link
+          text="View all"
+          :to="{ name: 'administration/VendorProgramsManagePage' }"
+        />
       </SimpleCard>
     </v-col>
   </v-row>

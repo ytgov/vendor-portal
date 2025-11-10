@@ -44,7 +44,11 @@
           </SimpleCard>
 
           <SimpleCard color="#7a9a0133">
-            <h3 class="mb-5">Decision: {{ vendorLinkRequest.status }}</h3>
+            <div class="d-flex">
+              <h3 class="mb-5">Decision:</h3>
+              <v-spacer />
+              <VendorLinkRequestStatusChip :status="vendorLinkRequest.status" />
+            </div>
             <p
               v-if="!isNil(vendorLinkRequest.decisionAt)"
               class="mb-2"
@@ -78,37 +82,35 @@
               label="Review notes"
               rows="2"
               auto-grow
-              hide-details
               :append-inner-icon="!isPending ? 'mdi-lock' : ''"
               :readonly="!isPending"
             />
 
             <div
               v-if="isPending"
-              class="d-flex mt-6"
+              class="d-flex"
             >
               <v-text-field
-                v-model="vendorLinkRequest.vendorId"
+                v-model="vendorLinkVendorSearch"
                 class="mb-4"
-                label="Vendor ID (must be exact match)"
-                persistent-hint
+                hide-details
+                label="Vendor Id (must be exact match)"
                 :append-inner-icon="!isPending ? 'mdi-lock' : ''"
                 :readonly="!isPending"
               />
               <v-btn
-                class="mb-5 ml-5"
+                class="ml-5"
                 prepend-icon="mdi-magnify"
-                :disabled="isEmpty(vendorLinkRequest.vendorId)"
                 style="height: 48px"
                 text="Search"
                 @click="doSearch"
               />
             </div>
+
             <div class="d-flex">
               <div
                 v-if="vendorSearchError"
                 class="text-subtitle-1 text-error"
-                style="line-height: 36px"
               >
                 <v-icon icon="mdi-alert-circle" />
                 {{ vendorSearchError }}
@@ -128,7 +130,7 @@
             </div>
             <v-row
               v-if="isPending"
-              class="mt-5"
+              class="mt-2"
             >
               <v-col>
                 <v-btn
@@ -183,31 +185,30 @@
                   readonly
                 />
 
-                <v-text-field
+                <v-textarea
                   :model-value="vendorLinkRequest.mailingAddress"
-                  label="Mailing Address"
+                  label="Mailing address"
+                  rows="2"
+                  auto-grow
                   append-inner-icon="mdi-lock"
                   readonly
                 />
 
-                <v-text-field
+                <v-textarea
                   :model-value="vendorLinkRequest.physicalAddress"
-                  label="Physical Address"
+                  label="Physical address"
+                  rows="2"
+                  auto-grow
                   append-inner-icon="mdi-lock"
                   readonly
                 />
-              </v-col>
-
-              <v-col cols="12">
                 <v-textarea
                   :model-value="vendorLinkRequest.businessDescription"
                   label="Business description"
-                  rows="3"
+                  rows="2"
                   append-inner-icon="mdi-lock"
                   readonly
                 />
-              </v-col>
-              <v-col cols="12">
                 <v-btn
                   color="primary"
                   variant="outlined"
@@ -249,7 +250,10 @@ import { formatDate, formatDateRelative } from "@/utils/formatters"
 
 import vendorsApi from "@/api/vendors-api"
 import vendorUsersApi from "@/api/vendor-users-api"
-import vendorLinkRequestsApi, { VendorLinkRequestStatuses } from "@/api/vendor-link-requests-api"
+import vendorLinkRequestsApi, {
+  VendorLinkRequest,
+  VendorLinkRequestStatuses,
+} from "@/api/vendor-link-requests-api"
 
 import useSnack from "@/use/use-snack"
 import useBreadcrumbs from "@/use/use-breadcrumbs"
@@ -257,11 +261,20 @@ import useVendorLinkRequest from "@/use/use-vendor-link-request"
 import { Vendor } from "@/use/use-vendor"
 
 import VendorMatchCard from "@/components/vendors/VendorMatchCard.vue"
+import VendorLinkRequestStatusChip from "@/components/vendor-link-requests/VendorLinkRequestStatusChip.vue"
 
 const props = defineProps<{ vendorLinkRequestId: string }>()
 const vendorLinkRequestIdNumber = computed(() => parseInt(props.vendorLinkRequestId))
 
-const { vendorLinkRequest, isLoading, save } = useVendorLinkRequest(vendorLinkRequestIdNumber)
+function onLoadLinkComplete(loadedValue: VendorLinkRequest | null) {
+  if (!isNil(loadedValue)) vendorLinkVendorSearch.value = loadedValue.vendorId || ""
+}
+
+const { vendorLinkRequest, isLoading, save } = useVendorLinkRequest(
+  vendorLinkRequestIdNumber,
+  onLoadLinkComplete
+)
+const vendorLinkVendorSearch = ref("")
 
 const isApproved = computed(
   () => vendorLinkRequest.value?.status === VendorLinkRequestStatuses.ACCEPTED
@@ -273,6 +286,10 @@ const isPending = computed(
 
 const matchedVendor = ref<Vendor | null>(null)
 const vendorSearchError = ref("")
+
+const snack = useSnack()
+
+const isDeciding = ref(false)
 
 const canApprove = computed(() => {
   if (isNil(vendorLinkRequest.value)) return false
@@ -294,8 +311,8 @@ async function doSearch() {
       vendorSearchError.value = "No vendor link request found"
       return
     }
-    if (isNil(vendorLinkRequest.value.vendorId)) {
-      vendorSearchError.value = "Search failed no vendor ID found"
+    if (isNil(vendorLinkVendorSearch.value) || isEmpty(vendorLinkVendorSearch.value)) {
+      vendorSearchError.value = "Search failed no Vendor Id found"
       return
     }
     if (isNil(vendorLinkRequest.value.user)) {
@@ -303,14 +320,14 @@ async function doSearch() {
       return
     }
 
-    const { vendor } = await vendorsApi.get(vendorLinkRequest.value.vendorId)
+    const { vendor } = await vendorsApi.get(vendorLinkVendorSearch.value)
 
     const { totalCount } = await vendorUsersApi.list({
       where: { vendorId: vendor.id, userId: vendorLinkRequest.value.user.id },
     })
 
     if (totalCount !== 0) {
-      vendorSearchError.value = "Requesting user is already linked to this Vendor ID"
+      vendorSearchError.value = "Requesting user is already linked to this Vendor Id"
       return
     }
 
@@ -318,13 +335,9 @@ async function doSearch() {
     vendorSearchError.value = ""
   } catch {
     matchedVendor.value = null
-    vendorSearchError.value = "No match was found for that Vendor ID"
+    vendorSearchError.value = "No match was found for that Vendor Id"
   }
 }
-
-const snack = useSnack()
-
-const isDeciding = ref(false)
 
 async function rejectVendorLinkRequest() {
   if (isNil(vendorLinkRequest.value)) return

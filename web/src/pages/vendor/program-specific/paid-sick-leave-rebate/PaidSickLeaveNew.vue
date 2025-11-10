@@ -127,12 +127,11 @@
               >
                 <StringDateInput
                   v-model="submission.birth_date"
-                  label="Birth date (mm/dd/yyyy)"
+                  label="Birth date (yyyy-mm-dd)"
                   hide-details
                   :readonly="!isNil(employee?.id)"
                   :append-inner-icon="!isNil(employee?.id) ? 'mdi-lock' : undefined"
                   :rules="[required]"
-                  :disabled="!isNil(employee?.id)"
                 />
               </v-col>
               <v-col
@@ -141,7 +140,6 @@
               >
                 <v-text-field
                   v-model="submission.email"
-                  :rules="[required]"
                   label="Personal Email Address"
                   hide-details
                   :readonly="!isNil(employee?.id)"
@@ -167,7 +165,7 @@
               >
                 <StringDateInput
                   v-model="submission.hire_date"
-                  label="Hire date (mm/dd/yyyy)"
+                  label="Hire date (yyyy-mm-dd)"
                   hide-details
                   :rules="[required]"
                 />
@@ -178,7 +176,6 @@
               >
                 <v-textarea
                   v-model="submission.mailing_address"
-                  :rules="[required]"
                   hide-details
                   label="Mailing address"
                   rows="2"
@@ -211,7 +208,7 @@
               >
                 <StringDateInput
                   v-model="submission.request_date"
-                  label="Leave start date (mm/dd/yyyy)"
+                  label="Leave start date (yyyy-mm-dd)"
                   hide-details
                   :rules="[required]"
                 />
@@ -224,7 +221,7 @@
                 <StringDateInput
                   v-model="submission.request_end_date"
                   :min="submission.request_date"
-                  label="Leave end date (mm/dd/yyyy)"
+                  label="Leave end date (yyyy-mm-dd)"
                   :rules="[required]"
                   hide-details
                 />
@@ -233,6 +230,16 @@
                 cols="12"
                 md="4"
               >
+                <v-file-input
+                  v-model="submission.pay_stub"
+                  label="Pay stub (PDF)"
+                  accept=".pdf"
+                  :rules="[required]"
+                  hide-details
+                  show-size
+                  truncate-length="25"
+                  required
+                />
               </v-col>
 
               <v-col
@@ -272,13 +279,33 @@
               </v-col>
             </v-row>
 
-            <v-btn
-              class="mt-3"
-              type="submit"
-              color="primary"
-              :loading="isLoading"
-              text="Save Submission"
-            />
+            <v-row>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="submission.notes"
+                  label="Notes"
+                  hide-details
+                  rows="2"
+                  auto-grow
+                />
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col
+                cols="12"
+                class="d-flex"
+              >
+                <v-spacer />
+                <v-btn
+                  class="mt-3"
+                  type="submit"
+                  color="primary"
+                  :loading="isLoading"
+                  text="Submit Submission"
+                />
+              </v-col>
+            </v-row>
           </v-form>
         </SimpleCard>
       </v-col>
@@ -287,14 +314,15 @@
 </template>
 
 <script setup lang="ts">
-import { isNil } from "lodash"
+import { isEmpty, isNil } from "lodash"
 import { computed, ref, toRefs, watch } from "vue"
 import { useRouter } from "vue-router"
-import { VForm } from "vuetify/lib/components/index.mjs"
+import { VForm } from "vuetify/components"
 
 import { required } from "@/utils/validators"
 import { formatCurrency } from "@/utils/formatters"
-import httpClient from "@/api/http-client"
+import { PSLR } from "@/api/program-specific"
+import { PSLRSubmission } from "@/api/program-specific/paid-sick-leave-rebate/submissions-api"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
 import useSnack from "@/use/use-snack"
@@ -308,7 +336,6 @@ import StringDateInput from "@/components/common/StringDateInput.vue"
 import EmployeeSelect, {
   PSLREmployee,
 } from "@/components/program-specific/paid-sick-leave-rebate/EmployeeSelect.vue"
-import { PSLRSubmission } from "@/components/program-specific/paid-sick-leave-rebate/PaidSickLeaveHome.vue"
 
 const props = defineProps<{ vendorId: string }>()
 const { vendorId } = toRefs(props)
@@ -374,7 +401,9 @@ watch(employee, (newEmployee: PSLREmployee | null) => {
     submission.value.email = newEmployee.email
     submission.value.birth_date = newEmployee.birth_date
     submission.value.program_pslr4_id = newEmployee.id
-    submission.value.hire_date = undefined
+    submission.value.hire_date = newEmployee.hire_date
+    submission.value.position_title = newEmployee.position_title
+    submission.value.mailing_address = newEmployee.mailing_address
     employeeNotFound.value = false
   } else {
     submission.value.first_name = undefined
@@ -390,6 +419,18 @@ watch(employeeNotFound, (newValue) => {
   }
 })
 
+function validateEitherMailingOrPhysicalAddressRequired() {
+  const isSubmissionMailingAddressEmpty =
+    isNil(submission.value.mailing_address) || isEmpty(submission.value.mailing_address)
+  const isSubmissionEmailEmpty = isNil(submission.value.email) || isEmpty(submission.value.email)
+
+  if (isSubmissionMailingAddressEmpty && isSubmissionEmailEmpty) {
+    return false
+  }
+
+  return true
+}
+
 const snack = useSnack()
 const router = useRouter()
 
@@ -398,11 +439,20 @@ async function validateAndSave() {
   if (qualifyFormRef.value === null) return
 
   const { valid } = await formRef.value.validate()
-  if (!valid) return
+  if (!valid) {
+    snack.error("Please fill out all required fields")
+    return
+  }
 
   const { valid: qualifyValid } = await qualifyFormRef.value.validate()
   if (!qualifyValid) {
+    snack.error("Please fill out all required fields")
     window.scrollTo({ top: 0, behavior: "smooth" })
+    return
+  }
+
+  if (!validateEitherMailingOrPhysicalAddressRequired()) {
+    snack.error("Please fill out either mailing or physical address")
     return
   }
 
@@ -410,12 +460,12 @@ async function validateAndSave() {
     isLoading.value = true
     submission.value.submission_date = new Date().toISOString()
 
-    const { data } = await httpClient.post(
-      `/api/program/pslr/${props.vendorId}/submissions`,
+    const { submission: createdSubmission } = await PSLR.submissionsApi.create(
+      props.vendorId,
       submission.value
     )
 
-    console.log("Submission created:", data)
+    console.log("Submission created:", createdSubmission)
     snack.success("Submission added")
 
     router.push({
@@ -424,9 +474,7 @@ async function validateAndSave() {
     })
   } catch (error) {
     console.error(error)
-    snack.notify(`Failed to create submission: ${error}`, {
-      color: "error",
-    })
+    snack.error(`Failed to create submission: ${error}`)
   } finally {
     isLoading.value = false
   }

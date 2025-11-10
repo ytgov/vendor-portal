@@ -92,7 +92,6 @@
                 <v-checkbox
                   v-model="hasSubmittedAllDocumentsWithinSickLeavePeriod"
                   :rules="[requiredCheckbox]"
-                  hide-details
                 >
                   <template #label>
                     <p class="text-black">
@@ -104,7 +103,6 @@
                 <v-checkbox
                   v-model="isEmployeeSickFromIllness"
                   :rules="[requiredCheckbox]"
-                  hide-details
                 >
                   <template #label>
                     <p class="text-black">
@@ -116,7 +114,6 @@
                 <v-checkbox
                   v-model="isApplyingInGoodFaith"
                   :rules="[requiredCheckbox]"
-                  hide-details
                 >
                   <template #label>
                     <p class="text-black">
@@ -131,7 +128,6 @@
                 <v-checkbox
                   v-model="isInAccordanceWithATIPP"
                   :rules="[requiredCheckbox]"
-                  hide-details
                 >
                   <template #label>
                     <p class="text-black">
@@ -626,9 +622,9 @@
 
 <script setup lang="ts">
 import { clamp, isNil } from "lodash"
-import { computed, ref } from "vue"
+import { computed, ref, watch } from "vue"
 import { useRouter } from "vue-router"
-import { VForm } from "vuetify/lib/components/index.mjs"
+import { VForm } from "vuetify/components"
 
 import { required } from "@/utils/validators"
 
@@ -646,6 +642,7 @@ import SimpleCard from "@/components/common/SimpleCard.vue"
 import DatePickerMenu from "@/components/common/DatePickerMenu.vue"
 import VendorSelect from "@/components/vendors/VendorSelect.vue"
 import ProgramInfoCard from "@/components/programs/ProgramInfoCard.vue"
+import useVendor from "@/use/use-vendor"
 
 const programSlug = ref("paid-sick-leave-rebate")
 const { program } = useProgram(programSlug)
@@ -719,7 +716,40 @@ const textFormData = ref<Record<number, string | null | undefined>>({})
 const fileFormData = ref<Record<number, File | null | undefined>>({})
 const fileExpiresAtFormData = ref<Record<number, string | null | undefined>>({})
 
-/* 
+watch(
+  () => vendorId.value,
+  async (newVendorId) => {
+    if (isNil(newVendorId)) return
+
+    const { fetch } = useVendor(ref(newVendorId))
+
+    const vend = await fetch()
+
+    if (!isNil(vend)) {
+      const address = `${vend.addressLine1}
+${vend.addressLine2}
+${vend.addressCity}, ${vend.addressProvince} ${vend.addressPostal}`.trim()
+
+      if (!isNil(documentations)) {
+        const mailingDocumentation = documentations.value.find(
+          (doc) => doc.name === "Mailing Address"
+        )
+        const physicalDocumentation = documentations.value.find(
+          (doc) => doc.name === "Physical Address"
+        )
+
+        if (!isNil(textFormData.value) && !isNil(mailingDocumentation)) {
+          textFormData.value[mailingDocumentation.id] = address
+        }
+        if (!isNil(textFormData.value) && !isNil(physicalDocumentation)) {
+          textFormData.value[physicalDocumentation.id] = address
+        }
+      }
+    }
+  }
+)
+
+/*
 For handling special documentation cases
 
 This is a bit of a hack to handle the special case of Business License and CRA Remittance documents.

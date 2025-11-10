@@ -110,7 +110,7 @@ import { isNil } from "lodash"
 import { ref, toRefs } from "vue"
 import { useRouter } from "vue-router"
 
-import { type VBtn, type VForm } from "vuetify/lib/components/index.mjs"
+import { type VBtn, type VForm } from "vuetify/components"
 
 import UserRolesSelect from "@/components/users/UserRolesSelect.vue"
 

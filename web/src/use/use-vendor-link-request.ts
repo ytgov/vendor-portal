@@ -5,7 +5,10 @@ import vendorLinkRequestsApi, { type VendorLinkRequest } from "@/api/vendor-link
 
 export { type VendorLinkRequest }
 
-export function useVendorLinkRequest(id: Ref<number | null | undefined>) {
+export function useVendorLinkRequest(
+  id: Ref<number | null | undefined>,
+  onComplete?: (value: VendorLinkRequest | null) => void
+) {
   const state = reactive<{
     vendorLinkRequest: VendorLinkRequest | null
     isLoading: boolean
@@ -27,6 +30,9 @@ export function useVendorLinkRequest(id: Ref<number | null | undefined>) {
       const { vendorLinkRequest } = await vendorLinkRequestsApi.get(staticId)
       state.isErrored = false
       state.vendorLinkRequest = vendorLinkRequest
+
+      if (onComplete) onComplete(vendorLinkRequest)
+
       return vendorLinkRequest
     } catch (error) {
       console.error("Failed to fetch vendorLinkRequest:", error)

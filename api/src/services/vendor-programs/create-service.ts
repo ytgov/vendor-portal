@@ -25,6 +25,18 @@ export class CreateService extends BaseService {
       throw new Error("programId is required")
     }
 
+    const existingAcceptedVendorProgram = await VendorProgram.findOne({
+      where: {
+        vendorId,
+        programId,
+        status: VendorProgram.Statuses.ACCEPTED,
+      },
+    })
+
+    if (existingAcceptedVendorProgram) {
+      throw new Error("Vendor program already accepted")
+    }
+
     const requestedByUserId = this.currentUser.id
     const requestedAt = new Date()
 

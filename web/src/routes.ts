@@ -187,7 +187,7 @@ const routes: RouteRecordRaw[] = [
                 name: "vendor/programs/PaidSickLeaveHome",
                 component: () =>
                   import(
-                    "@/components/program-specific/paid-sick-leave-rebate/PaidSickLeaveHome.vue"
+                    "@/pages/vendor/program-specific/paid-sick-leave-rebate/PaidSickLeaveHome.vue"
                   ),
                 props: true,
               },
@@ -196,7 +196,7 @@ const routes: RouteRecordRaw[] = [
                 name: "vendor/programs/PaidSickLeaveNew",
                 component: () =>
                   import(
-                    "@/components/program-specific/paid-sick-leave-rebate/PaidSickLeaveNew.vue"
+                    "@/pages/vendor/program-specific/paid-sick-leave-rebate/PaidSickLeaveNew.vue"
                   ),
                 props: true,
               },

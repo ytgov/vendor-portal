@@ -27,6 +27,9 @@ export type PSLREmployee = {
   first_name: string
   last_name: string
   birth_date: string
+  hire_date: string
+  position_title: string
+  mailing_address: string
 }
 
 const employees = ref<PSLREmployee[]>([])
@@ -39,7 +42,6 @@ async function loadEmployees() {
 loadEmployees()
 
 function makeTitle(item: PSLREmployee) {
-  console.log("Item:", item)
   return `${item.first_name} ${item.last_name} (${item.birth_date})`
 }
 </script>

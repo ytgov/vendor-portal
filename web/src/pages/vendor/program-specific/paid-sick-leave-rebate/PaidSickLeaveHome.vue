@@ -97,121 +97,31 @@
     </v-card>
   </div>
 
-  <v-dialog
-    v-model="showViewDialog"
+  <SubmissionAttributesDialog
+    v-if="!isNil(selectedSubmission)"
+    ref="submissionAttributesDialogRef"
+    :submission="selectedSubmission"
     width="600"
-  >
-    <v-card v-if="selectedSubmission">
-      <v-card-title class="mb-0 d-flex">
-        Submission Details
-        <v-chip
-          class="ml-3"
-          color="success"
-          size="small"
-          style="margin-top: 2px"
-        >
-          {{ selectedSubmission.status }}
-        </v-chip>
-        <v-spacer />
-        <v-btn
-          icon="mdi-close"
-          size="x-small"
-          variant="tonal"
-          title="Close"
-          @click="showViewDialog = false"
-        >
-          <v-icon size="21">mdi-close</v-icon>
-        </v-btn>
-      </v-card-title>
-      <v-card-text class="pt-2">
-        <v-row class="text-subtitle-1">
-          <v-col cols="6">
-            <div class="mb-2">
-              <strong>Employee Name / Birth Date:</strong>
-              <br />
-              {{ selectedSubmission.employee_name }} / {{ selectedSubmission.birth_date }}
-            </div>
-            <div class="mb-2">
-              <strong>Submitted On:</strong>
-              <br />
-              {{ selectedSubmission.submission_date }}
-            </div>
-          </v-col>
-          <v-col cols="6">
-            <div class="mb-2">
-              <strong>Employee Email:</strong>
-              <br />
-              {{ selectedSubmission.email }}
-            </div>
-            <div class="mb-2">
-              <strong>Date Range:</strong>
-              <br />{{ selectedSubmission.request_date }} -
-              {{ selectedSubmission.request_end_date }}
-            </div>
-          </v-col>
-          <v-divider />
-          <v-col cols="12">
-            <div class="mb-2">
-              <strong>Request:</strong>
-              <br />
-              {{ formatMoney(selectedSubmission.hourly_rate, 3) }}/hour x
-              {{ selectedSubmission.request_hours }} hours =
-              {{ formatMoney(selectedSubmission.request_amount, 2) }}
-            </div>
-            <div class="mb-2">
-              <strong>Payment:</strong>
-              <br />
-              {{ formatMoney(selectedSubmission.paid_rate, 3) }}/hour x
-              {{ selectedSubmission.paid_hours }} hours =
-              {{ formatMoney(selectedSubmission.paid_amount, 2) }}
-            </div>
-          </v-col>
-        </v-row>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
+  />
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue"
-import { groupBy } from "lodash"
+import { isNil, groupBy } from "lodash"
 
-import http from "@/api/http-client"
+import { PSLR } from "@/api/program-specific"
+import { PSLRSubmission } from "@/api/program-specific/paid-sick-leave-rebate/submissions-api"
+
 import useVendor from "@/use/use-vendor"
 import useProgram from "@/use/use-program"
 import useBreadcrumbs from "@/use/use-breadcrumbs"
+
+import SubmissionAttributesDialog from "@/components/program-specific/paid-sick-leave-rebate/SubmissionAttributesDialog.vue"
 
 const props = defineProps<{ vendorId: string }>()
 const { program } = useProgram(ref("paid-sick-leave-rebate"))
 
 const search = ref("")
-
-export type PSLRSubmission = {
-  id: string
-  program_pslr4_id: string
-  vendor_id: string
-  status: string
-  payment_status: string
-  request_amount: number
-  first_name: string
-  last_name: string
-  position_title: string
-  employee_name: string
-  birth_date: string
-  hire_date: string
-  email: string
-  mailing_address: string
-  submission_date: string
-  request_date: string
-  request_end_date: string
-  hourly_rate: number
-  request_hours: number
-  paid_rate: number
-  paid_hours: number
-  paid_amount: number
-}
-
-const showViewDialog = ref(false)
 
 const submissions = ref<PSLRSubmission[]>([])
 
@@ -236,16 +146,20 @@ const submissionsByEmployee = computed(() => {
       "employee_name"
     )
   }
-  return groupBy(submissions.value, "program_id")
+  return groupBy(submissions.value, "employee_name")
 })
 
 async function loadSubmissions() {
-  const { data } = await http.get(`/api/program/pslr/${props.vendorId}/submissions`)
-  submissions.value = data.data
+  const data = await PSLR.submissionsApi.list(props.vendorId)
+  submissions.value = data.submissions ?? []
 }
 
 const vendorId = ref(props.vendorId)
 const selectedSubmission = ref<PSLRSubmission | null>(null)
+
+const submissionAttributesDialogRef = ref<InstanceType<typeof SubmissionAttributesDialog> | null>(
+  null
+)
 
 const { vendor } = useVendor(vendorId)
 
@@ -304,6 +218,6 @@ function formatMoney(amount: number, minimumFractionDigits: number = 2): string 
 
 function openSubmission(_event: MouseEvent, { item }: { item: PSLRSubmission }) {
   selectedSubmission.value = item
-  showViewDialog.value = true
+  submissionAttributesDialogRef.value?.show()
 }
 </script>
