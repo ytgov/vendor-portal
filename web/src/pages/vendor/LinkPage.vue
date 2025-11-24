@@ -35,8 +35,7 @@
       <template #item.2>
         <SimpleCard title="Vendor Information">
           <p class="text-body-1 mb-4">
-            Please enter as much information as you know about the vendor you are trying to link. If
-            you know the existing Vendor ID, please enter it below and hit search.
+            Please enter as much information as you know about the vendor you are trying to link.
           </p>
           <p class="mb-4">Business name, YCOR number and Mailing address are required.</p>
           <v-form
@@ -83,8 +82,7 @@
               >
                 <v-text-field
                   v-model="vendorLinkRequest.businessDescription"
-                  label="Business description"
-                  rows="2"
+                  label="What does the business do? For example, services offered, products sold"
                 />
               </v-col>
             </v-row>
