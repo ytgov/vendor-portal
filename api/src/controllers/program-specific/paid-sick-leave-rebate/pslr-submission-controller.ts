@@ -27,8 +27,6 @@ export class PSLRSubmissionController extends BaseController {
 
       const submissions = await pslrIntegration.getSubmissions(this.params.vendorId)
 
-      console.log("----------- SUBMISSIONS:", submissions)
-
       return this.response.status(200).json({ submissions: submissions })
     } catch (error) {
       logger.error(`Error fetching submissions: ${error}`, { error })
