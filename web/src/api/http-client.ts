@@ -23,7 +23,11 @@ export const httpClient = axios.create({
 httpClient.interceptors.request.use(async (config) => {
   // Only add the Authorization header to requests that start with "/api"
   if (config.url?.startsWith("/api")) {
-    const accessToken = await auth0.getAccessTokenSilently()
+    const accessToken = await auth0.getAccessTokenSilently().catch(async () => {
+      window.location.href = "/"
+      return
+    })
+
     config.headers["Authorization"] = `Bearer ${accessToken}`
   }
 
