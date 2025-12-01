@@ -668,7 +668,7 @@ function validateEitherMailingOrPhysicalAddressRequired() {
 const snack = useSnack()
 const router = useRouter()
 
-async function validateFormAndContinue() {
+async function validateFormAndContinue(incrementStep = true) {
   if (formRef.value === null) return
 
   const { valid } = await formRef.value.validate()
@@ -682,12 +682,11 @@ async function validateFormAndContinue() {
     return
   }
 
-  step.value++
+  if (incrementStep) step.value++
 }
 
 async function validateAndSave() {
-  await validateFormAndContinue()
-
+  await validateFormAndContinue(false)
   try {
     isLoading.value = true
     submission.value.submission_date = new Date().toISOString()
