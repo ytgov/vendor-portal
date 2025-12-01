@@ -51,7 +51,6 @@
             { title: 'Status', value: 'status' },
           ]"
           hide-default-footer
-          @click:row="openSubmission"
         >
           <template #item.request_amount="{ item }">
             {{ formatMoney(item.request_amount, 2) }}
@@ -79,7 +78,6 @@
             { title: 'Status', value: 'status' },
           ]"
           hide-default-footer
-          @click:row="openSubmission"
         >
           <template #item.request_amount="{ item }">
             {{ formatMoney(item.request_amount, 2) }}
@@ -96,18 +94,11 @@
       </v-card-text>
     </v-card>
   </div>
-
-  <SubmissionAttributesDialog
-    v-if="!isNil(selectedSubmission)"
-    ref="submissionAttributesDialogRef"
-    :submission="selectedSubmission"
-    width="600"
-  />
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue"
-import { isNil, groupBy } from "lodash"
+import { groupBy } from "lodash"
 
 import { PSLR } from "@/api/program-specific"
 import { PSLRSubmission } from "@/api/program-specific/paid-sick-leave-rebate/submissions-api"
@@ -115,8 +106,6 @@ import { PSLRSubmission } from "@/api/program-specific/paid-sick-leave-rebate/su
 import useVendor from "@/use/use-vendor"
 import useProgram from "@/use/use-program"
 import useBreadcrumbs from "@/use/use-breadcrumbs"
-
-import SubmissionAttributesDialog from "@/components/program-specific/paid-sick-leave-rebate/SubmissionAttributesDialog.vue"
 
 const props = defineProps<{ vendorId: string }>()
 const { program } = useProgram(ref("paid-sick-leave-rebate"))
@@ -155,12 +144,6 @@ async function loadSubmissions() {
 }
 
 const vendorId = ref(props.vendorId)
-const selectedSubmission = ref<PSLRSubmission | null>(null)
-
-const submissionAttributesDialogRef = ref<InstanceType<typeof SubmissionAttributesDialog> | null>(
-  null
-)
-
 const { vendor } = useVendor(vendorId)
 
 const breadcrumbs = computed(() => {
@@ -214,10 +197,5 @@ function formatMoney(amount: number, minimumFractionDigits: number = 2): string 
     currency: "USD",
     minimumFractionDigits,
   }).format(amount)
-}
-
-function openSubmission(_event: MouseEvent, { item }: { item: PSLRSubmission }) {
-  selectedSubmission.value = item
-  submissionAttributesDialogRef.value?.show()
 }
 </script>

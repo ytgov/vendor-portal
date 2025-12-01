@@ -26,8 +26,11 @@ export type PSLRSubmission = {
   paid_hours: number
   paid_amount: number
   notes: string
+  all_provided_sick_used: boolean
 
-  pay_stub: File
+  pay_stub: File | File[]
+  pay_stub_prior: File
+  supporting_documents: File | File[]
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
